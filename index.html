@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WarQuests</title>
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+</head>
+<body>
+    <div id="stage"></div>
+    <script>
+        $(document).ready(function(){
+            game = new Game({
+                stage: '#stage'
+
+            });
+            game.start();
+        })
+    </script>
+</body>
+</html>

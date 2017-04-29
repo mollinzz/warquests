@@ -13,7 +13,7 @@ body.fullscreen section .container #stage {
     overflow: hidden;
 }
 
-.hero {
+#knight {
 	background-image: url(../images/FFRK_Warrior_sprites.png);
 	height: 100px;
 	width: 100px;

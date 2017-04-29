@@ -1,0 +1,28 @@
+html,
+body.fullscreen,
+body.fullscreen section,
+body.fullscreen section .container,
+body.fullscreen section .container #stage {
+    height: 100%;
+
+}
+
+body.fullscreen section .container #stage {
+    background: #eee;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero {
+	background-image: url(../images/FFRK_Warrior_sprites.png);
+	height: 100px;
+	width: 100px;
+	position: absolute;
+}
+
+.marker {
+	background-image: url(../images/marker2.png);
+	height: 40px;
+	width: 40px;
+	position: absolute;
+}

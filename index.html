@@ -7,16 +7,27 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/walk.js"></script>
 </head>
-<body>
-    <div id="stage"></div>
+<body class="fullscreen">
+    <section class="">
+        <div class="container">
+            <div id="stage"></div>
+        </div>
+    </section>
+
     <script>
         $(document).ready(function(){
+            var stage = new Stage();
             game = new Game({
                 stage: '#stage'
-
             });
+            knight = new Knight({posX:100, posY:200});
             game.start();
+            game.stage.addPerson(knight);
+            // setInterval(function(){
+            //     knight.walk();
+            // },1000)
         })
     </script>
 </body>

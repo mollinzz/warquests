@@ -28,25 +28,39 @@ function Knight(settings){
     this.registerWalk = function(){
         game.stage.jqEl.on('click', function(e){
             console.log(e);
-        game.stage.jqEl.append('<div class="marker"></div>');
-        $('.marker').animate({
-            top: e.offsetY  + 'px',
-            left: e.offsetX  + 'px'
-        },0,'swing')
+
+            var intervalId = setInterval(function(){
+                me.jqEl.css('background-position', '-500px -190px');                
+                setTimeout(function(){
+                    me.jqEl.css('background-position', '-500px 0px');
+                },350,'swing')
+            },600, 'swing');
+
+            
+            game.stage.jqEl.append('<div class="marker"></div>');
+            var markerHeight = parseInt($(".marker").css('height'));
+            var markerWidth = parseInt($(".marker").css('width'));
+            $('.marker').animate({
+                top: e.offsetY - markerHeight / 2 + 'px',
+                left: e.offsetX - markerWidth / 2  + 'px'
+            },0,'swing')
             me.walk(e.offsetX, e.offsetY, function(){
                 $('.marker').remove();
+                clearInterval(intervalId);
             });
+            
         })
     }
-    this.updatePosition=function() {
-        this.parent.jqEl.css('top', this.posY+'px');
-        this.parent.jqEl.css('left', this.posX+'px');
-    }
     this.walk = function(x, y, callback){
+        var knightHeight = parseInt($("#knight").css('height'));
+        var knightWidth = parseInt($("#knight").css('width'));
+        // if (x > 500) {
+        //         knight.jqEl.css('background-image', 'url(images/FFRK_Warrior_sprites_right.png)')
+        //     };
         this.jqEl.animate({
-            top: y   + 'px',
-            left: x  + 'px'
-        },500,'swing', callback);
+            top: y - knightHeight / 2 + 'px',
+            left: x - knightWidth / 2 + 'px'
+        },2000,'swing', callback);
     }
 }
 
@@ -59,9 +73,23 @@ function Stage(selector){
     this.jqEl.css('background-color', '#ADFF2F');
     this.jqEl.css('height', '100%');
     this.jqEl.css('width', '100%');
-
+    this.updatePosition=function() {
+        this.this.jqEl.css('top', this.posY+'px');
+        this.this.jqEl.css('left', this.posX+'px');
+    }
 }
-
+function Monster(settings){
+    this.id='monster';
+    //this.imgSrc='images/FFRK_Warrior_sprites.png';
+    this.posX = settings.posX ? settings.posX : 0;
+    this.posY = settings.posY ? settings.posY : 0;
+    this.getTag=function(){
+        return '<div id="'+this.id+'"></div>';
+    }
+    this.registerTag = function(){
+        this.jqEl = $('#'+this.id);
+    }
+}
 function Storage(){
     var me=this;
     this.object = {};

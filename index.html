@@ -22,9 +22,15 @@
             game = new Game({
                 stage: '#stage'
             });
+
             knight = new Knight({posX:100, posY:200});
+            monster = new Monster({posX:300, posY:400})
             game.start();
             game.stage.addPerson(knight);
+            //game.stage.addPerson(monster);
+            // setInterval(function(){
+            //     knight.updatePosition();
+            // },10);
             // setInterval(function(){
             //     knight.walk();
             // },1000)

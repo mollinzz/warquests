@@ -14,10 +14,12 @@ body.fullscreen section .container #stage {
 }
 
 #knight {
-	background-image: url(../images/FFRK_Warrior_sprites.png);
-	height: 100px;
-	width: 100px;
+	background-image: url(../images/FFRK_Warrior_sprites_right.png);
+	background-position: -500px 0px;
+	height: 85px;
+	width: 85px;
 	position: absolute;
+	
 }
 
 .marker {
@@ -25,4 +27,13 @@ body.fullscreen section .container #stage {
 	height: 40px;
 	width: 40px;
 	position: absolute;
+	background-position: 
+}
+
+#monster {
+	background-image: url(../images/monster_cyclops_axe.png);
+	height: 100px;
+	width: 64px;
+	position: absolute;
+	
 }

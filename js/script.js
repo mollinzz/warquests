@@ -25,6 +25,10 @@ function Knight(settings){
         this.registerWalk();
     }
     var me = this;
+    this.direction = 'right';
+    this.rightSprites = [
+        {top:0, left:0}
+    ]
     this.registerWalk = function(){
         game.stage.jqEl.on('click', function(e){
             console.log(e);

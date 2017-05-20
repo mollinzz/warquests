@@ -5,24 +5,22 @@
     <title>2</title>
     <script type="text/javascript" src="vendor/createjs/createjs.min.js"></script>
     <script type="text/javascript" src="js/warheroes.js"></script>
+    <link rel="stylesheet" href="css/warheroes.css">
 </head>
 <body onload="init();">
-  <canvas id="demoCanvas" width="1100" height="400"></canvas>
+  <canvas id="demoCanvas" width="1100" height="600"></canvas>
 <script>
 var game;
 function init() {
-
     game = new Game("demoCanvas");
     game.start();
-    game.stage.on("stagemousedown", function(event, e) {
+    game.stage.on("stagemousedown", function(event) {
             console.log(event);
-            console.log(e);
-            game.knight.walk(event.stageX, event.stageY);
+            if (!event.relatedTarget) {
+                game.knight.walk(event.stageX - 42.5, event.stageY - 42.5);
+            }
     });
-    game.stage.snake.addEventListener("click", handleEvent);
-    // function handleEvent(){
-    //     game.stage.snake.snakeAnimation.gotoAndPlay("walkRight")
-    // };
+    game.resizeCanvas();
 }
 </script>
 </body>

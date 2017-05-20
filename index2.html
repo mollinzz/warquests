@@ -11,12 +11,18 @@
 <script>
 var game;
 function init() {
+
     game = new Game("demoCanvas");
     game.start();
-    game.stage.on("stagemousedown", function(event) {
-        console.log(event);
-        game.knight.walk(event.stageX, event.stageY);
-    })
+    game.stage.on("stagemousedown", function(event, e) {
+            console.log(event);
+            console.log(e);
+            game.knight.walk(event.stageX, event.stageY);
+    });
+    game.stage.snake.addEventListener("click", handleEvent);
+    // function handleEvent(){
+    //     game.stage.snake.snakeAnimation.gotoAndPlay("walkRight")
+    // };
 }
 </script>
 </body>

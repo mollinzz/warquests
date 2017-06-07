@@ -1,5 +1,4 @@
-var snakeHP = 3;
-function Snake(x,y, snakeHP){
+function Snake(x,y){
     //спрайты
     var me = this;
     var snakeSprites = new createjs.SpriteSheet({
@@ -36,7 +35,7 @@ function Snake(x,y, snakeHP){
     //this.snakeAnimation.x
     createjs.Tween.get(this.imgObj)
     .to({x:x, y:y});
-    squareGreen = new createjs.Shape();
+    var squareGreen = new createjs.Shape();
     //ХП шкала
     squareGreen.graphics.beginFill("green");
     squareGreen.graphics.drawRect(
@@ -49,11 +48,35 @@ function Snake(x,y, snakeHP){
     game.stage.addChild(squareGreen);   
     //отслеживание клика на змею
     me.imgObj.addEventListener("click", onSnakeClick);
-    function onSnakeClick(ev, snakeHP){
+    function onSnakeClick(ev){
         console.log(snakeHP);
         game.knight.gotoAndFight(me);
-        snakeHP = snakeHP - 1;
     };
+    me.minusHP = function(){
+        snakeHP--;
+        if (snakeHP == 2) {
+            squareGreen.graphics.clear();
+            squareGreen.graphics.beginFill("orange");
+            squareGreen.graphics.drawRect(
+                x,
+                y - 20,
+                42,
+                15)
+        };
+        if (snakeHP == 1) {
+            squareGreen.graphics.clear();
+            squareGreen.graphics.beginFill("red");
+            squareGreen.graphics.drawRect(
+                x,
+                y - 20,
+                21,
+                15)
+        };
+        if (snakeHP == 0) {
+           game.stage.removeChild(me.imgObj);
+           game.stage.removeChild(squareGreen);
+        }
+    }
 }
 
 function Knight(){
@@ -90,7 +113,7 @@ function Knight(){
             "regY" : 0
         }
     });
-    this.walk = function(x,y){
+    this.walk = function(x,y, walkCallback){
         if(actionFlag){
             return false;
         };
@@ -102,7 +125,11 @@ function Knight(){
         createjs.Tween.get(me.imgObj)
         .to({ x: x, y: y}, parseInt((Math.abs(x - me.imgObj.x) + Math.abs(y - me.imgObj.y)) / 0.3), createjs.Ease.getPowInOut(2))
         .call(function(){
-            me.imgObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
+            if (walkCallback){
+                walkCallback();
+            } else {
+                me.imgObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
+            }
             actionFlag = 0;
             game.stage.removeChild(game.marker.imgObj);
         });
@@ -115,20 +142,25 @@ function Knight(){
     //             step = -10;
     //             knightAnimation.gotoAndPlay("walkLeft");
     //         };
+
     me.gotoAndFight = function(monster){
         if (me.imgObj.x > monster.imgObj.x) {
-            me.walk(monster.imgObj.x + 85, monster.imgObj.y);
-            
-            setTimeout(function(){
+            me.walk(monster.imgObj.x + 85, monster.imgObj.y, function() {
                 me.imgObj.gotoAndPlay("attackLeft");
-                //me.imgObj.gotoAndStop("walkLeft");
-            },1000)
+                setTimeout(function(){
+                    me.imgObj.gotoAndStop("walkLeft");
+                    monster.minusHP();
+                },1000)
+            });           
         } else {
-            me.walk(monster.imgObj.x - 85, monster.imgObj.y);
-            me.imgObj.gotoAndPlay("attackRight");
-            setTimeout(function(){
-                me.imgObj.gotoAndStop("walkRight")
-            },1000);
+            me.walk(monster.imgObj.x - 85, monster.imgObj.y, function(){
+                me.imgObj.gotoAndPlay("attackRight");
+                setTimeout(function(){
+                    me.imgObj.gotoAndStop("walkRight");
+                    monster.minusHP();
+                },1000);
+            });
+            
         }
     };
 };
@@ -191,7 +223,7 @@ function Game(stageId){
             me.knight = new Knight();
             var snake1 = new Snake(150,150);
             me.clock = new Clock(250,250);
-            //var snake2 = new Snake(300,300);
+            var snake2 = new Snake(300,300);
             me.stage.update();
             window.addEventListener('resize', me.resizeCanvas, false);        
             me.resizeCanvas = function () {

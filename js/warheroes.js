@@ -98,9 +98,6 @@ function Knight(){
         me.direction = (x > me.imgObj.x)+0;
         me.imgObj.gotoAndPlay(me.dirSettings[me.direction]["walk"]);
         game.marker = new marker(x,y);
-        if (target) {
-            game.stage.addChild(game.marker.imgObj);
-        };
         game.stage.addChild(game.marker.imgObj);
         createjs.Tween.get(me.imgObj)
         .to({ x: x, y: y}, parseInt((Math.abs(x - me.imgObj.x) + Math.abs(y - me.imgObj.y)) / 0.3), createjs.Ease.getPowInOut(2))
@@ -121,9 +118,10 @@ function Knight(){
     me.gotoAndFight = function(monster){
         if (me.imgObj.x > monster.imgObj.x) {
             me.walk(monster.imgObj.x + 85, monster.imgObj.y);
-            me.imgObj.gotoAndPlay("attackLeft");
+            
             setTimeout(function(){
-                me.imgObj.gotoAndStop("walkLeft");
+                me.imgObj.gotoAndPlay("attackLeft");
+                //me.imgObj.gotoAndStop("walkLeft");
             },1000)
         } else {
             me.walk(monster.imgObj.x - 85, monster.imgObj.y);

@@ -86,25 +86,6 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
     };
 };
 
-//persons
-function Snake(x,y, bar){
-    var snake = new Monster("snakeSprites",[6,7,8,7],"images/king_cobra3.png",93,93.8,x,y,objects[0].hp,bar,100,50, 'King cobra');
-
-};
-function Harpy(x, y, bar) {
-var harpy = new Monster(
-        "harpySprites",
-        [0,1,2,1],
-        "images/harpy.png",
-        105,
-        87,
-        x, y,
-        objects[1].hp,
-        bar,
-        70,
-        15
-        );
-}
 function Knight(){
     var me = this, actionFlag = 0, actionFlagFight = 0;
     var knigthHP = objects[2].hp;
@@ -248,13 +229,53 @@ function marker(x,y){
 
 function MonsterSpawner() {
     var me = this;
-    me.randomMachine = function() {
-
+    var countMonster = 0;
+    me.randomMachine = function(number, monsterName) {
+        for (var i=1; i<=number; i++) {
+            me.createMonster(
+                Math.random()*game.stage.canvas.width,
+                Math.random()*game.stage.canvas.height,
+                monsterName
+            );
+        }
     }
     me.createMonster = function(x, y, monsterName) {
-
+        countMonster++;
+        var monster;
+        switch(monsterName) {
+          case 'snake':
+            monster = new Monster(
+                "snakeSprites",
+                [6,7,8,7],
+                "images/king_cobra3.png",
+                93,
+                93.8,
+                x,
+                y,
+                objects[0].hp,
+                'bar',
+                100,
+                50,
+                'King cobra'
+            );
+            break;
+          case 'harpy':
+            monster = new Monster(
+                "harpySprites",
+                [0,1,2,1],
+                "images/harpy.png",
+                105,
+                87,
+                x, y,
+                objects[1].hp,
+                'bar',
+                70,
+                15
+            );
+            break;
+        }
+        return monster;
     }
-
 }
 
 //game func
@@ -262,6 +283,7 @@ function Game(stageId){
     // code here.
     var me = this;
     this.stage = new createjs.Stage(stageId);
+    me.spawner = new MonsterSpawner();
     this.start = function(){
 
         // fullscreen canvas
@@ -302,9 +324,15 @@ function Game(stageId){
     //     63,
     //     15);
     // var snake1 = snake;
-    Snake(100,100, "snakebar1");
-    Snake(300, 400, "snakebar2")
-    Harpy(200,300, 'harpy1'); 
+    // Snake(100,100, "snakebar1");
+    // Snake(300, 400, "snakebar2")
+    // Harpy(200,300, 'harpy1'); 
+    me.spawner.createMonster(100,100,'snake');
+    me.spawner.createMonster(300,400,'snake');
+    me.spawner.createMonster(200,300,'harpy');
+    me.spawner.randomMachine(10, 'snake');
+    me.spawner.randomMachine(50, 'harpy')
+
     me.stage.update();
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", handleEvent);

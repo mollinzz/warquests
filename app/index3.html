@@ -10,19 +10,8 @@
   <canvas id="demoCanvas" width="1" height="1"></canvas>
   <script>
     var game;  
-    var objects = [/*Snake*/{hp: 5}, /*Harpy*/{hp: 10}, /*Knight */{hp: 15, attack: 3}];
-    // var snakePerson = {
-    //     "snakeSprites",
-    //     [6,7,8,7],
-    //     "images/king_cobra.png",
-    //     63,
-    //     63,
-    //     250,
-    //     250,
-    //     objects[0].hp,
-    //     "snakebar",
-    //     63,
-    //     15};
+    var objects = [/*Snake*/{hp: 5, attack: 1}, /*Harpy*/{hp: 10, attack: 1.5}, /*Knight */{hp: 15, attack: 3}];
+
     function init(){
         game = new Game("demoCanvas");
         game.start();

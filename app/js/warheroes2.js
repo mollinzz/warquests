@@ -1,11 +1,9 @@
-var nice = 0;
 /** monster func */
 function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , x, y, monsterHP, monsterhpbar,
     widthBar, heightBar, nameOfMonster, monsterAttackPoint){
     var me = this;
     var monsterHP = monsterHP;
     var defaultHP = monsterHP;
-    var nice = 0;
     var monsterAttack = monsterAttackPoint;
     //sprites
     var monsterSprites = new createjs.SpriteSheet({
@@ -50,39 +48,31 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
     //checking click
     me.imgObj.addEventListener("click", onMonsterClick);
     function onMonsterClick(ev){
-        //alert(nice);
-        if (nice) {
-            return false;
-        }
-        nice = 1;
         //console.log(monsterHP);
         hpReload();
         game.knight.gotoAndFight(me, monsterHP, monsterAttackPoint, function(){
-            nice = 0;
             monsterHP--;
             hpReload();
             if (!monsterHP) {
                 game.stage.removeChild(me.imgObj);
                 if (monsterhpbar) {
-                    //console.log('Hello');
-                    //console.log(monsterhpbar);
                     game.stage.removeChild(monsterhpbar);
                 };
                 if(hpText) {
                     game.stage.removeChild(hpText);
                 };
-            // return false
-        };
-    });
+            };
+        });
     };
 };
 
 /**
  * Main hero
  * @constructor
-*/
-function Knight(){
-    var me = this, actionFlag = 0, actionFlagFight = 0;
+ */
+ function Knight(){
+    var actionsFlag = 0;
+    var me = this;
     var knightHP = 15;
     var defaultHP = knightHP;
     var factorKnight;
@@ -125,14 +115,18 @@ function Knight(){
     this.imgObj.gotoAndStop("walkRight");
     game.stage.addChild(this.imgObj);
 
-    // walking
-    this.walk = function(x,y, walkCallback){
-        if(actionFlag){
-            return false;
+    /** 
+    * Knight walking
+    * @param {number} x - x position of walking point
+    * @param {number} y - y position of walking point
+    * @param {function} walkCallback - callback oafter walking back
+    * @param {boolean} forceFlag - flag of required action
+    */
+    this.walk = function(x,y, walkCallback, forceFlag = false){
+        if (actionsFlag && !forceFlag) {
+            return false
         };
-        actionFlag = 1;
-        actionFlagFight = 1;
-
+        actionsFlag++;
         me.direction = (x > me.imgObj.x)+0;
         me.imgObj.gotoAndPlay(me.dirSettings[me.direction]["walk"]);
         //spawning marker
@@ -144,19 +138,12 @@ function Knight(){
         .to({ x: x, y: y}, parseInt((Math.abs(x - me.imgObj.x) + Math.abs(y - me.imgObj.y)) / 0.3), createjs.Ease.getPowInOut(1.5))
         .call(function(){
             if (walkCallback){
-                walkCallback();
-                actionFlag = 1;
-                actionFlagFight = 1;  
-                setTimeout(function(){
-                   actionFlag = 0;
-                   actionFlagFight = 0   
-               }, 1000)            
+                walkCallback();     
             } else {
                 me.imgObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
-                actionFlag = 0;
-                actionFlagFight = 0;
             };
             game.stage.removeChild(game.marker.imgObj);
+            actionsFlag--;
         });
     };
 
@@ -170,10 +157,10 @@ function Knight(){
  * @param {function} callback - callback after going.
  */
  me.gotoAndFight = function(monster, monsterHP, monsterAttack, callback){
-    if (actionFlagFight || actionFlag) {
+    if (actionsFlag) {
         return false;
-    };
-    actionFlagFight = 1;
+    }
+    actionsFlag++;
     if (me.imgObj.x > monster.imgObj.x) {
         me.walk(monster.imgObj.x + 127.5, monster.imgObj.y, function() {
                 //starting animation
@@ -183,8 +170,9 @@ function Knight(){
                     callback();
                     me.imgObj.gotoAndStop("walkLeft");
                     me.minusHPKnight(monsterAttack);
+                    actionsFlag--;
                 },1000)
-            });           
+            }, true);           
     } else {
         me.walk(monster.imgObj.x - 127.5, monster.imgObj.y, function(){
                 //starting animation
@@ -192,11 +180,12 @@ function Knight(){
 
                 //callback
                 setTimeout(function(){
-                    callback();             
+                    callback();                            
                     me.imgObj.gotoAndStop("walkRight");
                     me.minusHPKnight(monsterAttack);
+                    actionsFlag--;   
                 },1000);
-            });
+            }, true);
 
     }
 };

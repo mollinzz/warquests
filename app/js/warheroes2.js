@@ -149,14 +149,12 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
 
 /**
  * Fighting with monsters.
- * @function
- * @name gotoAndFight
  * @param {Monster} monster - attacking monster.
  * @param {number} monsterHP - healph points of monster.
  * @param {number} monsterAttack - attack points of monster.
  * @param {function} callback - callback after going.
  */
- me.gotoAndFight = function(monster, monsterHP, monsterAttack, callback){
+ this.gotoAndFight = function(monster, monsterHP, monsterAttack, callback){
     if (actionsFlag) {
         return false;
     }
@@ -193,7 +191,7 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
     //hpfunctions
     var hpBar = new createjs.Shape();
 
-    me.minusHPKnight = function(monsterAttack){       
+    this.minusHPKnight = function(monsterAttack){       
         apple = knightHP - monsterAttack;
         knightHP = apple;
         game.stage.removeChild(hpBar);
@@ -215,7 +213,7 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
     game.stage.addChild(hpBar);
 
     //regenerate
-    me.regen = function(){
+    this.regen = function(){
         if (knightHP < defaultHP) {
             console.log(knightHP);
             knightHP++;
@@ -301,6 +299,35 @@ function MonsterSpawner() {
       return monster;
   }
 }
+/**
+ * Invertory
+ * @constructor
+ */
+ function Inventory(){
+    var me = this, flagOpen = 0;
+    var inventoryBLock = new createjs.Shape();
+    inventoryBLock.graphics.beginFill('yellow');
+    inventoryBLock.graphics.drawRect(0, 400, 400, 350);
+    /** Open Inv */
+    this.open = function(){
+        //alert('хе-хе');
+        flagOpen = 1; 
+        game.stage.addChild(inventoryBLock);
+    };
+    /** Close Inv */
+    this.close = function(){
+        //alert('не хе-хе');
+        flagOpen = 0;
+        game.stage.removeChild(inventoryBLock);
+    };
+    this.toggle = function(){
+        if (!flagOpen) {
+            me.open();
+        } else {
+            me.close();
+        }
+    }
+}
 
 //game func
 function Game(stageId){
@@ -308,8 +335,8 @@ function Game(stageId){
     var me = this;
     this.stage = new createjs.Stage(stageId);
     me.spawner = new MonsterSpawner();
+    this.inventory = new Inventory();
     this.start = function(){
-
         // fullscreen canvas
         //window.addEventListener('resize', me.resizeCanvas, false);
         me.resizeCanvas = function() {
@@ -337,7 +364,6 @@ function Game(stageId){
 
     me.spawner.randomMachine(1, 'snake');
     me.spawner.randomMachine(2, 'harpy');
-
     me.knight = new Knight();
     setInterval(function(){
         me.knight.regen();

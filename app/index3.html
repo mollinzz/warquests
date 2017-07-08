@@ -21,6 +21,13 @@
                 game.knight.walk(event.stageX - 42.5, event.stageY - 42.5);
             };
         });
+        document.onkeydown = function(ev){
+            console.log(ev);
+            console.log(ev.code);
+            if (ev.code == 'KeyB') {
+                game.inventory.toggle();
+            };
+        };
         game.resizeCanvas();
     }
 </script>

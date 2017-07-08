@@ -1,5 +1,5 @@
-//monster func
 var nice = 0;
+/** monster func */
 function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , x, y, monsterHP, monsterhpbar,
     widthBar, heightBar, nameOfMonster, monsterAttackPoint){
     var me = this;
@@ -77,6 +77,10 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
     };
 };
 
+/**
+ * Main hero
+ * @constructor
+*/
 function Knight(){
     var me = this, actionFlag = 0, actionFlagFight = 0;
     var knightHP = 15;
@@ -144,9 +148,9 @@ function Knight(){
                 actionFlag = 1;
                 actionFlagFight = 1;  
                 setTimeout(function(){
-                 actionFlag = 0;
-                 actionFlagFight = 0   
-             }, 1000)            
+                   actionFlag = 0;
+                   actionFlagFight = 0   
+               }, 1000)            
             } else {
                 me.imgObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
                 actionFlag = 0;
@@ -156,14 +160,22 @@ function Knight(){
         });
     };
 
-    //fighting with monsters
-    me.gotoAndFight = function(monster, monsterHP, monsterAttack, callback){
-        if (actionFlagFight || actionFlag) {
-            return false;
-        };
-        actionFlagFight = 1;
-        if (me.imgObj.x > monster.imgObj.x) {
-            me.walk(monster.imgObj.x + 127.5, monster.imgObj.y, function() {
+/**
+ * Fighting with monsters.
+ * @function
+ * @name gotoAndFight
+ * @param {Monster} monster - attacking monster.
+ * @param {number} monsterHP - healph points of monster.
+ * @param {number} monsterAttack - attack points of monster.
+ * @param {function} callback - callback after going.
+ */
+ me.gotoAndFight = function(monster, monsterHP, monsterAttack, callback){
+    if (actionFlagFight || actionFlag) {
+        return false;
+    };
+    actionFlagFight = 1;
+    if (me.imgObj.x > monster.imgObj.x) {
+        me.walk(monster.imgObj.x + 127.5, monster.imgObj.y, function() {
                 //starting animation
                 me.imgObj.gotoAndPlay("attackLeft");
                 //callback
@@ -173,8 +185,8 @@ function Knight(){
                     me.minusHPKnight(monsterAttack);
                 },1000)
             });           
-        } else {
-            me.walk(monster.imgObj.x - 127.5, monster.imgObj.y, function(){
+    } else {
+        me.walk(monster.imgObj.x - 127.5, monster.imgObj.y, function(){
                 //starting animation
                 me.imgObj.gotoAndPlay("attackRight");
 
@@ -185,9 +197,9 @@ function Knight(){
                     me.minusHPKnight(monsterAttack);
                 },1000);
             });
-            
-        }
-    };
+
+    }
+};
 
     //hpfunctions
     var hpBar = new createjs.Shape();

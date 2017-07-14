@@ -1,10 +1,17 @@
-/** monster func */
-function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , x, y, monsterHP, monsterhpbar,
-    widthBar, heightBar, nameOfMonster, monsterAttackPoint){
+// var target;
+/** 
+ *monster func
+ * @consructor
+ */
+ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , x, y, monsterHP, monsterhpbar,
+    widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue){
+    /** vars*/
     var me = this;
     var monsterHP = monsterHP;
     var defaultHP = monsterHP;
+    var targetHP = monsterHP;
     var monsterAttack = monsterAttackPoint;
+    var coinValue = coinValue;
     //sprites
     var monsterSprites = new createjs.SpriteSheet({
         "animations": {
@@ -46,14 +53,20 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
     };
     
     //checking click
+    setTimeout(function(){
+        game.storage.remove("monsterHP")
+    }, 20000);
     me.imgObj.addEventListener("click", onMonsterClick);
     function onMonsterClick(ev){
-        //console.log(monsterHP);
         hpReload();
-        game.knight.gotoAndFight(me, monsterHP, monsterAttackPoint, function(){
-            monsterHP--;
+        // setTimeout(function(){
+        //     game.storage.remove("monsterHP")
+        // }, 20000);
+        game.knight.gotoAndFight(coinValue, me, monsterHP, monsterAttackPoint, function(){
+            monsterHP = monsterHP - 3;
+            //game.storage.setField("monsterHP", monsterHP)
             hpReload();
-            if (!monsterHP) {
+            if (monsterHP<=0) {
                 game.stage.removeChild(me.imgObj);
                 if (monsterhpbar) {
                     game.stage.removeChild(monsterhpbar);
@@ -61,8 +74,28 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
                 if(hpText) {
                     game.stage.removeChild(hpText);
                 };
+                drop(coinValue);
             };
         });
+    };
+
+    function drop(coinValue){
+        var variable;
+        variable = parseInt(Math.random() * 4);
+        switch(variable){
+            case 0:
+            game.inventory.spawnItems("basicSword", x, y, coinValue);
+            break;
+            case 1:
+            game.inventory.spawnItems("basicAxe", x, y, coinValue);
+            break;
+            case 2:
+            game.inventory.spawnItems("coin", x, y, coinValue);
+            break;
+            case 3: 
+            game.inventory.spawnItems("coin", x, y, coinValue);
+            break;
+        }
     };
 };
 
@@ -73,7 +106,6 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
  function Knight(){
     var actionsFlag = 0;
     var me = this;
-    var knightHP = 15;
     var defaultHP = knightHP;
     var factorKnight;
     var apple;
@@ -147,20 +179,22 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
         });
     };
 
-/**
- * Fighting with monsters.
- * @param {Monster} monster - attacking monster.
- * @param {number} monsterHP - healph points of monster.
- * @param {number} monsterAttack - attack points of monster.
- * @param {function} callback - callback after going.
- */
- this.gotoAndFight = function(monster, monsterHP, monsterAttack, callback){
-    if (actionsFlag) {
-        return false;
-    }
-    actionsFlag++;
-    if (me.imgObj.x > monster.imgObj.x) {
-        me.walk(monster.imgObj.x + 127.5, monster.imgObj.y, function() {
+    /**
+     * Fighting with monsters.
+     * @param {Monster} monster - attacking monster.
+     * @param {number} monsterHP - healph points of monster.
+     * @param {number} monsterAttack - attack points of monster.
+     * @param {function} callback - callback after going.
+     */
+     this.gotoAndFight = function(coinValue, monster, monsterHP, monsterAttack, callback){
+        if (actionsFlag) {
+            return false;
+        }
+        actionsFlag++;
+        //alert(knightHP)
+        target = monster;
+        if (me.imgObj.x > monster.imgObj.x) {
+            me.walk(monster.imgObj.x + 127.5, monster.imgObj.y, function() {
                 //starting animation
                 me.imgObj.gotoAndPlay("attackLeft");
                 //callback
@@ -171,8 +205,8 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
                     actionsFlag--;
                 },1000)
             }, true);           
-    } else {
-        me.walk(monster.imgObj.x - 127.5, monster.imgObj.y, function(){
+        } else {
+            me.walk(monster.imgObj.x - 127.5, monster.imgObj.y, function(){
                 //starting animation
                 me.imgObj.gotoAndPlay("attackRight");
 
@@ -185,23 +219,17 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
                 },1000);
             }, true);
 
-    }
-};
+        }
+    };
 
-    //hpfunctions
     var hpBar = new createjs.Shape();
-
-    this.minusHPKnight = function(monsterAttack){       
-        apple = knightHP - monsterAttack;
-        knightHP = apple;
-        game.stage.removeChild(hpBar);
-        factorKnight = parseInt(knightHP / defaultHP * 100) / 100;  
-        hpBar.graphics.clear();     
-        hpBar.graphics.beginFill('#e50707');
-        hpBar.graphics.drawRect(game.stage.canvas.width / 2 - 400, 20, factorKnight * 800, 50);       
-        game.stage.addChild(hpBar);
-        //console.log(knightHP);
-        //console.log(factorKnight);
+    /**
+     * Minusing HP of knight
+     *  @param {number} monsterAttack - value of attack point
+     */
+     this.minusHPKnight = function(monsterAttack){       
+        knightHP = knightHP - monsterAttack;
+        me.refreshHealphBar();
     };
     hpBar.graphics.beginFill("#e50707");
     hpBar.graphics.drawRect(
@@ -212,24 +240,56 @@ function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , 
         );
     game.stage.addChild(hpBar);
 
-    //regenerate
-    this.regen = function(){
+    this.refreshHealphBar = function(){
+        if (knightHP >= defaultHP) {
+            return false
+        }
+        game.stage.removeChild(hpBar);
+        factorKnight = parseInt(knightHP / defaultHP * 100) / 100; 
+        console.log(factorKnight);
+        hpBar.graphics.clear();     
+        hpBar.graphics.beginFill('#e50707');
+        hpBar.graphics.drawRect(game.stage.canvas.width / 2 - 400, 20, factorKnight * 800, 50);       
+        game.stage.addChild(hpBar);
+    };
+    /**
+     * Regenerating
+     */
+     this.regen = function(){
         if (knightHP < defaultHP) {
             console.log(knightHP);
             knightHP++;
-            game.stage.removeChild(hpBar);
-            factorKnight = parseInt(knightHP / defaultHP * 100) / 100; 
-            console.log(factorKnight);
-            hpBar.graphics.clear();     
-            hpBar.graphics.beginFill('#e50707');
-            hpBar.graphics.drawRect(game.stage.canvas.width / 2 - 400, 20, factorKnight * 800, 50);       
-            game.stage.addChild(hpBar);          
-        }
+            me.refreshHealphBar();
+        }   
     };
-};
 
-//decor
-function marker(x,y){
+    this.useAbility = function(target, abilityName){
+        // var abilityFlag = 0;
+        // if (abilityFlag) {
+        //     return false
+        // }
+        // abilityFlag = 1;
+        // switch(abilityName) {
+        //     case "shieldUp": 
+        //     if (knightHP >= defaultHP) {
+        //         return false
+        //     };
+        //     if (knightHP + 5 >= defaultHP) {
+        //         knightHP = defaultHP;
+        //         return false
+        //     }
+        //     alert(knightHP)
+        //     knightHP = knightHP + 5;
+        //     abilityFlag = 0;
+        // }
+    }
+};
+/**
+ * marker for detecting walking point
+ * @param {number} x - x position
+ * @param {number} y - y position
+ */
+ function marker(x,y){
     var marker = new createjs.SpriteSheet({
         "images": ["images/marker2.png"],
         "frames": {
@@ -245,8 +305,47 @@ function marker(x,y){
     .to({x: x + 22.5, y: y + 22.5});
     game.stage.addChild(this.imgObj);
 };
+/** 
+ *Saving objects to localStorage
+ */
+ function Storage(){
+    var me=this;
+    this.object = {};
+    this.save = function(){
+        var sObj = JSON.stringify(this.object);
+        localStorage.setItem("object", sObj);
+    };
 
-function MonsterSpawner() {
+    this.load = function(){
+        me.object = JSON.parse(localStorage.getItem("object"));
+        if (me.object==null) {
+            me.object={};
+        }
+    };
+    this.load();
+
+    this.setField = function(itemKey, itemVal){
+        me.object[itemKey] = itemVal;
+        me.save();
+    };
+
+    this.getField = function(itemKey){
+        return  me.object[itemKey];
+    };
+
+    this.refreshCoins = function(itemKey, itemValNew, coinValue){
+        localStorage.removeItem(itemKey);
+        this.setField(itemKey, itemValNew + coinValue);
+    };
+
+    this.remove = function(itemKey){
+        localStorage.removeItem(itemKey);
+    };
+}
+/** 
+ *Spawner of monsters
+ */
+ function MonsterSpawner() {
     var me = this;
     var countMonster = 0;
     me.randomMachine = function(number, monsterName) {
@@ -276,7 +375,8 @@ function MonsterSpawner() {
             100,
             50,
             'King cobra',
-            objects[0].attack
+            objects[0].attack,
+            1
             );
           break;
           case 'harpy':
@@ -292,33 +392,121 @@ function MonsterSpawner() {
             70,
             15,
             'Gotic harpy',
-            objects[1].attack
+            objects[1].attack,
+            2
             );
           break;
       }
       return monster;
   }
 }
+function Item(image, x, y, itemName, coinValue){
+    var me = this;
+    var item = new createjs.SpriteSheet({
+        "images": [image],
+        "frames": {
+            "height": 48,
+            "width": 48,
+            "regX":0,
+            "regY": 0
+        }
+    });
+    this.imgObj = new createjs.Sprite(item);
+    createjs.Tween.get(this.imgObj)
+    .to({x: x + 24, y: y + 24});
+    game.stage.addChild(me.imgObj);
+    me.imgObj.addEventListener("click", function(){
+        game.inventory.loot(itemName, coinValue, x, y, function(){
+            game.stage.removeChild(me.imgObj)
+        })
+    });
+}
 /**
- * Invertory
- * @constructor
+ * Items construct
+ *  @param {string} image - image of imgObject
+ *  @param {number} x - x position
+ *  @param {number} y - y position
  */
  function Inventory(){
     var me = this, flagOpen = 0;
-    var inventoryBLock = new createjs.Shape();
-    inventoryBLock.graphics.beginFill('yellow');
-    inventoryBLock.graphics.drawRect(0, 400, 400, 350);
-    /** Open Inv */
-    this.open = function(){
+    var inventoryBlock = new createjs.Shape();
+    //var cointxt =  game.storage.getItem("coins");
+    var text = new createjs.Text('0', "40px Arial", "black");
+
+    createjs.Tween.get(text)
+    .to({x: 320, y: window.innerHeight - 390});
+
+    var inventoryBlockFraction = new createjs.SpriteSheet({
+        "images": ["images/network.png"],
+        "frames": {
+            "height": 360,
+            "width": 360,
+            "regX": 0,
+            "regY": 0
+        }
+    });
+    inventoryBlockFraction = new createjs.Sprite(inventoryBlockFraction);
+    createjs.Tween.get(inventoryBlockFraction)
+    .to({x: 20, y: window.innerHeight - 360 });
+
+    inventoryBlock.graphics.beginFill('yellow');
+    inventoryBlock.graphics.drawRect(20, window.innerHeight - 400, 360, 400);
+
+
+    this.spawnItems = function(itemName, x, y, coinValue){
+        var item;
+        switch(itemName){
+            case 'coin': 
+            item = new Item("images/coin.png", x, y, itemName, coinValue);
+            break;
+            case 'basicAxe':
+            item = new Item("images/item-axe.png", x, y, itemName, coinValue);
+            break;
+            case 'basicSword':
+            item = new Item("images/item-sword2.png", x, y, itemName, coinValue);
+            break;
+        }
+        return item;
+    }
+
+    this.loot = function(itemName, coinValue, x, y, lootCallback){
+        if (game.knight.imgObj.x < x) {
+            game.knight.walk(x - 100, y, function(){
+                choosing();
+                lootCallback(); 
+                game.knight.imgObj.gotoAndStop("walkRight")
+            })
+        } else {
+            game.knight.walk(x + 100, y, function(){
+                choosing();
+                lootCallback(); 
+                game.knight.imgObj.gotoAndStop("walkLeft")
+            })
+        }
+            function choosing(){
+                switch(itemName){
+                    case "coin":
+                    game.storage.refreshCoins("coins", game.storage.getField("coins"), coinValue);
+                };
+            };
+        }
+
+        /** Open Inv */
+        this.open = function(){
         //alert('хе-хе');
         flagOpen = 1; 
-        game.stage.addChild(inventoryBLock);
+        game.stage.addChild(inventoryBlock);
+        game.stage.addChild(inventoryBlockFraction);
+        game.stage.addChild(text);
+        //alert(cointxt)
     };
     /** Close Inv */
     this.close = function(){
         //alert('не хе-хе');
         flagOpen = 0;
-        game.stage.removeChild(inventoryBLock);
+        game.stage.removeChild(inventoryBlock);
+        game.stage.removeChild(inventoryBlockFraction);
+        game.stage.removeChild(text);
     };
     this.toggle = function(){
         if (!flagOpen) {
@@ -329,13 +517,17 @@ function MonsterSpawner() {
     }
 }
 
-//game func
-function Game(stageId){
+/**
+ *Main game fucn 
+ */
+ function Game(stageId){
     // code here.
     var me = this;
     this.stage = new createjs.Stage(stageId);
     me.spawner = new MonsterSpawner();
     this.inventory = new Inventory();
+    this.storage = new Storage();
+    // this.items = new Items();
     this.start = function(){
         // fullscreen canvas
         //window.addEventListener('resize', me.resizeCanvas, false);
@@ -356,18 +548,24 @@ function Game(stageId){
           );
         // Can only define this after shape is drawn, else no fill applies
 
-        //creating persons
         bg1.graphics.ef(); // short for endFill()
         me.stage.addChild(bg1);  // Add Child to Stage
         //monsterSprites, standFrames, image, spriteHeight, spriteWidth, x, y, monsterHP, monsterhpbar,
     //widthBar, heightBar
 
-    me.spawner.randomMachine(1, 'snake');
-    me.spawner.randomMachine(2, 'harpy');
+    me.spawner.createMonster(50 , 100,'snake');
+    me.spawner.createMonster(100 , 100,'snake');
+    me.spawner.createMonster(100, 50, 'harpy');
     me.knight = new Knight();
+
     setInterval(function(){
         me.knight.regen();
     }, 5000);
+    setInterval(function(){
+        if (knightHP <= 0){
+            alert('gg');
+        }
+    },100)
 
     me.stage.update();
     createjs.Ticker.setFPS(60);
@@ -377,3 +575,4 @@ function Game(stageId){
     }
 };
 }
+

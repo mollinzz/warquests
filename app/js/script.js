@@ -5,7 +5,7 @@ function Game(settings) {
         var gamerName = this.storage.getField('gamerName');
         if (!gamerName) {
             gamerName = prompt('Enter name', 'name');
-            this.storage.setField('gamerName',gamerName);
+            this.storage.setField('gamerName', gamerName);
         } 
         this.stage.jqEl.append("<p>hello, "+gamerName+"</p>");
     }

@@ -11,7 +11,7 @@
   <script>
     var game;  
     var objects = [/*Snake*/{hp: 5, attack: 1}, /*Harpy*/{hp: 10, attack: 1.5}, /*Knight */{hp: 15, attack: 3}];
-    var knightHP = 15;
+    
     function init(){       
         game = new Game("demoCanvas");
         game.start();     
@@ -19,7 +19,6 @@
             game.storage.setField("coins", 0);
             alert(game.storage.getField("coins"));
         };
-        var coinInvtext = game.storage.getField("coins");
         game.stage.on("stagemousedown", function(event) {
             //console.log(event);
             if (!event.relatedTarget) {

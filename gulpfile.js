@@ -1,14 +1,14 @@
 var gulp = require('gulp');
-var sass =require('gulp-sass');
+var sass = require('gulp-sass');
 var browserSync = require('browser-sync'); 
-//var jsdoc = require('gulp-jsdoc');
+// var jsdoc = require("gulp-jsdoc");	
 
 gulp.task('sass', function(){
 	return gulp.src('app/sass/style.sass')
 	.pipe(sass())
 	.pipe(gulp.dest('app/css'))
 	.pipe(browserSync.reload({stream: 
-        true}))
+		true}))
 });
 
 gulp.task('browser-sync', function(){
@@ -20,6 +20,11 @@ gulp.task('browser-sync', function(){
 		notify: true
 	})
 });
+
+// gulp.task('docs', function(){
+// 	gulp.src("app/js/*.js")
+// 	.pipe(jsdoc('docs/'))	
+// });
 
 gulp.task('watch',['browser-sync','sass'],function(){
 	gulp.watch('app/sass/**/*.sass', ['sass']);

@@ -1,6 +1,6 @@
 // var target;
 /** 
- *monster func
+ *monster function
  * @consructor
  */
  function Monster(monsterSprites, standFrames, image,spriteWidth ,spriteHeight , x, y, monsterHP, monsterhpbar,

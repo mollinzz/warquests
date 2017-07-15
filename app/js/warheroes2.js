@@ -331,9 +331,20 @@
         return  me.object[itemKey];
     };
 
-    this.refreshCoins = function(itemKey, itemValNew, coinValue){
+    this.refreshCoins = function(itemKey, itemValOld, coinValue){
+        if (!itemValOld) {
+            itemValOld = 0;
+        }
         localStorage.removeItem(itemKey);
-        this.setField(itemKey, itemValNew + coinValue);
+        this.setField(itemKey, itemValOld + coinValue);
+    };
+
+    this.refreshItem  = function(itemKey, itemValOld, coinValue){
+        if (!itemValOld) {
+            itemValOld = 0;
+        }
+        // localStorage.removeItem(itemKey);
+        this.setField(itemKey, itemValOld + 1);
     };
 
     this.remove = function(itemKey){
@@ -399,6 +410,27 @@
   }
 }
 
+/** Collection of possible items */
+function ItemCollection(){
+    var me = this;
+    this.items = {
+        basicSword: {
+            "image48": "images/item-sword2.png",
+            "image100": "images/item-sword2.png"
+        },
+        basicAxe: {
+            "image48": "images/item-axe.png",
+            "image100": "images/item-axe.png",
+        },
+        coin: {
+            "image48": "images/coin.png",
+            "image100": "images/coin.png", //not used
+        }
+    };
+    this.getSmallImage = function(itemName){
+        return me.items[itemName]["image48"];
+    };
+};
 function Item(image, x, y, itemName, coinValue){
     var me = this;
     var item = new createjs.SpriteSheet({
@@ -432,8 +464,7 @@ function Item(image, x, y, itemName, coinValue){
     var me = this, flagOpen = 0;
     var inventoryBlock = new createjs.Shape();
 
-    var coinInvtext = game.storage.getField("coins");
-    var text = new createjs.Text(coinInvtext, "40px Arial", "black");
+    var text = new createjs.Text(game.storage.getField("coins"), "40px Arial", "black");
     text.x = 280;
 
     var inventoryBlockFraction = new createjs.SpriteSheet({
@@ -446,7 +477,7 @@ function Item(image, x, y, itemName, coinValue){
         }
     });
     inventoryBlockFraction = new createjs.Sprite(inventoryBlockFraction);
-    inventoryBlockFraction.y = 20;
+    inventoryBlockFraction.y = 40;
 
     inventoryBlock.graphics.beginFill('yellow');
     inventoryBlock.graphics.drawRect(0, 0, 360, 400);
@@ -459,55 +490,55 @@ function Item(image, x, y, itemName, coinValue){
     this.container.addChild(text);
 
     this.spawnItems = function(itemName, x, y, coinValue){
-        var item;
+        return new Item(game.itemCollection.getSmallImage(itemName), x, y, coinValue);
+    };  
+ /**
+  * Loot function for items
+  * @param {string} itemName - name of droped item
+  * @param {number} coinValue - 
+  */
+  this.loot = function(itemName, coinValue, x, y, lootCallback){
+    if (game.knight.imgObj.x < x) {
+        game.knight.walk(x - 100, y, function(){
+            choosing();
+            lootCallback(); 
+            game.knight.imgObj.gotoAndStop("walkRight")
+        })
+    } else {
+        game.knight.walk(x + 100, y, function(){
+            choosing();
+            lootCallback(); 
+            game.knight.imgObj.gotoAndStop("walkLeft")
+        })
+    }
+    function choosing(){
         switch(itemName){
-            case 'coin': 
-            item = new Item("images/coin.png", x, y, itemName, coinValue);
+            case "coin":
+            game.storage.refreshCoins("coins", game.storage.getField("coins"), coinValue);
+            me.refresh(); 
             break;
-            case 'basicAxe':
-            item = new Item("images/item-axe.png", x, y, itemName, coinValue);
+            case "basicSword": 
+            case "basicAxe":
+            game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
             break;
-            case 'basicSword':
-            item = new Item("images/item-sword2.png", x, y, itemName, coinValue);
-            break;
-        }
-        return item;
-    }
+        }; 
+    };
+}
 
-    this.loot = function(itemName, coinValue, x, y, lootCallback){
-        if (game.knight.imgObj.x < x) {
-            game.knight.walk(x - 100, y, function(){
-                choosing();
-                lootCallback(); 
-                game.knight.imgObj.gotoAndStop("walkRight")
-            })
-        } else {
-            game.knight.walk(x + 100, y, function(){
-                choosing();
-                lootCallback(); 
-                game.knight.imgObj.gotoAndStop("walkLeft")
-            })
-        }
-        function choosing(){
-            switch(itemName){
-                case "coin":
-                game.storage.refreshCoins("coins", game.storage.getField("coins"), coinValue);
-            };
+/** Reloading view inventory */
+this.refresh = function(){
+    text.text = game.storage.getField("coins");
+};
+
+/** Open Inv */
+this.open = function(){
+            //alert('хе-хе');
+            flagOpen = 1; 
+            game.stage.addChild(me.container)
         };
-    }
-    /**Reloading view inventory */
-    this.refresh = function(){
 
-    };
-
-    /** Open Inv */
-    this.open = function(){
-        //alert('хе-хе');
-        flagOpen = 1; 
-        game.stage.addChild(me.container)
-    };
-    /** Close Inv */
-    this.close = function(){
+        /** Close Inv */
+        this.close = function(){
         //alert('не хе-хе');
         flagOpen = 0;
         game.stage.removeChild(me.container);
@@ -530,9 +561,10 @@ function Item(image, x, y, itemName, coinValue){
     this.storage = new Storage();
     this.stage = new createjs.Stage(stageId);
     me.spawner = new MonsterSpawner();
-    this.inventory = new Inventory();
     // this.items = new Items();
+    this.itemCollection = new ItemCollection();
     this.start = function(){
+        this.inventory = new Inventory();
         // fullscreen canvas
         //window.addEventListener('resize', me.resizeCanvas, false);
         me.resizeCanvas = function() {

@@ -436,12 +436,10 @@ function ItemCollection(){
         return me.items[itemName]["image100"]
     };
 };
+
 function Item(image, x, y, itemName, coinValue){
     var me = this;
-    var item = new Image();
-    item.src = image;
-    var bitmap = new createjs.Bitmap(item);
-    bitmap.width = 48;
+    var bitmap = new createjs.Bitmap(image);
     bitmap.x = x;
     bitmap.y = y;
     game.stage.addChild(bitmap);
@@ -506,26 +504,32 @@ function ItemInventory(image, x, y){
   * @param {number} coinValue - 
   */
   this.loot = function(itemName, coinValue, x, y, lootCallback){
-    choosing();
-    lootCallback(); 
     if (game.knight.imgObj.x < x) {
         game.knight.walk(x - 100, y, function(){
             game.knight.imgObj.gotoAndStop("walkRight")
+            choosing();
+            lootCallback(); 
         })
     } else {
         game.knight.walk(x + 100, y, function(){
             game.knight.imgObj.gotoAndStop("walkLeft")
+            choosing();
+            lootCallback(); 
         })
-    }
+    };
+
     function choosing(){
         switch(itemName){
             case "coin":
             game.storage.refreshCoins("coins", game.storage.getField("coins"), coinValue);
             me.refresh(); 
             break;
-            case "basicSword": 
+            case "basicSword":
+            ItemInventory(game.itemCollection.getBigImage(itemName), me.invObj.first.posX, me.invObj.first.posY);
+            game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
+            break; 
             case "basicAxe":
-            ItemInventory(game.itemCollection.getBigImage(itemName), me.invObj.second.posX, me.invObj.first.posY);
+            ItemInventory(game.itemCollection.getBigImage(itemName), me.invObj.second.posX, me.invObj.second.posY);
             game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
             break;
         }; 

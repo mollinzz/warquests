@@ -60,7 +60,7 @@
         //     game.storage.remove("monsterHP")
         // }, 20000);
         game.knight.gotoAndFight(coinValue, me, monsterHP, monsterAttackPoint, function(){
-            monsterHP = monsterHP - 3;
+            monsterHP = monsterHP - 10;
             //game.storage.setField("monsterHP", monsterHP)
             hpReload();
             if (monsterHP<=0) {
@@ -415,42 +415,51 @@ function ItemCollection(){
     var me = this;
     this.items = {
         basicSword: {
-            "image48": "images/item-sword2.png",
-            "image100": "images/item-sword2.png"
+            "image48": "images/sword48px.png",
+            "image100": "images/sword100px.png"
         },
         basicAxe: {
-            "image48": "images/item-axe.png",
-            "image100": "images/item-axe.png",
+            "image48": "images/axe48px.png",
+            "image100": "images/axe100px.png",
         },
         coin: {
             "image48": "images/coin.png",
             "image100": "images/coin.png", //not used
         }
     };
+
     this.getSmallImage = function(itemName){
         return me.items[itemName]["image48"];
+    };
+
+    this.getBigImage = function(itemName){
+        return me.items[itemName]["image100"]
     };
 };
 function Item(image, x, y, itemName, coinValue){
     var me = this;
-    var item = new createjs.SpriteSheet({
-        "images": [image],
-        "frames": {
-            "height": 48,
-            "width": 48,
-            "regX":0,
-            "regY": 0
-        }
-    });
-    this.imgObj = new createjs.Sprite(item);
-    createjs.Tween.get(this.imgObj)
-    .to({x: x + 24, y: y + 24});
-    game.stage.addChild(me.imgObj);
-    me.imgObj.addEventListener("click", function(){
+    var item = new Image();
+    item.src = image;
+    var bitmap = new createjs.Bitmap(item);
+    bitmap.width = 48;
+    bitmap.x = x;
+    bitmap.y = y;
+    game.stage.addChild(bitmap);
+    bitmap.addEventListener("click", function(){
         game.inventory.loot(itemName, coinValue, x, y, function(){
-            game.stage.removeChild(me.imgObj)
+            game.stage.removeChild(bitmap);
         })
     });
+}
+
+function ItemInventory(image, x, y){
+    var me = this;
+    var item = new Image();
+    item.src = image;
+    var bitmap = new createjs.Bitmap(item);
+    bitmap.x = x;
+    bitmap.y = y;
+    game.inventory.container.addChild(bitmap);
 }
 
 /**
@@ -462,35 +471,34 @@ function Item(image, x, y, itemName, coinValue){
  function Inventory(){
     this.container = new createjs.Container();
     var me = this, flagOpen = 0;
+    this.invObj = {first: {"posX": 10, "posY": 60}, second: {"posX": 130, "posY": 60}}
+
+    var text = new createjs.Text("X " + game.storage.getField("coins"), "40px Arial", "black");
+    text.x = 58;
+
+    var inventoryBlockFraction = new Image();
+    inventoryBlockFraction.src = "images/network.png";
+    var bitmap = new createjs.Bitmap(inventoryBlockFraction);
+    bitmap.y = 40;
+
+    var coinImageInv = new Image();
+    coinImageInv.src = "images/coin.png";
+    var bitmap2 = new createjs.Bitmap(coinImageInv);
+
     var inventoryBlock = new createjs.Shape();
-
-    var text = new createjs.Text(game.storage.getField("coins"), "40px Arial", "black");
-    text.x = 280;
-
-    var inventoryBlockFraction = new createjs.SpriteSheet({
-        "images": ["images/network.png"],
-        "frames": {
-            "height": 360,
-            "width": 360,
-            "regX": 0,
-            "regY": 0
-        }
-    });
-    inventoryBlockFraction = new createjs.Sprite(inventoryBlockFraction);
-    inventoryBlockFraction.y = 40;
-
     inventoryBlock.graphics.beginFill('yellow');
     inventoryBlock.graphics.drawRect(0, 0, 360, 400);
 
     this.container.x = 20;
     this.container.y = window.innerHeight - 400;
 
-    this.container.addChild(inventoryBlock);
-    this.container.addChild(inventoryBlockFraction);
+    //this.container.addChild(inventoryBlock);
+    this.container.addChild(bitmap);
     this.container.addChild(text);
+    this.container.addChild(bitmap2);
 
     this.spawnItems = function(itemName, x, y, coinValue){
-        return new Item(game.itemCollection.getSmallImage(itemName), x, y, coinValue);
+        return new Item(game.itemCollection.getSmallImage(itemName), x, y, itemName, coinValue);
     };  
  /**
   * Loot function for items
@@ -498,16 +506,14 @@ function Item(image, x, y, itemName, coinValue){
   * @param {number} coinValue - 
   */
   this.loot = function(itemName, coinValue, x, y, lootCallback){
+    choosing();
+    lootCallback(); 
     if (game.knight.imgObj.x < x) {
         game.knight.walk(x - 100, y, function(){
-            choosing();
-            lootCallback(); 
             game.knight.imgObj.gotoAndStop("walkRight")
         })
     } else {
         game.knight.walk(x + 100, y, function(){
-            choosing();
-            lootCallback(); 
             game.knight.imgObj.gotoAndStop("walkLeft")
         })
     }
@@ -519,11 +525,12 @@ function Item(image, x, y, itemName, coinValue){
             break;
             case "basicSword": 
             case "basicAxe":
+            ItemInventory(game.itemCollection.getBigImage(itemName), me.invObj.second.posX, me.invObj.first.posY);
             game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
             break;
         }; 
     };
-}
+};
 
 /** Reloading view inventory */
 this.refresh = function(){
@@ -532,17 +539,18 @@ this.refresh = function(){
 
 /** Open Inv */
 this.open = function(){
-            //alert('хе-хе');
-            flagOpen = 1; 
-            game.stage.addChild(me.container)
-        };
+        //alert('хе-хе');
+        flagOpen = 1; 
+        game.stage.addChild(me.container)
+    };
 
-        /** Close Inv */
-        this.close = function(){
+    /** Close Inv */
+    this.close = function(){
         //alert('не хе-хе');
         flagOpen = 0;
         game.stage.removeChild(me.container);
     };
+
     this.toggle = function(){
         if (!flagOpen) {
             me.open();

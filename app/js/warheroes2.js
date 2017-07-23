@@ -534,7 +534,7 @@ function ItemInventory(image, x, y){
 
 /** Reloading view inventory */
 this.refresh = function(){
-    text.text = game.storage.getField("coins");
+    text.text = "X " + game.storage.getField("coins");
 };
 
 /** Open Inv */

@@ -90,7 +90,7 @@
             game.inventory.spawnItems("coin", x, y, coinValue);
             break;
             case 3: 
-            game.inventory.spawnItems("coin", x, y, coinValue);
+            game.inventory.spawnItems("speedPotion", x, y);
             break;
         }
     };
@@ -112,6 +112,11 @@
     {"walk":"walkLeft"},
     {"walk":"walkRight"}
     ];
+    this.skills = {
+        shieldBlock: 1,
+        attack: 2,
+        movementSpeed: 0.3
+    };
 
     // sprites
     var heroSprites = new createjs.SpriteSheet({
@@ -165,7 +170,7 @@
 
         //moving
         createjs.Tween.get(me.imgObj)
-        .to({ x: x, y: y}, parseInt((Math.abs(x - me.imgObj.x) + Math.abs(y - me.imgObj.y)) / 0.3), createjs.Ease.getPowInOut(1.5))
+        .to({ x: x, y: y}, parseInt((Math.abs(x - me.imgObj.x) + Math.abs(y - me.imgObj.y)) / me.skills.movementSpeed), createjs.Ease.getPowInOut(1.5))
         .call(function(){
             if (walkCallback){
                 walkCallback();     
@@ -262,25 +267,25 @@
     };
 
     this.useAbility = function(target, abilityName){
-        // var abilityFlag = 0;
-        // if (abilityFlag) {
-        //     return false
-        // }
-        // abilityFlag = 1;
-        // switch(abilityName) {
-        //     case "shieldUp": 
-        //     if (knightHP >= defaultHP) {
-        //         return false
-        //     };
-        //     if (knightHP + 5 >= defaultHP) {
-        //         knightHP = defaultHP;
-        //         return false
-        //     }
-        //     alert(knightHP)
-        //     knightHP = knightHP + 5;
-        //     abilityFlag = 0;
-        // }
-    }
+        var abilityFlag = 0;
+        if (abilityFlag) {
+            return false
+        }
+        abilityFlag = 1;
+        switch(abilityName) {
+            case "shieldUp": 
+            if (knightHP >= defaultHP) {
+                return false
+            };
+            if (knightHP + 5 >= defaultHP) {
+                knightHP = defaultHP;
+                return false
+            }
+           //alert(knightHP)
+           knightHP = knightHP + 5;
+           abilityFlag = 0;
+       }
+   }
 };
 /**
  * marker for detecting walking point
@@ -344,7 +349,7 @@
             itemValOld = 0;
         }
         // localStorage.removeItem(itemKey);
-        this.setField(itemKey, itemValOld + 1);
+        this.setField(itemKey, itemValOld + coinValue);
     };
 
     this.remove = function(itemKey){
@@ -416,15 +421,34 @@ function ItemCollection(){
     this.items = {
         basicSword: {
             "image48": "images/sword48px.png",
-            "image100": "images/sword100px.png"
+            "image100": "images/sword100px.png",
+            "effect": function(){
+                
+            }
         },
         basicAxe: {
             "image48": "images/axe48px.png",
             "image100": "images/axe100px.png",
+            "effect": function(){
+                
+            }
         },
         coin: {
             "image48": "images/coin.png",
             "image100": "images/coin.png", //not used
+            "effect": function(){
+                
+            }
+        },
+        speedPotion: {
+            "image48": "images/0.png",
+            "image100": "images/0.png",
+            "effect": function(){
+                game.knight.skills.movementSpeed += 3;
+                setTimeout(function(){
+                   game.knight.skills.movementSpeed -= 3;
+               }, 5000)  
+            }
         }
     };
 
@@ -465,7 +489,8 @@ function Item(image, x, y, itemName, coinValue){
     ];
     this.itemArray = [
     "basicSword",
-    "basicAxe"
+    "basicAxe",
+    "speedPotion"
     ]
 
     var text = new createjs.Text("X " + game.storage.getField("coins"), "40px Arial", "black");
@@ -503,7 +528,7 @@ function Item(image, x, y, itemName, coinValue){
         var bitmap = new createjs.Bitmap(item);
         bitmap.x = x;
         bitmap.y = y;
-       me.container.addChild(bitmap);
+        me.container.addChild(bitmap);
     };
 
  /**
@@ -534,8 +559,7 @@ function Item(image, x, y, itemName, coinValue){
             game.storage.refreshCoins("coins", game.storage.getField("coins"), coinValue); 
             break;
             case "basicSword":
-            game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
-            break; 
+            case "speedPotion":
             case "basicAxe":
             game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
             break;
@@ -556,7 +580,7 @@ this.refresh = function(){
           me.slots[slotIndex].posX,
           me.slots[slotIndex].posY
           );
-         slotIndex++;
+
      }
  };
 
@@ -583,6 +607,25 @@ this.open = function(){
         } else {
             me.close();
         }
+    };
+    /**
+     *@todo Refactor
+     */
+     this.applySlot = function(number) {
+        var slotIndex = 0;
+        var currentItem = null;
+        for (var i = 0; i < me.itemArray.length; i++) {
+            currentItem = game.storage.getField(me.itemArray[i]);
+            if (currentItem) {
+                slotIndex++;
+                if (slotIndex == number){
+                    game.storage.refreshItem(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
+                    me.refresh();                    
+                    game.itemCollection.items[me.itemArray[i]].effect();
+                    break;
+                }
+            }
+        };
     }
 }
 

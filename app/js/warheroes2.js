@@ -450,16 +450,6 @@ function Item(image, x, y, itemName, coinValue){
     });
 }
 
-function ItemInventory(image, x, y){
-    var me = this;
-    var item = new Image();
-    item.src = image;
-    var bitmap = new createjs.Bitmap(item);
-    bitmap.x = x;
-    bitmap.y = y;
-    game.inventory.container.addChild(bitmap);
-}
-
 /**
  * Items construct
  *  @param {string} image - image of imgObject
@@ -469,7 +459,14 @@ function ItemInventory(image, x, y){
  function Inventory(){
     this.container = new createjs.Container();
     var me = this, flagOpen = 0;
-    this.invObj = {first: {"posX": 10, "posY": 60}, second: {"posX": 130, "posY": 60}}
+    this.slots = [
+    {"posX": 10, "posY": 60}, 
+    {"posX": 130, "posY": 60}
+    ];
+    this.itemArray = [
+    "basicSword",
+    "basicAxe"
+    ]
 
     var text = new createjs.Text("X " + game.storage.getField("coins"), "40px Arial", "black");
     text.x = 58;
@@ -498,6 +495,17 @@ function ItemInventory(image, x, y){
     this.spawnItems = function(itemName, x, y, coinValue){
         return new Item(game.itemCollection.getSmallImage(itemName), x, y, itemName, coinValue);
     };  
+
+    this.itemInventory = function(image, x, y){
+        var me = this;
+        var item = new Image();
+        item.src = image;
+        var bitmap = new createjs.Bitmap(item);
+        bitmap.x = x;
+        bitmap.y = y;
+       me.container.addChild(bitmap);
+    };
+
  /**
   * Loot function for items
   * @param {string} itemName - name of droped item
@@ -517,29 +525,43 @@ function ItemInventory(image, x, y){
             lootCallback(); 
         })
     };
-
-    function choosing(){
+    /**
+     * Saving items info into localStorage and refreshing inventory
+     */
+     function choosing(){
         switch(itemName){
             case "coin":
-            game.storage.refreshCoins("coins", game.storage.getField("coins"), coinValue);
-            me.refresh(); 
+            game.storage.refreshCoins("coins", game.storage.getField("coins"), coinValue); 
             break;
             case "basicSword":
-            ItemInventory(game.itemCollection.getBigImage(itemName), me.invObj.first.posX, me.invObj.first.posY);
             game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
             break; 
             case "basicAxe":
-            ItemInventory(game.itemCollection.getBigImage(itemName), me.invObj.second.posX, me.invObj.second.posY);
             game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
             break;
         }; 
+        me.refresh();
     };
 };
 
 /** Reloading view inventory */
 this.refresh = function(){
+    var slotIndex = 0;
+    var currentItem = null;
     text.text = "X " + game.storage.getField("coins");
+    for (var i = 0; i < me.itemArray.length; i++) {
+        currentItem = game.storage.getField(me.itemArray[i]);
+        if (currentItem) {
+         me.itemInventory(game.itemCollection.getBigImage(me.itemArray[i]),
+          me.slots[slotIndex].posX,
+          me.slots[slotIndex].posY
+          );
+         slotIndex++;
+     }
+ };
+
 };
+me.refresh();
 
 /** Open Inv */
 this.open = function(){

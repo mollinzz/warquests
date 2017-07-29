@@ -2,40 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WarQuests</title>
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="js/script.js"></script>
-    <!-- <script src="js/walk.js"></script> -->
+    <title>3</title>
+    <script type="text/javascript" src="vendor/createjs/createjs.min.js"></script>
+    <script type="text/javascript" src="js/monster.js"></script> 
+    <script src="js/knight.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>   
 </head>
-<body class="fullscreen">
-    <p>ROFl</p>
-    <section class="">
-        <div class="container">
-            <div id="stage"></div>
-        </div>
-    </section>
-
-    <script>
-        $(document).ready(function(){
-            var stage = new Stage();
-            game = new Game({
-                stage: '#stage'
-            });
-
-            knight = new Knight({posX:100, posY:200});
-            monster = new Monster({posX:300, posY:400})
-            game.start();
-            game.stage.addPerson(knight);
-            //game.stage.addPerson(monster);
-            // setInterval(function(){
-            //     knight.updatePosition();
-            // },10);
-            // setInterval(function(){
-            //     knight.walk();
-            // },1000)
-        })
-    </script>
+<body onload="init();">
+  <canvas id="demoCanvas" width="1" height="1"></canvas>
+  <script>
+    var game;  
+    
+    function init(){       
+        game = new Game("demoCanvas");
+        game.start();     
+        if (!game.storage.getField("coins")) {
+            game.storage.setField("coins", 0);
+            alert(game.storage.getField("coins"));
+        };
+        game.stage.on("stagemousedown", function(event) {
+            //console.log(event);
+            if (!event.relatedTarget) {
+                game.knight.walk(event.stageX - 42.5, event.stageY - 42.5);
+            };
+        });
+        document.onkeydown = function(ev){
+            console.log(ev);
+            console.log(ev.code);
+            if (ev.code == 'KeyB') {
+                game.inventory.toggle();
+            };
+            if (ev.code == 'KeyA') {
+                game.knight.useAbility(target, 'shieldUp')
+            }
+            if (ev.code.substring(0,5) == 'Digit') {
+               game.inventory.applySlot(parseInt(ev.code.substring(5)));
+            }
+        };
+        game.resizeCanvas();
+    }
+</script>
 </body>
 </html>

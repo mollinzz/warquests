@@ -61,7 +61,7 @@
         //     game.storage.remove("monsterHP")
         // }, 20000);
         game.knight.gotoAndFight(coinValue, me, monsterHP, monsterAttackPoint, function(){
-        	monsterHP = monsterHP - 2;
+        	monsterHP = monsterHP - game.knight.skills.attack;
             //game.storage.setField("monsterHP", monsterHP)
             hpReload();
             if (monsterHP<=0) {
@@ -82,21 +82,23 @@
      */
      function drop(coinValue){
      	var variable;
-     	variable = parseInt(Math.random() * 2);
+     	variable = parseInt(Math.random() * 6);
      	switch(variable){
-     		case 0: 
+     		case 0: game.inventory.spawnItems("attackPointPotion", x, y);
+     		break;
+     		case 1: 
      		game.inventory.spawnItems("speedPotion", x, y);
      		break;
-     		case 1:
+     		case 2:
      		game.inventory.spawnItems("healphPotion", x, y);
      		break;
-     		case 2:
+     		case 3:
      		game.inventory.spawnItems("basicSword", x, y, coinValue);
      		break;
-     		case 3:
+     		case 4:
      		game.inventory.spawnItems("basicAxe", x, y, coinValue);
      		break;
-     		case 4:
+     		case 5:
      		game.inventory.spawnItems("coin", x, y, coinValue);
      		break;
      	}
@@ -120,11 +122,13 @@
 	 ];
 	 this.skills = {
 	 	shieldBlock: 1,
-	 	attack: 2,
-	 	movementSpeed: 0.3
+	 	slam: 2,
+	 	movementSpeed: 0.3,
+	 	attack: 1,
+	 	manaPoints: 10
 	 };
 
-	 /** Sprites setting */
+	/** Sprites setting */
 	 var knightSprites = new createjs.SpriteSheet({
 	 	"animations" : {
 	 		"walkRight": {
@@ -183,7 +187,7 @@
         	} else {
         		me.imgObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
         	};
-        	game.stage.removeChild(game.marker.imgObj);
+        	game.stage.removeChild(game.marker.bitmap);
         	actionsFlag--;
         });
       };
@@ -202,16 +206,16 @@
      	target = monster;
      	if (me.imgObj.x > monster.imgObj.x) {
      		me.walk(monster.imgObj.x + 127.5, monster.imgObj.y, function() {
-                //starting animation
-                me.imgObj.gotoAndPlay("attackLeft");
-                //callback
-                setTimeout(function(){
-                	callback();
-                	me.imgObj.gotoAndStop("walkLeft");
-                	me.minusHPKnight(monsterAttack);
-                	actionsFlag--;
-                },1000)
-              }, true);           
+	        //starting animation
+	        me.imgObj.gotoAndPlay("attackLeft");
+	        //callback
+	        setTimeout(function(){
+	        	callback();
+	        	me.imgObj.gotoAndStop("walkLeft");
+	        	me.minusHPKnight(monsterAttack);
+	        	actionsFlag--;
+	        },1000)
+	      }, true);           
      	} else {
      		me.walk(monster.imgObj.x - 127.5, monster.imgObj.y, function(){
                 //starting animation
@@ -234,7 +238,7 @@
      */
      this.minusHPKnight = function(monsterAttack){       
      	me.knightHP = me.knightHP - monsterAttack;
-     	me.refreshHealphBar();
+     	me.refreshBar(me.knightHP, me.defaultHP, hpBar, 20, 50);
      };
 
     /** Plus HP of knight
@@ -242,7 +246,7 @@
      */
      this.plusHPKnight = function(value){       
      	me.knightHP = me.knightHP + value;
-     	me.refreshHealphBar();
+     	me.refreshBar(me.knightHP, me.defaultHP, hpBar, 20, 50);
      };
 
      var hpBar = new createjs.Shape();
@@ -255,17 +259,24 @@
      	);
      game.stage.addChild(hpBar);
 
+     var manaBar = new createjs.Shape();
+     manaBar.graphics.beginFill("#005aff");
+     manaBar.graphics.drawRect(
+     	game.stage.canvas.width / 2 - 400, 
+     	70,
+     	800,
+     	25
+     	);
+     game.stage.addChild(manaBar);
+
      /** Refreshing of healph bar */
-     this.refreshHealphBar = function(){
-     	if (me.knightHP >= me.defaultHP) {
-     		return false
-     	};
+     this.refreshBar = function(count1, count2, bar, y, width){
         // game.stage.removeChild(hpBar);
-        factorKnight = parseInt(me.knightHP / me.defaultHP * 100) / 100; 
+        factorKnight = parseInt(count1 / count2 * 100) / 100; 
         //console.log(factorKnight);
-        hpBar.graphics.clear();     
-        hpBar.graphics.beginFill('#e50707');
-        hpBar.graphics.drawRect(game.stage.canvas.width / 2 - 400, 20, factorKnight * 800, 50);       
+        bar.graphics.clear();     
+        bar.graphics.beginFill('#e50707');
+        bar.graphics.drawRect(game.stage.canvas.width / 2 - 400, y, factorKnight * 800, width);       
         //game.stage.addChild(hpBar);
       };
 
@@ -274,7 +285,7 @@
       	if (me.knightHP < me.defaultHP) {
       		console.log(me.knightHP);
       		me.plusHPKnight(1);
-      		me.refreshHealphBar();
+      		me.refreshBar(me.knightHP, me.defaultHP, hpBar, 20, 50);
       	}   
       };
 
@@ -297,7 +308,6 @@
      			knightHP = defaultHP;
      			return false
      		}
-           //alert(knightHP)
            knightHP = knightHP + 5;
            abilityFlag = 0;
          }
@@ -309,20 +319,10 @@
  * @param {number} y - y position
  */
  function marker(x,y){
- 	var marker = new createjs.SpriteSheet({
- 		"images": ["images/marker2.png"],
- 		"frames": {
- 			"height": 45,
- 			"width": 45,
- 			"regX":0,
- 			"regY": 0
- 		}
- 	});
- 	this.imgObj = new createjs.Sprite(marker);
-    //createjs.Tween.get(this.imgObj);
-    createjs.Tween.get(this.imgObj)
-    .to({x: x + 22.5, y: y + 22.5});
-    game.stage.addChild(this.imgObj);
+ 		this.bitmap = new createjs.Bitmap("images/marker2.png");
+ 		this.bitmap.x = x + 22.5;
+ 		this.bitmap.y = y + 22.5;
+    game.stage.addChild(this.bitmap);
  };
 
 /** Saving objects to localStorage */
@@ -472,7 +472,7 @@
 
             }
           },
-          speedPotion: {
+        speedPotion: {
           	"image48": "images/speedPotion48px.png",
           	"image100": "images/speedPotion100px.png",
           	"effect": function(){
@@ -488,17 +488,30 @@
           	"effect": function(){
           		if (game.knight.knightHP >= game.knight.defaultHP - 5) {
           			game.knight.knightHP =  game.knight.defaultHP;
-          			alert(game.knight.knightHP == game.knight.defaultHP)
-          			alert("lul")
           		} else {
           			game.knight.plusHPKnight(5);
-          			alert('kek')
           		};
           		game.knight.refreshHealphBar();
-          		alert(game.knight.knightHP)
           	}
+          },
+          attackPointPotion: {
+          	"image48": "images/attackpotion48px.png",
+          	"image100": "images/attackpotion100px.png",
+          	"effect": function(){
+          		if (game.knight.knightHP <= 5 ) {
+          			game.knight.skills.attack = game.knight.skills.attack + 5;
+          			setTimeout(function(){
+          				game.knight.skills.attack = game.knight.skills.attack - 5;
+          		  }, 5000)
+          		} else {
+          			game.knight.skills.attack = game.knight.skills.attack + 3;
+          		  setTimeout(function(){
+          			  game.knight.skills.attack = game.knight.skills.attack - 3;
+          		  }, 5000)
+          		}
+						}
           }
-      };
+        }
 
      /** Getting 48px image
      * @param {string} itemName - identificator of item
@@ -513,7 +526,7 @@
      this.getBigImage = function(itemName){
     	return me.items[itemName]["image100"]
      };
-     };
+}
 
 /** Game inventory */
  function Inventory(){
@@ -529,7 +542,8 @@
 	  	"basicSword",
 	  	"basicAxe",
 	  	"speedPotion",
-	  	"healphPotion"
+	  	"healphPotion",
+	  	"attackPointPotion"
   	]
 
   	var text = new createjs.Text("X " + game.storage.getField("coins"), "40px Arial", "black");
@@ -570,10 +584,10 @@
       	var me = this;
       	var item = new Image();
       	item.src = image;
-      	var bitmap = new createjs.Bitmap(item);
-      	bitmap.x = x;
-      	bitmap.y = y;
-      	me.container.addChild(bitmap);
+      	var itemInventoryBitmap = new createjs.Bitmap(item);
+      	itemInventoryBitmap.x = x;
+      	itemInventoryBitmap.y = y;
+      	me.container.addChild(itemInventoryBitmap);
       };
 
     /** Items construct
@@ -582,16 +596,15 @@
       *  @param {number} y - y position
       */
       this.item = function (image, x, y, itemName, coinValue){
-     	var me = this;
-     	var bitmap = new createjs.Bitmap(image);
-     	bitmap.x = x;
-     	bitmap.y = y;
-     	game.stage.addChild(bitmap);
-     	bitmap.addEventListener("click", function(){
-     		me.loot(itemName, coinValue, x, y, function(){
-     			game.stage.removeChild(bitmap);
-     		})
-     	});
+	     	var bitmapItem = new createjs.Bitmap(image);
+	     	bitmapItem.x = x;
+	     	bitmapItem.y = y;
+	     	game.stage.addChild(bitmapItem);
+	     	bitmapItem.addEventListener("click", function(){
+	     		me.loot(itemName, coinValue, x, y, function(){
+	     			game.stage.removeChild(bitmapItem);
+	     		})
+	     	});
       };
 
     /** Loot function for items
@@ -627,6 +640,7 @@
          		case "speedPotion":
          		case "basicAxe":
          		case "healphPotion":
+         		case "attackPointPotion":
          		game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
          		break;
          	}; 
@@ -741,9 +755,9 @@
 	me.spawner.createMonster(100, 50, 'harpy');
 	me.knight = new Knight();
 
-	setInterval(function(){
-		me.knight.regen();
-	}, 5000);
+	// setInterval(function(){
+	// 	me.knight.regen();
+	// }, 5000);
 
 	setInterval(function(){
 		if (me.knightHP <= 0){
@@ -758,4 +772,4 @@
 	me.stage.update();               
 	}
 	};
- ;
+}

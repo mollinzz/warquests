@@ -131,9 +131,25 @@
    		x, y,
    		10,
    		'bar',
-   		70,
-   		15,
+   		87,
+   		50,
    		'Gotic harpy',
    		2,
    		2)
+   };
+   function HellHarpy (x, y){
+   	this.prototype = new Monster(
+   		"harpySprites",
+   		[0,1,2,1],
+   		"images/hellHarpy.png",
+   		140,
+   		70,
+   		x, y,
+   		30,
+   		'bar',
+   		140,
+   		50,
+   		'Hell harpy',
+   		5,
+   		10)
    };

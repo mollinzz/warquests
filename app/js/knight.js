@@ -17,7 +17,7 @@
 	 	shieldBlock: 1,
 	 	slam: 2,
 	 	movementSpeed: 0.3,
-	 	attack: 10,
+	 	attack: 1,
 	 	manaPoints: 10
 	 };
 
@@ -131,7 +131,7 @@
      */
      this.minusHPKnight = function(monsterAttack){       
      	me.knightHP = me.knightHP - monsterAttack;
-     	me.refreshBar(me.knightHP, me.defaultHP, hpBar, 20, 50);
+     	me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50);
      };
 
     /** Plus HP of knight
@@ -139,28 +139,28 @@
      */
      this.plusHPKnight = function(value){       
      	me.knightHP = me.knightHP + value;
-     	me.refreshBar(me.knightHP, me.defaultHP, hpBar, 20, 50);
+     	me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50);
      };
 
-     var hpBar = new createjs.Shape();
-     hpBar.graphics.beginFill("#e50707");
-     hpBar.graphics.drawRect(
+     this.hpBar = new createjs.Shape();
+     this.hpBar.graphics.beginFill("#e50707");
+     this.hpBar.graphics.drawRect(
      	game.stage.canvas.width / 2 - 400, 
      	20,
      	800,
      	50
      	);
-     game.stage.addChild(hpBar);
+     game.stage.addChild(this.hpBar);
 
-     var manaBar = new createjs.Shape();
-     manaBar.graphics.beginFill("#005aff");
-     manaBar.graphics.drawRect(
+     this.manaBar = new createjs.Shape();
+     this.manaBar.graphics.beginFill("#005aff");
+     this.manaBar.graphics.drawRect(
      	game.stage.canvas.width / 2 - 400, 
      	70,
      	800,
      	25
      	);
-     game.stage.addChild(manaBar);
+     game.stage.addChild(this.manaBar);
 
      /** Refreshing of healph bar */
      this.refreshBar = function(count1, count2, bar, y, width){
@@ -178,7 +178,7 @@
      if (me.knightHP < me.defaultHP) {
         console.log(me.knightHP);
         me.plusHPKnight(1);
-        me.refreshBar(me.knightHP, me.defaultHP, hpBar, 20, 50);
+        me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50);
     }   
 };
 

@@ -124,7 +124,7 @@
 	 	shieldBlock: 1,
 	 	slam: 2,
 	 	movementSpeed: 0.3,
-	 	attack: 1,
+	 	attack: 10,
 	 	manaPoints: 10
 	 };
 
@@ -536,7 +536,12 @@
 	  	{"posX": 10, "posY": 60}, 
 	  	{"posX": 130, "posY": 60},
 	  	{"posX": 250, "posY": 60},
-	  	{"posX": 10, "posY": 70}
+	  	{"posX": 10, "posY": 180},
+	  	{"posX": 130, "posY": 180},
+	  	{"posX": 250, "posY": 180},
+	  	{"posX": 10, "posY": 300},
+	  	{"posX": 130, "posY": 300},
+	  	{"posX": 250, "posY": 300}
   	];
   	this.itemArray = [
 	  	"basicSword",
@@ -544,7 +549,9 @@
 	  	"speedPotion",
 	  	"healphPotion",
 	  	"attackPointPotion"
-  	]
+  	];
+
+  	this.containerBitmaps = [];
 
   	var text = new createjs.Text("X " + game.storage.getField("coins"), "40px Arial", "black");
   	text.x = 58;
@@ -581,13 +588,13 @@
       * @param {number} y - y pos
       */
       this.itemInventory = function(image, x, y){
-      	var me = this;
       	var item = new Image();
       	item.src = image;
       	var itemInventoryBitmap = new createjs.Bitmap(item);
       	itemInventoryBitmap.x = x;
       	itemInventoryBitmap.y = y;
       	me.container.addChild(itemInventoryBitmap);
+      	me.containerBitmaps.push(itemInventoryBitmap);
       };
 
     /** Items construct
@@ -652,6 +659,10 @@
        this.refresh = function(){
        	var slotIndex = 0;
        	var currentItem = null;
+       	for (var i = 0; i < me.containerBitmaps.length; i++) {
+       		me.container.removeChild(me.containerBitmaps[i]);
+       	};
+       	me.containerBitmaps = [];
        	text.text = "X " + game.storage.getField("coins");
        	for (var i = 0; i < me.itemArray.length; i++) {
        		currentItem = game.storage.getField(me.itemArray[i]);
@@ -660,6 +671,7 @@
        				me.slots[slotIndex].posX,
        				me.slots[slotIndex].posY
        				);
+       			slotIndex++;
        		};
        	};
        };

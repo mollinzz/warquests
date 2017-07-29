@@ -434,8 +434,11 @@ function Game(stageId) {
     // }, 5000);
 
     setInterval(function() {
-      if (me.knightHP <= 0) {
-        alert('gg');
+      if (me.knight.knightHP <= 0) {
+        me.knight.die();
+        setTimeout(function(){
+          location.reload();
+        }, 1000)
       }
     }, 100)
 

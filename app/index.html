@@ -34,9 +34,9 @@
       if (ev.code == 'KeyB') {
         game.inventory.toggle();
       };
-      if (ev.code == 'KeyA') {
-        game.knight.useAbility(target, 'shieldUp')
-      }
+      if (ev.code == 'KeyS') {
+        game.knight.useAbility('slam');
+      };
       if (ev.code.substring(0, 5) == 'Digit') {
         game.inventory.applySlot(parseInt(ev.code.substring(5)));
       }

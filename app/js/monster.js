@@ -5,8 +5,8 @@
    widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue) {
    /** Variables */
    var me = this;
-   var monsterHP = monsterHP;
-   var defaultHP = monsterHP;
+   this.monsterHP = monsterHP;
+   var defaultHP = this.monsterHP;
    var targetHP = monsterHP;
    var monsterAttack = monsterAttackPoint;
    var coinValue = coinValue;
@@ -44,7 +44,7 @@
    /** Refreshing healph bar */
    function hpReload() {
      game.stage.removeChild(monsterhpbar);
-     factor = parseInt(monsterHP / defaultHP * 100) / 100;
+     factor = parseInt(me.monsterHP / defaultHP * 100) / 100;
      //console.log(factor);
      monsterhpbar.graphics.clear();
      monsterhpbar.graphics.beginFill('#cc0000');
@@ -60,11 +60,12 @@
      // setTimeout(function(){
      //     game.storage.remove("monsterHP")
      // }, 20000);
-     game.knight.gotoAndFight(coinValue, me, monsterHP, monsterAttackPoint, function() {
-       monsterHP = monsterHP - game.knight.skills.attack;
+     game.knight.gotoAndFight(coinValue, me, monsterAttackPoint, function() {
        //game.storage.setField("monsterHP", monsterHP)
+       me.monsterHP = me.monsterHP - game.knight.skills.attack - game.knight.skills.extraAttack;
+               game.knight.skills.extraAttack = 0;
        hpReload();
-       if (monsterHP <= 0) {
+       if (me.monsterHP <= 0) {
          game.stage.removeChild(me.imgObj);
          if (monsterhpbar) {
            game.stage.removeChild(monsterhpbar);

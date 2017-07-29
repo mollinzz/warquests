@@ -17,9 +17,11 @@ function Knight() {
     shieldBlock: 1,
     slam: 2,
     movementSpeed: 0.3,
+    extraAttack: 0,
     attack: 1,
-    manaPoints: 10
+    manaPoints: 10,
   };
+    this.defaultMana = this.skills.manaPoints;
 
   /** Sprites setting */
   var knightSprites = new createjs.SpriteSheet({
@@ -39,9 +41,12 @@ function Knight() {
       "attackLeft": {
         "frames": [12, 13, 14],
         "speed": 0.1
+      },
+      "headStone": {
+        "frames": [11]
       }
     },
-    "images": ["images/warrior_sprites4.png"],
+    "images": ["images/warrior_sprites5.png"],
     "frames": {
       "height": 127.5,
       "width": 127.5,
@@ -91,39 +96,37 @@ function Knight() {
    * @param {number} monsterAttack - attack points of monster.
    * @param {function} callback - callback after going.
    */
-  this.gotoAndFight = function(coinValue, monster, monsterHP, monsterAttack, callback) {
+  this.gotoAndFight = function(coinValue, monster, monsterAttack, callback) {
     if (actionsFlag) {
       return false;
     }
     actionsFlag++;
-    target = monster;
+    var coord = -127.5;
+    var attackFrame = "attackRight";
+    var walkFrame = "walkRight";
     if (me.imgObj.x > monster.imgObj.x) {
-      me.walk(monster.imgObj.x + 127.5, monster.imgObj.y, function() {
-        //starting animation
-        me.imgObj.gotoAndPlay("attackLeft");
-        //callback
-        setTimeout(function() {
-          callback();
-          me.imgObj.gotoAndStop("walkLeft");
-          me.minusHPKnight(monsterAttack);
-          actionsFlag--;
-        }, 1000)
-      }, true);
-    } else {
-      me.walk(monster.imgObj.x - 127.5, monster.imgObj.y, function() {
-        //starting animation
-        me.imgObj.gotoAndPlay("attackRight");
+      coord = 127.5;
+      attackFrame = "attackLeft";
+      walkFrame = "walkLeft";
+    };
+    me.walk(monster.imgObj.x + coord, monster.imgObj.y, function() {
+      //starting animation
+      me.imgObj.gotoAndPlay(attackFrame);
+      //callback
+      setTimeout(function() {
+        callback();
+        me.imgObj.gotoAndStop(walkFrame);
+        //monster.monsterHP = monster.monsterHP - me.skills.attack - me.skills.extraAttack;
+        // console.log(monster.monsterHP - me.skills.attack - me.skills.extraAttack)
+        game.knight.skills.extraAttack = 0;
+        me.minusHPKnight(monsterAttack);
+        actionsFlag--;
+      }, 1000)
+    }, true);
+  };
 
-        //callback
-        setTimeout(function() {
-          callback();
-          me.imgObj.gotoAndStop("walkRight");
-          me.minusHPKnight(monsterAttack);
-          actionsFlag--;
-        }, 1000);
-      }, true);
-
-    }
+  this.die = function() {
+    me.imgObj.gotoAndPlay("headStone");
   };
 
   /** Minusing HP of knight
@@ -131,7 +134,7 @@ function Knight() {
    */
   this.minusHPKnight = function(monsterAttack) {
     me.knightHP = me.knightHP - monsterAttack;
-    me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50);
+    me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50, "#e50707");
   };
 
   /** Plus HP of knight
@@ -139,7 +142,7 @@ function Knight() {
    */
   this.plusHPKnight = function(value) {
     me.knightHP = me.knightHP + value;
-    me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50);
+    me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50, "#e50707");
   };
 
   this.hpBar = new createjs.Shape();
@@ -163,12 +166,12 @@ function Knight() {
   game.stage.addChild(this.manaBar);
 
   /** Refreshing of healph bar */
-  this.refreshBar = function(count1, count2, bar, y, width) {
+  this.refreshBar = function(count1, count2, bar, y, width, color) {
     // game.stage.removeChild(hpBar);
     factorKnight = parseInt(count1 / count2 * 100) / 100;
     //console.log(factorKnight);
     bar.graphics.clear();
-    bar.graphics.beginFill('#e50707');
+    bar.graphics.beginFill(color);
     bar.graphics.drawRect(game.stage.canvas.width / 2 - 400, y, factorKnight * 800, width);
     //game.stage.addChild(hpBar);
   };
@@ -178,7 +181,7 @@ function Knight() {
     if (me.knightHP < me.defaultHP) {
       console.log(me.knightHP);
       me.plusHPKnight(1);
-      me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50);
+      me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50,"#e50707");
     }
   };
 
@@ -186,7 +189,7 @@ function Knight() {
    * @param {object} target - target of using ability
    * @param {string} abilityName - name of ability to switch construction 
    */
-  this.useAbility = function(target, abilityName) {
+  this.useAbility = function(abilityName) {
     var abilityFlag = 0;
     if (abilityFlag) {
       return false
@@ -203,6 +206,12 @@ function Knight() {
         }
         knightHP = knightHP + 5;
         abilityFlag = 0;
+        break;
+      case "slam":
+        me.skills.extraAttack = 2;
+        //console.log(me.skills.extraAttack)
+        me.skills.manaPoints -= 3;
+        me.refreshBar(me.skills.manaPoints, me.defaultMana, me.manaBar, 70, 25,"#005aff")
     }
   }
 };

@@ -2,48 +2,52 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>3</title>
-  <script type="text/javascript" src="vendor/createjs/createjs.min.js"></script>
-  <script type="text/javascript" src="js/monster.js"></script>
-  <script src="js/knight.js"></script>
-  <script type="text/javascript" src="js/script.js"></script>
+    <meta charset="UTF-8">
+    <title>3</title>
+    <script type="text/javascript" src="vendor/createjs/createjs.min.js"></script>
+    <script type="text/javascript" src="js/monster.js"></script>
+    <script type="text/javascript" src="js/knight.js"></script>
+    <script type="text/javascript" src="js/inventory.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
 </head>
 
-<body onload="init();">
-  <canvas id="demoCanvas" width="1" height="1"></canvas>
-  <script>
-  var game;
+<body onload="init()">
+    <canvas id="demoCanvas" width="1" height="1"></canvas>
+    <script>
+    var game;
 
-  function init() {
-    game = new Game("demoCanvas");
-    game.start();
-    if (!game.storage.getField("coins")) {
-      game.storage.setField("coins", 0);
-      alert(game.storage.getField("coins"));
-    };
-    game.stage.on("stagemousedown", function(event) {
-      //console.log(event);
-      if (!event.relatedTarget) {
-        game.knight.walk(event.stageX - 42.5, event.stageY - 42.5);
-      };
-    });
-    document.onkeydown = function(ev) {
-      console.log(ev);
-      console.log(ev.code);
-      if (ev.code == 'KeyB') {
-        game.inventory.toggle();
-      };
-      if (ev.code == 'KeyS') {
-        game.knight.useAbility('slam');
-      };
-      if (ev.code.substring(0, 5) == 'Digit') {
-        game.inventory.applySlot(parseInt(ev.code.substring(5)));
-      }
-    };
-    game.resizeCanvas();
-  }
-  </script>
+    function init() {
+        game = new Game("demoCanvas");
+        game.start();
+        if (!game.storage.getField("coins")) {
+            game.storage.setField("coins", 0);
+            alert(game.storage.getField("coins"));
+        };
+        game.stage.on("stagemousedown", function(event) {
+            //console.log(event);
+            if (!event.relatedTarget) {
+                game.knight.walk(event.stageX - 42.5, event.stageY - 42.5);
+            };
+        });
+        document.onkeydown = function(ev) {
+            console.log(ev);
+            console.log(ev.code);
+            if (ev.code == 'KeyB') {
+                game.inventory.toggle();
+            };
+            if (ev.code == 'KeyS') {
+                game.knight.useAbility('slam');
+            };
+            if (ev.code == 'KeyA') {
+                game.knight.useAbility('heal')
+            };
+            if (ev.code.substring(0, 5) == 'Digit') {
+                game.inventory.applySlot(parseInt(ev.code.substring(5)));
+            }
+        };
+        game.resizeCanvas();
+    }
+    </script>
 </body>
 
 </html>

@@ -24,6 +24,7 @@ function Inventory() {
   ];
 
   this.containerBitmaps = [];
+  this.containerTexts = [];
 
   var text = new createjs.Text("X " + game.storage.getField("coins"), "40px Arial", "black");
   text.x = 58;
@@ -58,15 +59,21 @@ function Inventory() {
    * @param {string} image - adress of img
    * @param {number} x - x pos
    * @param {number} y - y pos
+   * @param {number} number - how many items
    */
-  this.itemInventory = function(image, x, y) {
+  this.itemInventory = function(image, x, y, number) {
     var item = new Image();
     item.src = image;
     var itemInventoryBitmap = new createjs.Bitmap(item);
     itemInventoryBitmap.x = x;
     itemInventoryBitmap.y = y;
+    var text = new createjs.Text(number, "15px Arial", "black");
+    text.x = x;
+    text.y = y;
+    me.container.addChild(text);
     me.container.addChild(itemInventoryBitmap);
     me.containerBitmaps.push(itemInventoryBitmap);
+    me.containerTexts.push(text);
   };
 
   /** Items construct
@@ -135,14 +142,19 @@ function Inventory() {
     for (var i = 0; i < me.containerBitmaps.length; i++) {
       me.container.removeChild(me.containerBitmaps[i]);
     };
+    for (var i = 0; i < me.containerTexts.length; i++) {
+      me.container.removeChild(me.containerTexts[i]);
+    };
     me.containerBitmaps = [];
+    me.containerTexts = [];
     text.text = "X " + game.storage.getField("coins");
     for (var i = 0; i < me.itemArray.length; i++) {
       currentItem = game.storage.getField(me.itemArray[i]);
       if (currentItem) {
         me.itemInventory(game.itemCollection.getBigImage(me.itemArray[i]),
           me.slots[slotIndex].posX,
-          me.slots[slotIndex].posY
+          me.slots[slotIndex].posY,
+          currentItem
         );
         slotIndex++;
       };

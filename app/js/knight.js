@@ -21,7 +21,7 @@ function Knight() {
     slam: 2,
     movementSpeed: 0.3,
     extraAttack: 0,
-    attack: 10,
+    attack: 1,
   };
   this.defaultMana = this.manaPoints;
 

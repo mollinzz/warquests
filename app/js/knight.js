@@ -209,8 +209,7 @@ function Knight() {
         } else {
           me.plusHPKnight(4);
         };
-        game.abilityPanel.changeImage(game.abilityPanel.healSprite);
-        game.abilityPanel.rollback(5);
+        game.abilityPanel.healSlot.changeImage();
         setTimeout(function() {
           healAbilityFlag = 0;
         }, 5000);
@@ -224,7 +223,7 @@ function Knight() {
         //console.log(me.skills.extraAttack)
         me.manaPoints -= 3;
         me.refreshBar(me.manaPoints, me.defaultMana, me.manaBar, 70, 25, "#005aff");
-        game.abilityPanel.changeImage(game.abilityPanel.slamSprite);
+        game.abilityPanel.slamSlot.changeImage();
         setTimeout(function() {
           slamAbilityFlag = 0;
         }, 4000)

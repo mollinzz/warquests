@@ -106,69 +106,87 @@ function AbilityPanel() {
   mainBlock.graphics.drawRect(0, 0, 321, 109);
   container.addChild(mainBlock);
 
-  var slamImage = new createjs.SpriteSheet({
-    "animations": {
-      "notUsed": {
-        "frames": [0]
-      },
-      "used": {
-        "frames": [1]
-      }
-    },
-    "images": ["images/slam.png"],
-    "frames": {
-      "height": 100,
-      "width": 100,
-      "regX": 0,
-      "regY": 0
-    }
-  });
-  this.slamSprite = new createjs.Sprite(slamImage);
-  this.slamSprite.gotoAndStop("notUsed");
-  createjs.Tween.get(this.slamSprite)
-    .to({ x: 3, y: 3 });
-
-  var healImage = new createjs.SpriteSheet({
-    "animations": {
-      "notUsed": {
-        "frames": [0]
-      },
-      "used": {
-        "frames": [1]
-      }
-    },
-    "images": ["images/heal.png"],
-    "frames": {
-      "height": 100,
-      "width": 100,
-      "regX": 0,
-      "regY": 0
-    }
-  });
-  this.healSprite = new createjs.Sprite(healImage);
-  this.healSprite.gotoAndStop("notUsed");
-  createjs.Tween.get(this.healSprite)
-    .to({ x: 109, y: 3 });
-
-  container.addChild(this.healSprite);
-  container.addChild(this.slamSprite);
-
-  this.changeImage = function(abilityImage) {
-    abilityImage.gotoAndStop("used");
-    setTimeout(function() {
-      abilityImage.gotoAndStop("notUsed");
-    }, 300);
-  };
-  this.rollback = function(rollbackTime) {
-    var time = rollbackTime;
-    for (var i; i < rollbackTime; setTimeout(function(){i++; time--;}, 1000)) {
-      alert()
-      var text = new createjs.Text(time, "40px Arial", "red");
-      container.addChild(text)
-    }
-  };
-
+  this.slamSlot = new AbilityPanelSlot("slam", 3, container)
+  this.healSlot = new AbilityPanelSlot("heal", 106, container)
 };
+/** Single slot for ability panel
+ * @param {string} slotName - name of slot
+ * @param {number} x - x pos
+ * @param {Object} container - cretejs container for slot
+ */
+function AbilityPanelSlot(slotName, x, container) {
+  var me = this;
+  var slotSettings = {
+    slam: {
+      spriteSettings: {
+        "animations": {
+          "notUsed": {
+            "frames": [0]
+          },
+          "used": {
+            "frames": [1]
+          }
+        },
+        "images": ["images/slam.png"],
+        "frames": {
+          "height": 100,
+          "width": 100,
+          "regX": 0,
+          "regY": 0
+        }
+      },
+      timeOut: 4
+    },
+    heal: {
+      spriteSettings: {
+        "animations": {
+          "notUsed": {
+            "frames": [0]
+          },
+          "used": {
+            "frames": [1]
+          }
+        },
+        "images": ["images/heal.png"],
+        "frames": {
+          "height": 100,
+          "width": 100,
+          "regX": 0,
+          "regY": 0
+        }
+      },
+      timeOut: 5
+    }
+  };
+  var image = new createjs.SpriteSheet(slotSettings[slotName].spriteSettings);
+  this.sprite = new createjs.Sprite(image);
+  this.sprite.gotoAndStop("notUsed");
+  createjs.Tween.get(this.sprite)
+    .to({ x: x, y: 3 });
+  container.addChild(this.sprite);
+
+  this.text = new createjs.Text("", "100px Arial", "white");
+  container.addChild(this.text);
+  this.text.x = x + 20;
+  this.text.y = 0;
+
+  this.changeImage = function() {
+    me.sprite.gotoAndStop("used");
+    setTimeout(function() {
+      me.sprite.gotoAndStop("notUsed");
+    }, 300);
+    me.text.text = slotSettings[slotName]["timeOut"];
+    var currentTime = slotSettings[slotName]["timeOut"];
+    var intervalId = setInterval(function() {
+      currentTime--;
+      me.text.text = currentTime;
+    }, 1000);
+    setTimeout(function() {
+      clearInterval(intervalId);
+      me.text.text = "";
+    }, slotSettings[slotName]["timeOut"] * 1000)
+  };
+}
 
 /** Main game func */
 function Game(stageId) {

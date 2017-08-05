@@ -265,7 +265,6 @@ function ItemCollection() {
             "image100": "images/manaPotion100px.png",
             "effect": function() {
                 if (game.knight.manaPoints == game.knight.defaultMana) {
-                    alert('it is full')
                     return false;
                 };
                 if (game.knight.manaPoints >= game.knight.defaultMana - 3) {
@@ -286,7 +285,7 @@ function ItemCollection() {
         return me.items[itemName]["image48"];
     };
 
-    /** Getting 48px image
+    /** Getting 100px image
      * @param {string} itemName - identificator of item
      */
     this.getBigImage = function(itemName) {

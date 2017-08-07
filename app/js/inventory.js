@@ -2,7 +2,7 @@
 function Inventory() {
   this.container = new createjs.Container();
   var me = this,
-    flagOpen = 0;
+  flagOpen = 0;
   this.slots = [
     { "posX": 10, "posY": 60 },
     { "posX": 130, "posY": 60 },
@@ -14,6 +14,7 @@ function Inventory() {
     { "posX": 130, "posY": 300 },
     { "posX": 250, "posY": 300 }
   ];
+
   this.itemArray = [
     "basicSword",
     "basicAxe",
@@ -43,7 +44,7 @@ function Inventory() {
   inventoryBlock.graphics.drawRect(0, 0, 360, 400);
 
   this.container.x = 20;
-  this.container.y = window.innerHeight - 400;
+  this.container.y = window.innerHeight - 440;
 
   //this.container.addChild(inventoryBlock);
   this.container.addChild(bitmap);

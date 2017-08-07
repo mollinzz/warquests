@@ -8,6 +8,8 @@
   <script type="text/javascript" src="js/monster.js"></script>
   <script type="text/javascript" src="js/knight.js"></script>
   <script type="text/javascript" src="js/inventory.js"></script>
+  <script type="text/javascript" src="js/abilityPanel.js"></script>
+  <script type="text/javascript" src="js/equipmentPanel.js"></script>
   <script type="text/javascript" src="js/script.js"></script>
 </head>
 
@@ -35,6 +37,9 @@
       if (ev.code == 'KeyB') {
         game.inventory.toggle();
       };
+      if (ev.code == 'KeyC') {
+        game.equipmentPanel.toggle();
+      }
       if (ev.code == 'KeyA') {
         game.knight.useAbility('slam');
       };

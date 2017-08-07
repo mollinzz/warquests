@@ -18,7 +18,6 @@ function Knight() {
   ];
   this.skills = {
     shieldBlock: 1,
-    slam: 2,
     movementSpeed: 0.3,
     extraAttack: 0,
     attack: 1,
@@ -189,11 +188,6 @@ function Knight() {
       me.refreshBar(count1, count2, bar, y, height, color);
     };
   };
-
-  /** Using ability
-   * @param {object} target - target of using ability
-   * @param {string} abilityName - name of ability to switch construction 
-   */
   this.useAbility = function(abilityName) {
     switch (abilityName) {
       case "heal":
@@ -205,7 +199,7 @@ function Knight() {
         me.refreshBar(me.manaPoints, me.defaultMana, me.manaBar, 70, 25, "#005aff");
         if (me.knightHP >= me.defaultHP - 5) {
           me.knightHP = me.defaultHP;
-          me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50, "#e50707");
+          me.refreshBar(me.knightHP, me.defaultHP, me.hpBar, 20, 50, "#e50707");
         } else {
           me.plusHPKnight(4);
         };

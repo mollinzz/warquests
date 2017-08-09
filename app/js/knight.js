@@ -2,6 +2,7 @@
  * @constructor
  */
 function Knight() {
+  var attackSpeed;
   var healAbilityFlag = 0;
   var slamAbilityFlag = 0;
   this.knightHP = 15;
@@ -20,7 +21,7 @@ function Knight() {
     shieldBlock: 1,
     movementSpeed: 0.3,
     extraAttack: 0,
-    attack: 1,
+    attack: 10,
   };
   this.defaultMana = this.manaPoints;
 
@@ -100,6 +101,11 @@ function Knight() {
   this.gotoAndFight = function(coinValue, monster, monsterAttack, callback) {
     if (actionsFlag) {
       return false;
+    };
+    if (game.itemCollection.items[game.storage.getField("equipedWeapon")]) {
+      attackSpeed = game.itemCollection.items[game.storage.getField("equipedWeapon")].attackSpeed;
+    } else {
+      attackSpeed = game.knight.skills.attack;
     }
     actionsFlag++;
     var coord = -127.5;
@@ -121,7 +127,7 @@ function Knight() {
         // console.log(monster.monsterHP - me.skills.attack - me.skills.extraAttack)
         me.minusHPKnight(monsterAttack);
         actionsFlag--;
-      }, 1000)
+      }, attackSpeed)
     }, true);
   };
 

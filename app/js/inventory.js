@@ -2,7 +2,7 @@
 function Inventory() {
   this.container = new createjs.Container();
   var me = this,
-  flagOpen = 0;
+    flagOpen = 0;
   this.slots = [
     { "posX": 10, "posY": 60 },
     { "posX": 130, "posY": 60 },
@@ -164,6 +164,31 @@ function Inventory() {
 
   me.refresh();
 
+  /** Slot apply
+   * @todo Refactor
+   */
+  this.applySlot = function(number) {
+    var slotIndex = 0;
+    var currentItem = null;
+    for (var i = 0; i < me.itemArray.length; i++) {
+      currentItem = game.storage.getField(me.itemArray[i]);
+      if (currentItem) {
+        slotIndex++;
+        if (slotIndex == number) {
+          if (game.itemCollection.items[me.itemArray[i]]["disableApply"]) {
+            game.equipmentPanel.equipItem(me.itemArray[i], game.itemCollection.items[me.itemArray[i]]["type"]);
+            game.storage.refreshItem(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
+            me.refresh();
+            break;
+          }
+          me.refresh();
+          game.itemCollection.items[me.itemArray[i]].effect();
+          break;
+        };
+      };
+    };
+  };
+
   /** OpenInv */
   this.open = function() {
     flagOpen = 1;
@@ -184,30 +209,6 @@ function Inventory() {
       me.close();
     }
   };
-
-  /** Slot apply
-   * @todo Refactor
-   */
-  this.applySlot = function(number) {
-    var slotIndex = 0;
-    var currentItem = null;
-    for (var i = 0; i < me.itemArray.length; i++) {
-      currentItem = game.storage.getField(me.itemArray[i]);
-      if (currentItem) {
-        slotIndex++;
-        if (slotIndex == number) {
-          if (game.itemCollection.items[me.itemArray[i]]["disableApply"]) {
-            break;
-          }
-          me.refresh();
-          game.itemCollection.items[me.itemArray[i]].effect();
-          game.storage.refreshItem(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1)
-          me.refresh();
-          break;
-        };
-      };
-    };
-  };
 };
 
 /** Collection of possible items */
@@ -217,18 +218,26 @@ function ItemCollection() {
     basicSword: {
       "image48": "images/sword48px.png",
       "image100": "images/sword100px.png",
+      "image100px300px": "images/sword100px300px.png",
       "effect": function() {
 
       },
-      "disableApply": true
+      "disableApply": true,
+      "type": "weapon",
+      "attack": 1,
+      "attackSpeed": 800
     },
     basicAxe: {
       "image48": "images/axe48px.png",
       "image100": "images/axe100px.png",
+      "image100px300px": "images/axe100px300px.png",
       "effect": function() {
 
       },
-      "disableApply": true
+      "disableApply": true,
+      "type": "weapon",
+      "attack": 1.5,
+      "attackSpeed": 1100
     },
     coin: {
       "image48": "images/coin.png",
@@ -310,5 +319,9 @@ function ItemCollection() {
    */
   this.getBigImage = function(itemName) {
     return me.items[itemName]["image100"]
+  };
+
+  this.getBigestImage = function(itemName) {
+    return me.items[itemName]["image100px300px"]
   };
 }

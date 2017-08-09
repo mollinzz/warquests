@@ -1,6 +1,10 @@
 function EquipmentPanel() {
   var flagOpen = 0;
   var me = this;
+  // if (!game.storage.getField('equipedArmor') || !game.storage.getField('equipedSword')) {
+  //   game.storage.setField('equipedArmor', "basicArmor");
+  //   game.storage.setField('equipedWeapon', "electroforez");
+  // }
   this.mainContainer = new createjs.Container();
   this.mainContainer.x = game.stage.canvas.width - 440;
   this.mainContainer.y = game.stage.canvas.height - 380;
@@ -9,23 +13,40 @@ function EquipmentPanel() {
   mainBlock.graphics.beginFill("gray");
   mainBlock.graphics.drawRect(0, 0, 400, 340);
 
-  weaponSlot = new createjs.Bitmap("images/graySword.png")
-  weaponSlot.x = 20;
-  weaponSlot.y = 20;
+  weaponSlot = new Image();
+  if (!game.storage.getField("equipedWeapon")) {
+    weaponSlot.src = "images/graySword.png";
+  } else {
+    weaponSlot.src = game.itemCollection.getBigestImage(game.storage.getField("equipedWeapon"));
+  }
+  var bitmapWeaponSlot = new createjs.Bitmap(weaponSlot);
+  bitmapWeaponSlot.x = 20;
+  bitmapWeaponSlot.y = 20;
 
-  helmetSlot = new createjs.Bitmap("images/grayHelmet.png")
-  helmetSlot.x = 140;
-  helmetSlot.y = 20;
+  helmetSlot = new Image();
+  helmetSlot.src = "images/grayHelmet.png";
+  var bitmapHelmetSlot = new createjs.Bitmap(helmetSlot);
+  bitmapHelmetSlot.x = 140;
+  bitmapHelmetSlot.y = 20;
 
-  armorSlot = new createjs.Bitmap("images/grayArmor.png")
-  armorSlot.x = 140;
-  armorSlot.y = 120;
+  armorSlot = new Image();
+  armorSlot.src = "images/grayArmor.png";
+  var bitmapArmorSlot = new createjs.Bitmap(armorSlot);
+  bitmapArmorSlot.x = 140;
+  bitmapArmorSlot.y = 120;
 
-  shoesSlot = new createjs.Bitmap("images/grayShoes.png")
-  shoesSlot.x = 140;
-  shoesSlot.y = 220;
+  shoesSlot = new Image();
+  shoesSlot.src = "images/grayShoes.png";
+  var bitmapShoesSlot = new createjs.Bitmap(shoesSlot);
+  bitmapShoesSlot.x = 140;
+  bitmapShoesSlot.y = 220;
 
-  textAttack = new createjs.Text("Attack: " + game.knight.skills.attack, "20px Arial", "black");
+  if (game.itemCollection.items[game.storage.getField("equipedWeapon")]) {
+    var attack = game.itemCollection.items[game.storage.getField("equipedWeapon")].attack + game.knight.skills.attack;
+  } else {
+    var attack = game.knight.skills.attack
+  }
+  textAttack = new createjs.Text("Attack: " + attack, "20px Arial", "black");
   textAttack.x = 260;
   textAttack.y = 20;
 
@@ -42,10 +63,10 @@ function EquipmentPanel() {
   textSpeed.y = 95;
 
   this.mainContainer.addChild(mainBlock);
-  this.mainContainer.addChild(weaponSlot);
-  this.mainContainer.addChild(armorSlot);
-  this.mainContainer.addChild(helmetSlot);
-  this.mainContainer.addChild(shoesSlot);
+  this.mainContainer.addChild(bitmapWeaponSlot);
+  this.mainContainer.addChild(bitmapHelmetSlot);
+  this.mainContainer.addChild(bitmapArmorSlot);
+  this.mainContainer.addChild(bitmapShoesSlot);
   this.mainContainer.addChild(textAttack);
   this.mainContainer.addChild(textHealph);
   this.mainContainer.addChild(textMana);
@@ -54,6 +75,23 @@ function EquipmentPanel() {
   this.mainContainer.addEventListener("click", function() {
     return false
   });
+
+  this.equipItem = function(itemName, type) {
+    switch (type) {
+      case "weapon":
+        game.storage.refreshItem(game.storage.getField("equipedWeapon"), 0, 1)
+        game.inventory.refresh();
+        game.storage.setField("equipedWeapon", itemName);
+        weaponSlot.src = game.itemCollection.getBigestImage(itemName);
+        me.refresh();
+        break;
+    };
+  };
+
+  this.refresh = function() {
+    attack = game.itemCollection.items[game.storage.getField("equipedWeapon")].attack + game.knight.skills.attack;
+    textAttack.text = "Attack: " + attack;
+  };
 
   this.open = function() {
     flagOpen = 1;

@@ -79,9 +79,21 @@ function EquipmentPanel() {
   this.equipItem = function(itemName, type) {
     switch (type) {
       case "weapon":
-        game.storage.refreshItem(game.storage.getField("equipedWeapon"), 0, 1)
+        debugger;
+        if (itemName == game.storage.getField("equipedWeapon")) {
+          alert()
+          return false;
+          break;
+        };
+        // game.storage.refreshItem(game.storage.getField("equipedWeapon"), game.storage.getField(itemName), 1)
         game.inventory.refresh();
+        if (game.storage.getField(itemName) == 0) {
+          game.storage.refreshItem(game.storage.getField("equipedWeapon"), 0, 1)
+        } else {
+          game.storage.refreshItem(game.storage.getField("equipedWeapon"), game.storage.getField(game.storage.getField("equipedWeapon")), 1);
+        };
         game.storage.setField("equipedWeapon", itemName);
+        game.inventory.refresh();
         weaponSlot.src = game.itemCollection.getBigestImage(itemName);
         me.refresh();
         break;

@@ -129,18 +129,18 @@ function Game(stageId) {
     //widthBar, heightBar
     me.abilityPanel = new AbilityPanel();
     /** Spawning monsters at start of game */
-    me.spawner.createMonster(50, 100, 'snake');
-    me.spawner.createMonster(100, 100, 'snake');
-    me.spawner.createMonster(150, 100, 'snake');
-    me.spawner.createMonster(200, 100, 'snake');
-    me.spawner.createMonster(250, 100, 'snake');
-    me.spawner.createMonster(300, 100, 'snake');
-    me.spawner.createMonster(350, 100, 'snake');
-    me.spawner.createMonster(450, 100, 'reaper');
-    me.spawner.createMonster(450, 180, 'reaper');
-    me.spawner.createMonster(450, 250, 'reaper');
-    me.spawner.createMonster(100, 50, 'harpy');
-    me.spawner.createMonster(100, 200, 'harpy');
+    // me.spawner.createMonster(50, 100, 'snake');
+    // me.spawner.createMonster(100, 100, 'snake');
+    // me.spawner.createMonster(150, 100, 'snake');
+    // me.spawner.createMonster(200, 100, 'snake');
+    // me.spawner.createMonster(250, 100, 'snake');
+    // me.spawner.createMonster(300, 100, 'snake');
+    // me.spawner.createMonster(350, 100, 'snake');
+    // me.spawner.createMonster(450, 100, 'reaper');
+    // me.spawner.createMonster(450, 180, 'reaper');
+    // me.spawner.createMonster(450, 250, 'reaper');
+    // me.spawner.createMonster(100, 50, 'harpy');
+    // me.spawner.createMonster(100, 200, 'harpy');
     me.knight = new Knight();
     
     me.equipmentPanel = new EquipmentPanel();

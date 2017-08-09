@@ -176,8 +176,8 @@ function Inventory() {
         slotIndex++;
         if (slotIndex == number) {
           if (game.itemCollection.items[me.itemArray[i]]["disableApply"]) {
-            game.equipmentPanel.equipItem(me.itemArray[i], game.itemCollection.items[me.itemArray[i]]["type"]);
             game.storage.refreshItem(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
+            game.equipmentPanel.equipItem(me.itemArray[i], game.itemCollection.items[me.itemArray[i]]["type"]);
             me.refresh();
             break;
           }

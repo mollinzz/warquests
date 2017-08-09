@@ -28,22 +28,13 @@ function Storage() {
     return me.object[itemKey];
   };
 
-  /* Refreshing coins*/
-  this.refreshCoins = function(itemKey, itemValOld, coinValue) {
-    if (!itemValOld) {
-      itemValOld = 0;
-    }
-    localStorage.removeItem(itemKey);
-    this.setField(itemKey, itemValOld + coinValue);
-  };
-
   /** Refreshing items */
-  this.refreshItem = function(itemKey, itemValOld, coinValue) {
-    if (!itemValOld) {
-      itemValOld = 0;
+  this.refresh = function(itemKey, oldVal, value) {
+    if (!oldVal) {
+      oldVal = 0;
     }
     // localStorage.removeItem(itemKey);
-    this.setField(itemKey, itemValOld + coinValue);
+    this.setField(itemKey, oldVal + value);
   };
 
   /** Removing from local storage */
@@ -104,9 +95,15 @@ function Game(stageId) {
   // this.items = new Items();
   this.itemCollection = new ItemCollection();
   this.start = function() {
+    if (!game.storage.getField("levelPoints")) {
+      game.storage.setField("levelPoints", 0);
+    };
+    if (!game.storage.getField("level")) {
+      game.storage.setField("level", 1);
+    };
     me.inventory = new Inventory();
     // fullscreen canvas
-    //window.addEventListener('resize', me.resizeCanvas, false);
+    //    window.addEventListener('resize', me.resizeCanvas, false);
     me.resizeCanvas = function() {
       me.stage.canvas.width = window.innerWidth;
       me.stage.canvas.height = window.innerHeight;
@@ -129,7 +126,7 @@ function Game(stageId) {
     //widthBar, heightBar
     me.abilityPanel = new AbilityPanel();
     /** Spawning monsters at start of game */
-    // me.spawner.createMonster(50, 100, 'snake');
+    me.spawner.createMonster(50, 100, 'snake');
     // me.spawner.createMonster(100, 100, 'snake');
     // me.spawner.createMonster(150, 100, 'snake');
     // me.spawner.createMonster(200, 100, 'snake');
@@ -142,7 +139,7 @@ function Game(stageId) {
     // me.spawner.createMonster(100, 50, 'harpy');
     // me.spawner.createMonster(100, 200, 'harpy');
     me.knight = new Knight();
-    
+
     me.equipmentPanel = new EquipmentPanel();
 
     var factor;

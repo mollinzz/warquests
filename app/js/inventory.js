@@ -121,7 +121,7 @@ function Inventory() {
     function choosing() {
       switch (itemName) {
         case "coin":
-          game.storage.refreshCoins("coins", game.storage.getField("coins"), coinValue);
+          game.storage.refresh("coins", game.storage.getField("coins"), coinValue);
           break;
         case "basicSword":
         case "speedPotion":
@@ -129,7 +129,7 @@ function Inventory() {
         case "healphPotion":
         case "attackPointPotion":
         case "manaPotion":
-          game.storage.refreshItem(itemName, game.storage.getField(itemName), 1);
+          game.storage.refresh(itemName, game.storage.getField(itemName), 1);
           break;
       };
       me.refresh();
@@ -176,11 +176,13 @@ function Inventory() {
         slotIndex++;
         if (slotIndex == number) {
           if (game.itemCollection.items[me.itemArray[i]]["disableApply"]) {
-            game.storage.refreshItem(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
+            game.storage.refresh(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
             game.equipmentPanel.equipItem(me.itemArray[i], game.itemCollection.items[me.itemArray[i]]["type"]);
             me.refresh();
             break;
           }
+          me.refresh();
+          game.storage.refresh(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
           me.refresh();
           game.itemCollection.items[me.itemArray[i]].effect();
           break;
@@ -267,7 +269,7 @@ function ItemCollection() {
           game.knight.plusHPKnight(5);
         };
         //callback();
-        game.knight.refreshBar(game.knight.knightHP, game.knight.defaultHP, game.knight.hpBar, 20, 50);
+        game.knight.refreshBar(game.knight.knightHP, game.knight.defaultHP, game.knight.hpBar, 20, 50, "#e50707");
       }
     },
     attackPointPotion: {

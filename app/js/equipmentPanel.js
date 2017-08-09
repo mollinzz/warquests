@@ -44,8 +44,8 @@ function EquipmentPanel() {
   if (game.itemCollection.items[game.storage.getField("equipedWeapon")]) {
     var attack = game.itemCollection.items[game.storage.getField("equipedWeapon")].attack + game.knight.skills.attack;
   } else {
-    var attack = game.knight.skills.attack
-  }
+    var attack = game.knight.skills.attack;
+  };
   textAttack = new createjs.Text("Attack: " + attack, "20px Arial", "black");
   textAttack.x = 260;
   textAttack.y = 20;
@@ -62,6 +62,14 @@ function EquipmentPanel() {
   textSpeed.x = 260;
   textSpeed.y = 95;
 
+  var levelPointsText = new createjs.Text("EXP: " + game.storage.getField("levelPoints"), "20px Arial", "black");
+  levelPointsText.x = 260;
+  levelPointsText.y = 120;
+
+  var levelText = new createjs.Text("Level: " + game.storage.getField("level"), "20px Arial", "black");
+  levelText.x = 260;
+  levelText.y = 145;
+
   this.mainContainer.addChild(mainBlock);
   this.mainContainer.addChild(bitmapWeaponSlot);
   this.mainContainer.addChild(bitmapHelmetSlot);
@@ -71,6 +79,8 @@ function EquipmentPanel() {
   this.mainContainer.addChild(textHealph);
   this.mainContainer.addChild(textMana);
   this.mainContainer.addChild(textSpeed);
+  this.mainContainer.addChild(levelPointsText);
+  this.mainContainer.addChild(levelText);
 
   this.mainContainer.addEventListener("click", function() {
     return false
@@ -88,9 +98,9 @@ function EquipmentPanel() {
         // game.storage.refreshItem(game.storage.getField("equipedWeapon"), game.storage.getField(itemName), 1)
         game.inventory.refresh();
         if (game.storage.getField(itemName) == 0) {
-          game.storage.refreshItem(game.storage.getField("equipedWeapon"), 0, 1)
+          game.storage.refresh(game.storage.getField("equipedWeapon"), 0, 1)
         } else {
-          game.storage.refreshItem(game.storage.getField("equipedWeapon"), game.storage.getField(game.storage.getField("equipedWeapon")), 1);
+          game.storage.refresh(game.storage.getField("equipedWeapon"), game.storage.getField(game.storage.getField("equipedWeapon")), 1);
         };
         game.storage.setField("equipedWeapon", itemName);
         game.inventory.refresh();
@@ -103,6 +113,8 @@ function EquipmentPanel() {
   this.refresh = function() {
     attack = game.itemCollection.items[game.storage.getField("equipedWeapon")].attack + game.knight.skills.attack;
     textAttack.text = "Attack: " + attack;
+    levelPointsText.text = "EXP: " + game.storage.getField("levelPoints");
+    levelText.text = "Level: " + game.storage.getField("level");
   };
 
   this.open = function() {
@@ -123,3 +135,30 @@ function EquipmentPanel() {
     }
   };
 };
+
+var levels = {
+  1: {
+    "XP": 0,
+    "coins": 0
+  },
+  2: {
+    "XP": 10,
+    "coins": 5
+  },
+  3: {
+    "XP": 20,
+    "coins": 7
+  },
+  4: {
+    "XP": 35,
+    "coins": 10
+  },
+  5: {
+    "XP": 50,
+    "coins": 12
+  },
+  6: {
+    "XP": 70,
+    "coins": 15
+  },
+}

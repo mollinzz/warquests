@@ -1,7 +1,7 @@
    /** Monster function
     * @consructor
     */
-   function Monster(standFrames, image, spriteWidth, spriteHeight, x, y, monsterHP, widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue, textPosX) {
+   function Monster(standFrames, image, spriteWidth, spriteHeight, x, y, monsterHP, widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue, textPosX, levelPointsValue) {
      /** Variables */
      var me = this;
      this.monsterHP = monsterHP;
@@ -80,6 +80,8 @@
            game.stage.removeChild(me.imgObj);
            game.stage.removeChild(container)
            drop(coinValue);
+           game.storage.refresh("levelPoints", game.storage.getField("levelPoints"), levelPointsValue);
+           game.equipmentPanel.refresh();
          };
        });
      };
@@ -127,7 +129,8 @@
        'King cobra',
        1,
        1,
-       3)
+       3,
+       1)
    };
 
    function Harpy(x, y) {
@@ -143,7 +146,8 @@
        'Harpy',
        2,
        2,
-       25)
+       25,
+       2)
    };
 
    function Reaper(x, y) {
@@ -158,5 +162,6 @@
        'Reaper',
        10,
        10,
-       35)
+       35,
+       10)
    };

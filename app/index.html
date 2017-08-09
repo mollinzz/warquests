@@ -37,6 +37,15 @@
       if (ev.code == 'KeyB') {
         game.inventory.toggle();
       };
+      if (ev.code == 'Enter') {
+        if (levels[game.storage.getField("level") + 1].XP <= game.storage.getField("levelPoints") & levels[game.storage.getField("level") + 1].coins <= game.storage.getField("coins")) {
+          alert()
+          game.storage.refresh("coins", game.storage.getField("coins"), - levels[game.storage.getField("level") + 1].coins)
+          game.storage.refresh("level", game.storage.getField("level"), 1);
+          game.equipmentPanel.refresh();
+          game.inventory.refresh();
+        }
+      }
       if (ev.code == 'KeyC') {
         game.equipmentPanel.toggle();
       }

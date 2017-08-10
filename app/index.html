@@ -38,6 +38,7 @@
         game.inventory.toggle();
       };
       if (ev.code == 'Enter') {
+        
         if (levels[game.storage.getField("level") + 1].XP <= game.storage.getField("levelPoints") & levels[game.storage.getField("level") + 1].coins <= game.storage.getField("coins")) {
           alert()
           game.storage.refresh("coins", game.storage.getField("coins"), - levels[game.storage.getField("level") + 1].coins)
@@ -53,7 +54,7 @@
         game.knight.useAbility('slam');
       };
       if (ev.code == 'KeyS') {
-        game.knight.useAbility('heal')
+        game.knight.useAbility('heal');
       };
       if (ev.code.substring(0, 5) == 'Digit') {
         game.inventory.applySlot(parseInt(ev.code.substring(5)));

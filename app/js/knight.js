@@ -21,7 +21,7 @@ function Knight() {
     shieldBlock: 1,
     movementSpeed: 0.3,
     extraAttack: 0,
-    attack: 10,
+    attack: 1,
   };
   this.defaultMana = this.manaPoints;
 
@@ -57,9 +57,14 @@ function Knight() {
     }
   });
 
+  this.weaponObj = null;
+
+  this.container = new createjs.Container();
+  game.stage.addChild(this.container);
+
   this.imgObj = new createjs.Sprite(knightSprites);
   this.imgObj.gotoAndStop("walkRight");
-  game.stage.addChild(this.imgObj);
+  this.container.addChild(this.imgObj);
 
   /** Knight walking
    * @param {number} x - x position of walking point.
@@ -72,15 +77,15 @@ function Knight() {
       return false
     };
     actionsFlag++;
-    me.direction = (x > me.imgObj.x) + 0;
+    me.direction = (x > me.container.x) + 0;
     me.imgObj.gotoAndPlay(me.dirSettings[me.direction]["walk"]);
     //spawning marker
     game.marker = new marker(x, y);
-    game.stage.addChild(game.marker.imgObj);
+    game.stage.addChild(game.marker.bitmap);
 
     //moving
-    createjs.Tween.get(me.imgObj)
-      .to({ x: x, y: y }, parseInt((Math.abs(x - me.imgObj.x) + Math.abs(y - me.imgObj.y)) / me.skills.movementSpeed), createjs.Ease.getPowInOut(1.5))
+    createjs.Tween.get(me.container)
+      .to({ x: x, y: y }, parseInt((Math.abs(x - me.container.x) + Math.abs(y - me.container.y)) / me.skills.movementSpeed), createjs.Ease.getPowInOut(1.5))
       .call(function() {
         if (walkCallback) {
           walkCallback();
@@ -111,7 +116,7 @@ function Knight() {
     var coord = -127.5;
     var attackFrame = "attackRight";
     var walkFrame = "walkRight";
-    if (me.imgObj.x > monster.imgObj.x) {
+    if (me.container.x > monster.imgObj.x) {
       coord = 127.5;
       attackFrame = "attackLeft";
       walkFrame = "walkLeft";
@@ -119,10 +124,12 @@ function Knight() {
     me.walk(monster.imgObj.x + coord, monster.imgObj.y, function() {
       //starting animation
       me.imgObj.gotoAndPlay(attackFrame);
+      me.weaponObj.gotoAndPlay(attackFrame);
       //callback
       setTimeout(function() {
         callback();
         me.imgObj.gotoAndStop(walkFrame);
+        me.weaponObj.gotoAndStop(walkFrame);
         //monster.monsterHP = monster.monsterHP - me.skills.attack - me.skills.extraAttack;
         // console.log(monster.monsterHP - me.skills.attack - me.skills.extraAttack)
         me.minusHPKnight(monsterAttack);

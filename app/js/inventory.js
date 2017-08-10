@@ -176,8 +176,12 @@ function Inventory() {
         slotIndex++;
         if (slotIndex == number) {
           if (game.itemCollection.items[me.itemArray[i]]["disableApply"]) {
-            game.storage.refresh(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
+            if (me.itemArray[i] == game.storage.getField("equipedWeapon")) {
+              return false;
+              break;
+        };
             game.equipmentPanel.equipItem(me.itemArray[i], game.itemCollection.items[me.itemArray[i]]["type"]);
+            game.storage.refresh(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
             me.refresh();
             break;
           }
@@ -227,7 +231,8 @@ function ItemCollection() {
       "disableApply": true,
       "type": "weapon",
       "attack": 1,
-      "attackSpeed": 800
+      "attackSpeed": 800,
+       "frameImg": "images/sword_sprite.png"
     },
     basicAxe: {
       "image48": "images/axe48px.png",
@@ -239,7 +244,8 @@ function ItemCollection() {
       "disableApply": true,
       "type": "weapon",
       "attack": 1.5,
-      "attackSpeed": 1100
+      "attackSpeed": 1100,
+      "frameImg": "images/axe_sprite.png"
     },
     coin: {
       "image48": "images/coin.png",
@@ -326,4 +332,8 @@ function ItemCollection() {
   this.getBigestImage = function(itemName) {
     return me.items[itemName]["image100px300px"]
   };
+
+  this.getWeaponFrameImage = function(itemName){
+    return me.items[itemName]["frameImg"]
+  }
 }

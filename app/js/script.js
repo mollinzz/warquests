@@ -23,7 +23,7 @@ function Storage() {
     me.save();
   };
 
-  /** Getting from loacal storage */
+  /** Getting from local storage */
   this.getField = function(itemKey) {
     return me.object[itemKey];
   };
@@ -158,6 +158,7 @@ function Game(stageId) {
     // me.spawner.createMonster(450, 250, 'reaper');
     // me.spawner.createMonster(100, 50, 'harpy');
     // me.spawner.createMonster(100, 200, 'harpy');
+
     me.knight = new Knight();
 
     me.equipmentPanel = new EquipmentPanel();

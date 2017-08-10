@@ -89,13 +89,6 @@ function EquipmentPanel() {
   this.equipItem = function(itemName, type) {
     switch (type) {
       case "weapon":
-        debugger;
-        if (itemName == game.storage.getField("equipedWeapon")) {
-          alert()
-          return false;
-          break;
-        };
-        // game.storage.refreshItem(game.storage.getField("equipedWeapon"), game.storage.getField(itemName), 1)
         game.inventory.refresh();
         if (game.storage.getField(itemName) == 0) {
           game.storage.refresh(game.storage.getField("equipedWeapon"), 0, 1)
@@ -105,10 +98,46 @@ function EquipmentPanel() {
         game.storage.setField("equipedWeapon", itemName);
         game.inventory.refresh();
         weaponSlot.src = game.itemCollection.getBigestImage(itemName);
+        game.knight.container.removeChild(game.knight.weaponObj);
+        game.knight.weaponObj = me.getWeaponObj(itemName);
+        game.knight.container.addChild(game.knight.weaponObj);
+        debugger;
         me.refresh();
         break;
     };
   };
+
+  this.getWeaponObj = function(itemName){
+    return new createjs.Sprite(new createjs.SpriteSheet({
+    "animations": {
+      "walkRight":{
+        "frames": [0]
+      },
+      "walkLeft":{
+        "frames": [3]
+      },      
+      "attackRight": {
+        "frames": [0, 1, 2, 1],
+        "speed": 0.1
+      },
+      "attackLeft": {
+        "frames": [3, 4, 5],
+        "speed": 0.1
+      },
+    },
+    "images": [game.itemCollection.getWeaponFrameImage(itemName)],
+    "frames": {
+      "height": 127.5,
+      "width": 127.5,
+      "regX": 0,
+      "regY": 0
+    }
+  }));
+  };
+
+  game.knight.weaponObj = me.getWeaponObj("basicAxe");
+  game.knight.weaponObj.gotoAndStop("attackLeft");
+  game.knight.container.addChild(game.knight.weaponObj);
 
   this.refresh = function() {  
     attack = game.knight.skills.attack;
@@ -164,4 +193,4 @@ var levels = {
     "XP": 70,
     "coins": 15
   },
-}
+};

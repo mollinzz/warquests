@@ -41,11 +41,11 @@ function EquipmentPanel() {
   bitmapShoesSlot.x = 140;
   bitmapShoesSlot.y = 220;
 
+  var attack = game.knight.skills.attack;
   if (game.itemCollection.items[game.storage.getField("equipedWeapon")]) {
-    var attack = game.itemCollection.items[game.storage.getField("equipedWeapon")].attack + game.knight.skills.attack;
-  } else {
-    var attack = game.knight.skills.attack;
+    attack += game.itemCollection.items[game.storage.getField("equipedWeapon")].attack;
   };
+
   textAttack = new createjs.Text("Attack: " + attack, "20px Arial", "black");
   textAttack.x = 260;
   textAttack.y = 20;
@@ -110,8 +110,11 @@ function EquipmentPanel() {
     };
   };
 
-  this.refresh = function() {
-    attack = game.itemCollection.items[game.storage.getField("equipedWeapon")].attack + game.knight.skills.attack;
+  this.refresh = function() {  
+    attack = game.knight.skills.attack;
+    if (game.itemCollection.items[game.storage.getField("equipedWeapon")]) {
+      attack += game.itemCollection.items[game.storage.getField("equipedWeapon")].attack;
+    };
     textAttack.text = "Attack: " + attack;
     levelPointsText.text = "EXP: " + game.storage.getField("levelPoints");
     levelText.text = "Level: " + game.storage.getField("level");

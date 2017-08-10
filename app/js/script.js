@@ -105,8 +105,28 @@ function Game(stageId) {
     // fullscreen canvas
     //    window.addEventListener('resize', me.resizeCanvas, false);
     me.resizeCanvas = function() {
-      me.stage.canvas.width = window.innerWidth;
-      me.stage.canvas.height = window.innerHeight;
+      gameArea = me.stage.canvas; 
+      widthToHeight = 2000 / 1000; 
+      newWidth = window.innerWidth; 
+      newHeight = window.innerHeight; 
+      newWidthToHeight = newWidth / newHeight; 
+      if (newWidthToHeight > widthToHeight) 
+      { 
+      newWidth = newHeight * widthToHeight; 
+      gameArea.style.height = newHeight + 'px'; 
+      gameArea.style.width = newWidth + 'px'; 
+      } else 
+      { 
+      newHeight = newWidth / widthToHeight; 
+      gameArea.style.height = newHeight + 'px'; 
+      gameArea.style.width = newWidth + 'px'; 
+
+      } 
+      scale = newWidthToHeight / widthToHeight; 
+      me.stage.width = newWidth; 
+      me.stage.height = newHeight; 
+      gameArea.style.marginTop = ((window.innerHeight - newHeight) / 2) + 'px'; 
+      gameArea.style.marginLeft = ((window.innerWidth - newWidth) / 2) + 'px';
     };
     me.resizeCanvas();
     // canvas background  

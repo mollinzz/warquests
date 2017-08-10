@@ -44,7 +44,7 @@ function Inventory() {
   inventoryBlock.graphics.drawRect(0, 0, 360, 400);
 
   this.container.x = 20;
-  this.container.y = window.innerHeight - 440;
+  this.container.y = game.stage.canvas.height - 440;
 
   //this.container.addChild(inventoryBlock);
   this.container.addChild(bitmap);

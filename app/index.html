@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>3</title>
+  <link rel="stylesheet" href="css/style.css">
   <script type="text/javascript" src="vendor/createjs/createjs.min.js"></script>
   <script type="text/javascript" src="js/monster.js"></script>
   <script type="text/javascript" src="js/knight.js"></script>
@@ -14,10 +15,9 @@
 </head>
 
 <body onload="init()">
-  <canvas id="demoCanvas" width="1" height="1"></canvas>
+  <canvas id="demoCanvas" width="2000" height="1000"></canvas>
   <script>
   var game;
-
   function init() {
     game = new Game("demoCanvas");
     game.start();
@@ -60,6 +60,10 @@
       }
     };
     game.resizeCanvas();
+    window.addEventListener("resize",function(){
+        console.log('check');
+       game.resizeCanvas();
+    });
   }
   </script>
 </body>

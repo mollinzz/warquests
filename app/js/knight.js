@@ -105,7 +105,7 @@ function Knight() {
     if (game.itemCollection.items[game.storage.getField("equipedWeapon")]) {
       attackSpeed = game.itemCollection.items[game.storage.getField("equipedWeapon")].attackSpeed;
     } else {
-      attackSpeed = game.knight.skills.attack;
+      attackSpeed = 1000;
     }
     actionsFlag++;
     var coord = -127.5;

@@ -1,2 +1,5 @@
-body {
-  background-color: #aaa; }
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+};

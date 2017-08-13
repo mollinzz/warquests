@@ -1,7 +1,7 @@
 function AbilityPanel() {
   var me = this;
   var container = new createjs.Container();
-  game.stage.addChild(container);
+  //game.stage.addChild(container);
   container.x = game.stage.canvas.width / 2 - 200;
   container.y = game.stage.canvas.height - 129;
 

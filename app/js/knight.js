@@ -15,7 +15,7 @@ function Knight() {
   this.direction = 1; // right direction
   this.dirSettings = [
     { "walk": "walkLeft" },
-    { "walk": "walkRight" }
+    { "walk": "walkRight" },
   ];
   this.skills = {
     shieldBlock: 1,
@@ -78,6 +78,7 @@ function Knight() {
     };
     actionsFlag++;
     me.direction = (x > me.container.x) + 0;
+    me.weaponObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
     me.imgObj.gotoAndPlay(me.dirSettings[me.direction]["walk"]);
     //spawning marker
     game.marker = new marker(x, y);
@@ -91,6 +92,8 @@ function Knight() {
           walkCallback();
         } else {
           me.imgObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
+          me.weaponObj.y = 15;
+          me.weaponObj.x = 10;
         };
         game.stage.removeChild(game.marker.bitmap);
         actionsFlag--;
@@ -166,7 +169,7 @@ function Knight() {
     800,
     50
   );
-  game.stage.addChild(this.hpBar);
+  //game.stage.addChild(this.hpBar);
 
   this.manaBar = new createjs.Shape();
   this.manaBar.graphics.beginFill("#005aff");
@@ -176,7 +179,7 @@ function Knight() {
     800,
     25
   );
-  game.stage.addChild(this.manaBar);
+  //game.stage.addChild(this.manaBar);
 
   /** Refreshing of healph bar */
   this.refreshBar = function(count1, count2, bar, y, height, color) {

@@ -101,48 +101,48 @@ function EquipmentPanel() {
         game.knight.container.removeChild(game.knight.weaponObj);
         game.knight.weaponObj = me.getWeaponObj(itemName);
         game.knight.container.addChild(game.knight.weaponObj);
-        debugger;
         me.refresh();
         break;
     };
   };
 
-  this.getWeaponObj = function(itemName){
+  this.getWeaponObj = function(itemName) {
     return new createjs.Sprite(new createjs.SpriteSheet({
-    "animations": {
-      "walkRight":{
-        "frames": [0]
+      "animations": {
+        "walkRight": {
+          "frames": [5]
+        },
+        "walkLeft": {
+          "frames": [0]
+        },
+        "attackRight": {
+          "frames": [0, 1, 2, 1],
+          "speed": 0.1
+        },
+        "attackLeft": {
+          "frames": [3, 4, 5],
+          "speed": 0.1
+        },
       },
-      "walkLeft":{
-        "frames": [3]
-      },      
-      "attackRight": {
-        "frames": [0, 1, 2, 1],
-        "speed": 0.1
-      },
-      "attackLeft": {
-        "frames": [3, 4, 5],
-        "speed": 0.1
-      },
-    },
-    "images": [game.itemCollection.getWeaponFrameImage(itemName)],
-    "frames": {
-      "height": 127.5,
-      "width": 127.5,
-      "regX": 0,
-      "regY": 0
-    }
-  }));
+      "images": [game.itemCollection.getWeaponFrameImage(itemName)],
+      "frames": {
+        "height": 127.5,
+        "width": 127.5,
+        "regX": 0,
+        "regY": 0
+      }
+    }));
   };
 
-  game.knight.weaponObj = me.getWeaponObj("basicAxe");
-  game.knight.weaponObj.gotoAndStop("attackLeft");
+  game.knight.weaponObj = me.getWeaponObj(game.storage.getField("equipedWeapon"));
+  game.knight.weaponObj.gotoAndStop("walkRight");
+  game.knight.weaponObj.y = 15;
+  game.knight.weaponObj.x = 10;
   game.knight.container.addChild(game.knight.weaponObj);
-
-  this.refresh = function() {  
+  this.refresh = function() {
     attack = game.knight.skills.attack;
-    if (game.itemCollection.items[game.storage.getField("equipedWeapon")]) {
-      attack += game.itemCollection.items[game.storage.getField("equipedWeapon")].attack;
+    if (game.storage.getField("equipedWeapon")) {
+      attack = game.itemCollection.items[game.storage.getField("equipedWeapon")].attack + game.knight.skills.attack;
     };
     textAttack.text = "Attack: " + attack;
     levelPointsText.text = "EXP: " + game.storage.getField("levelPoints");

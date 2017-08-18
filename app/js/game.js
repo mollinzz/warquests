@@ -2,11 +2,12 @@
 function Game(stageId) {
   // code here.
   var me = this;
-  this.storage = new Storage();
-  this.stage = new createjs.Stage(stageId);
-  this.spawner = new MonsterSpawner();
-  this.itemCollection = new ItemCollection();
   this.start = function() {
+    this.storage = new Storage();
+    this.stage = new createjs.Stage(stageId);
+    this.spawner = new MonsterSpawner();
+    this.itemCollection = new ItemCollection();
+    me.stage.autoClear = false;
     this.abilityFlag = 1;
     if (!game.storage.getField("levelPoints")) {
       game.storage.setField("levelPoints", 0);
@@ -38,23 +39,27 @@ function Game(stageId) {
     };
     me.resizeCanvas();
     // canvas background  
-    var bg1 = new createjs.Shape();
-    bg1.graphics.beginFill("#51d977"); // first bg
-    bg1.graphics.drawRect(
+    this.bg1 = new createjs.Shape();
+    this.bg1.graphics.beginFill("#51d977"); // first bg
+    this.bg1.graphics.drawRect(
       0,
       0,
       me.stage.canvas.width,
       me.stage.canvas.height
     );
 
-    bg1.graphics.ef();
-    me.stage.addChild(bg1);
+    this.bg1.graphics.ef();
+    me.stage.addChild(this.bg1);
 
     me.inventory = new Inventory();
     me.abilityPanel = new AbilityPanel();
     me.knight = new Knight();
     me.equipmentPanel = new EquipmentPanel();
-    this.decor = new Decor();
+    me.levelGenerator = new LevelGenerate()
+    // me.decor = new Decor();
+    House(300, 100);
+    Portal(300, 300);
+    me.spawner.createMonster(200, 200, "snake")
     var factor;
     var factor2;
     setInterval(function() {

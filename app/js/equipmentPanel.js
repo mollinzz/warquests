@@ -100,6 +100,8 @@ function EquipmentPanel() {
         weaponSlot.src = game.itemCollection.getBigestImage(itemName);
         game.knight.container.removeChild(game.knight.weaponObj);
         game.knight.weaponObj = me.getWeaponObj(itemName);
+        game.knight.weaponObj.y = 15;
+        game.knight.weaponObj.x = 10;
         game.knight.container.addChild(game.knight.weaponObj);
         me.refresh();
         break;
@@ -107,6 +109,10 @@ function EquipmentPanel() {
   };
 
   this.getWeaponObj = function(itemName) {
+    if (!game.storage.getField("equipedWeapon")) {
+      image = ""
+    } else { image = game.itemCollection.getWeaponFrameImage(itemName) }
+
     return new createjs.Sprite(new createjs.SpriteSheet({
       "animations": {
         "walkRight": {
@@ -124,7 +130,7 @@ function EquipmentPanel() {
           "speed": 0.1
         },
       },
-      "images": [game.itemCollection.getWeaponFrameImage(itemName)],
+      "images": [image],
       "frames": {
         "height": 127.5,
         "width": 127.5,

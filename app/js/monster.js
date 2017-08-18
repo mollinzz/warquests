@@ -12,7 +12,7 @@
 
      /** Sprites setting */
      var monsterSprites = new createjs.SpriteSheet({
-       "animations": {
+      "animations": {
          "stand": {
            "frames": standFrames,
            "speed": 0.1

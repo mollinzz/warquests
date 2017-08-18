@@ -7,9 +7,11 @@ function Knight() {
   var slamAbilityFlag = 0;
   this.knightHP = 15;
   this.manaPoints = 10;
-  var actionsFlag = 0;
+  this.actionsFlag = 0;
   var me = this;
   this.defaultHP = this.knightHP;
+  this.containerBar = new createjs.Container();
+  game.stage.addChild(this.containerBar)
   var factorKnight;
   var apple;
   this.direction = 1; // right direction
@@ -73,10 +75,10 @@ function Knight() {
    * @param {boolean} forceFlag - flag of required action.
    */
   this.walk = function(x, y, walkCallback, forceFlag = false) {
-    if (actionsFlag && !forceFlag) {
+    if (me.actionsFlag && !forceFlag) {
       return false
     };
-    actionsFlag++;
+    me.actionsFlag++;
     me.direction = (x > me.container.x) + 0;
     me.weaponObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
     me.imgObj.gotoAndPlay(me.dirSettings[me.direction]["walk"]);
@@ -96,7 +98,7 @@ function Knight() {
           me.weaponObj.x = 10;
         };
         game.stage.removeChild(game.marker.bitmap);
-        actionsFlag--;
+        me.actionsFlag--;
       });
   };
 
@@ -107,7 +109,7 @@ function Knight() {
    * @param {function} callback - callback after going.
    */
   this.gotoAndFight = function(coinValue, monster, monsterAttack, callback) {
-    if (actionsFlag) {
+    if (me.actionsFlag) {
       return false;
     };
     if (game.itemCollection.items[game.storage.getField("equipedWeapon")]) {
@@ -115,16 +117,18 @@ function Knight() {
     } else {
       attackSpeed = 1000;
     }
-    actionsFlag++;
-    var coord = -127.5;
+    me.actionsFlag++;
+    var coordX = -127.5;
     var attackFrame = "attackRight";
     var walkFrame = "walkRight";
+
     if (me.container.x > monster.imgObj.x) {
-      coord = 127.5;
+      coordX = 127.5;
       attackFrame = "attackLeft";
       walkFrame = "walkLeft";
-    };
-    me.walk(monster.imgObj.x + coord, monster.imgObj.y, function() {
+    }
+    console.log(coordX + "x");
+    me.walk(monster.imgObj.x + coordX, monster.imgObj.y, function() {
       //starting animation
       me.imgObj.gotoAndPlay(attackFrame);
       me.weaponObj.gotoAndPlay(attackFrame);
@@ -136,7 +140,7 @@ function Knight() {
         //monster.monsterHP = monster.monsterHP - me.skills.attack - me.skills.extraAttack;
         // console.log(monster.monsterHP - me.skills.attack - me.skills.extraAttack)
         me.minusHPKnight(monsterAttack);
-        actionsFlag--;
+        me.actionsFlag--;
       }, attackSpeed)
     }, true);
   };
@@ -160,6 +164,15 @@ function Knight() {
     me.knightHP = me.knightHP + value;
     me.refreshBar(me.knightHP, me.defaultHP, this.hpBar, 20, 50, "#e50707");
   };
+  this.manaBar = new createjs.Shape();
+  this.manaBar.graphics.beginFill("#005aff");
+  this.manaBar.graphics.drawRect(
+    game.stage.canvas.width / 2 - 400,
+    70,
+    800,
+    25
+  );
+  this.containerBar.addChild(this.manaBar);
 
   this.hpBar = new createjs.Shape();
   this.hpBar.graphics.beginFill("#e50707");
@@ -169,17 +182,10 @@ function Knight() {
     800,
     50
   );
-  //game.stage.addChild(this.hpBar);
+  this.containerBar.addChild(this.hpBar);
 
-  this.manaBar = new createjs.Shape();
-  this.manaBar.graphics.beginFill("#005aff");
-  this.manaBar.graphics.drawRect(
-    game.stage.canvas.width / 2 - 400,
-    70,
-    800,
-    25
-  );
-  //game.stage.addChild(this.manaBar);
+  // this.hpBar.prototype = new Bar(game.stage.canvas.width / 2 - 400, 20, 800, 50, "#e50707", this.containerBar)
+  // this.manaBar = new Bar(game.stage.canvas.width / 2 - 400, 70, 800, 25, "#005aff", this.containerBar)
 
   /** Refreshing of healph bar */
   this.refreshBar = function(count1, count2, bar, y, height, color) {
@@ -204,6 +210,22 @@ function Knight() {
       me.refreshBar(count1, count2, bar, y, height, color);
     };
   };
+
+  this.refreshBar = function(count1, count2, bar, y, height, color) {
+    if (count1 <= 0) {
+      bar.graphics.clear();
+      bar.graphics.drawRect(game.stage.canvas.width / 2 - 400, y, 0, height);
+    } else {
+      // game.stage.removeChild(hpBar);
+      factorKnight = parseInt(count1 / count2 * 100) / 100;
+      //console.log(bar);
+      bar.graphics.clear();
+      bar.graphics.beginFill(color);
+      bar.graphics.drawRect(game.stage.canvas.width / 2 - 400, y, factorKnight * 800, height);
+      //game.stage.addChild(hpBar);
+    }
+  };
+
   this.useAbility = function(abilityName) {
     switch (abilityName) {
       case "heal":

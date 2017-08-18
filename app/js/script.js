@@ -84,3 +84,16 @@ function MonsterSpawner() {
     return monster;
   }
 };
+
+function Bar(width, height, x, y, color, container) {
+  var me = this;
+  bar = new createjs.Shape();
+  bar.graphics.beginFill(color);
+  bar.graphics.drawRect(
+    width,
+    height,
+    x,
+    y
+  );
+  container.addChild(bar);
+};

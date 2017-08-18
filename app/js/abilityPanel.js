@@ -1,19 +1,19 @@
 function AbilityPanel() {
   var me = this;
-  var container = new createjs.Container();
+  this.container = new createjs.Container();
   //game.stage.addChild(container);
-  container.x = game.stage.canvas.width / 2 - 200;
-  container.y = game.stage.canvas.height - 129;
+  this.container.x = game.stage.canvas.width / 2 - 200;
+  this.container.y = game.stage.canvas.height - 129;
 
-  var mainBlock = new createjs.Shape();
+  mainBlock = new createjs.Shape();
   mainBlock.graphics.beginFill('yellow');
   mainBlock.graphics.drawRect(0, 0, 321, 109);
-  container.addChild(mainBlock);
+  this.container.addChild(mainBlock);
 
-  this.slamSlot = new AbilityPanelSlot("slam", 3, container)
-  this.healSlot = new AbilityPanelSlot("heal", 106, container)
+  this.slamSlot = new AbilityPanelSlot("slam", 3, this.container)
+  this.healSlot = new AbilityPanelSlot("heal", 106, this.container)
 
-  container.addEventListener("click", function(){
+  this.container.addEventListener("click", function(){
    return false 
   });
 };

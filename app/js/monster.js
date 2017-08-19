@@ -66,7 +66,7 @@
        // setTimeout(function(){
        //     game.storage.remove("monsterHP")
        // }, 20000);
-       game.knight.gotoAndFight(coinValue, me, monsterAttackPoint, function() {
+       game.knight.gotoAndFight(coinValue, me, monsterAttackPoint, spriteWidth, function() {
          //game.storage.setField("monsterHP", monsterHP)
          if (game.storage.getField("equipedWeapon")) {
           me.monsterHP = me.monsterHP - game.knight.skills.extraAttack - game.knight.skills.attack  - game.itemCollection.items[game.storage.getField("equipedWeapon")].attack;

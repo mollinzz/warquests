@@ -108,7 +108,7 @@ function Knight() {
    * @param {number} monsterAttack - attack points of monster.
    * @param {function} callback - callback after going.
    */
-  this.gotoAndFight = function(coinValue, monster, monsterAttack, callback) {
+  this.gotoAndFight = function(coinValue, monster, monsterAttack, monsterWidth, callback) {
     if (me.actionsFlag) {
       return false;
     };
@@ -119,6 +119,7 @@ function Knight() {
     }
     me.actionsFlag++;
     var coordX = -127.5;
+    var coordY = 0;
     var attackFrame = "attackRight";
     var walkFrame = "walkRight";
 
@@ -126,9 +127,19 @@ function Knight() {
       coordX = 127.5;
       attackFrame = "attackLeft";
       walkFrame = "walkLeft";
-    }
-    console.log(coordX + "x");
-    me.walk(monster.imgObj.x + coordX, monster.imgObj.y, function() {
+    };
+    if (monster.imgObj.x - 70 < me.container.x & me.container.x < monster.imgObj.x + monsterWidth - 10) {
+      coordX = 0;
+      if (monster.imgObj.y + 20 < me.container.y) {
+        coordY = 127.5;
+      } else {
+        coordY = -127.5;
+      }
+    };
+
+    console.log(monster.imgObj.y);
+    console.log(coordY);
+    me.walk(monster.imgObj.x + coordX, monster.imgObj.y + coordY, function() {
       //starting animation
       me.imgObj.gotoAndPlay(attackFrame);
       me.weaponObj.gotoAndPlay(attackFrame);

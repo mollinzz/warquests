@@ -57,7 +57,7 @@ function Game(stageId) {
     me.equipmentPanel = new EquipmentPanel();
     me.levelGenerator = new LevelGenerate()
     // me.decor = new Decor();
-    House(300, 100);
+    //House(300, 100);
     Portal(300, 300);
     me.spawner.createMonster(200, 200, "snake")
     var factor;

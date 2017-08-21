@@ -32,7 +32,7 @@ function Storage() {
   this.refresh = function(itemKey, oldVal, value) {
     if (!oldVal) {
       oldVal = 0;
-    }
+    };
     // localStorage.removeItem(itemKey);
     this.setField(itemKey, oldVal + value);
   };

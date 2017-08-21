@@ -15,6 +15,10 @@ function Game(stageId) {
     if (!game.storage.getField("level")) {
       game.storage.setField("level", 1);
     };
+    if (!game.storage.getField("coins")) {
+      game.storage.setField("coins", 0);
+      alert(game.storage.getField("coins"));
+    };
     me.resizeCanvas = function() {
       gameArea = me.stage.canvas;
       widthToHeight = 2000 / 1000;
@@ -55,11 +59,13 @@ function Game(stageId) {
     me.abilityPanel = new AbilityPanel();
     me.knight = new Knight();
     me.equipmentPanel = new EquipmentPanel();
-    me.levelGenerator = new LevelGenerate()
+    me.levelGenerator = new LevelGenerate();
+    me.market = new Market();
     // me.decor = new Decor();
-    //House(300, 100);
+    House(300, 100);
+    House2(800, 100);
     Portal(300, 300);
-    me.spawner.createMonster(200, 200, "snake")
+    House2(300, 500)
     var factor;
     var factor2;
     setInterval(function() {

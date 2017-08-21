@@ -10,6 +10,7 @@ function LevelGenerate() {
     game.knight.weaponObj.y = 15;
     game.knight.weaponObj.x = 10;
     game.knight.container.addChild(game.knight.weaponObj);
-    game.stage.addChild(game.abilityPanel.container)
+    game.stage.addChild(game.abilityPanel.container);
+    game.abilityFlag = 0;
   };
 };

@@ -31,20 +31,24 @@ function Decor(animations, usedAnimations, image, spriteWidth, spriteHeight, x, 
     };
     usingFlag = 1;
     decorObj.gotoAndPlay("used");
+    useFunc();
     setTimeout(function() {
-      useFunc();
       usingFlag = 0;
-
     }, 1400)
   })
 };
 
 function House(x, y) {
-  this.prototype = new Decor([0], [0], "images/house1x1.png", 200, 168, x, y, function() {})
+  this.prototype = new Decor([0], [0], "images/house1x1.png", 200, 168, x, y, function() { game.market.open("potionShop") })
+};
+
+function House2(x, y) {
+  this.prototype = new Decor([0], [0], "images/house2x1.png", 126, 126, x, y, function() { game.market.open("weaponShop") });
+//  console.log(this.prototype) 
 };
 
 function Portal(x, y) {
   this.prototype = new Decor([16], [0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13, 14, 15, 16], "images/portal.png", 64, 64, x, y, function() {
-      game.levelGenerator.createInterface();
-    })
-  };
+    setTimeout(function() { game.levelGenerator.createInterface() }, 1400)
+  })
+};

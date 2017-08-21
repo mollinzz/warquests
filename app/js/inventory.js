@@ -27,7 +27,7 @@ function Inventory() {
   this.containerBitmaps = [];
   this.containerTexts = [];
 
-  var text = new createjs.Text("X " + game.storage.getField("coins"), "40px Arial", "black");
+  var text = new createjs.Text("X " + game.storage.getField("coins"), "32px Arial", "black");
   text.x = 58;
 
   var inventoryBlockFraction = new Image();
@@ -179,7 +179,7 @@ function Inventory() {
             if (me.itemArray[i] == game.storage.getField("equipedWeapon")) {
               return false;
               break;
-        };
+            };
             game.equipmentPanel.equipItem(me.itemArray[i], game.itemCollection.items[me.itemArray[i]]["type"]);
             game.storage.refresh(me.itemArray[i], game.storage.getField(me.itemArray[i]), -1);
             me.refresh();
@@ -232,7 +232,8 @@ function ItemCollection() {
       "type": "weapon",
       "attack": 1,
       "attackSpeed": 800,
-       "frameImg": "images/sword_sprite.png"
+      "frameImg": "images/sword_sprite.png",
+      "coinValue": 25
     },
     basicAxe: {
       "image48": "images/axe48px.png",
@@ -245,7 +246,8 @@ function ItemCollection() {
       "type": "weapon",
       "attack": 1.5,
       "attackSpeed": 1100,
-      "frameImg": "images/axe_sprite.png"
+      "frameImg": "images/axe_sprite.png",
+      "coinValue": 25
     },
     coin: {
       "image48": "images/coin.png",
@@ -263,7 +265,8 @@ function ItemCollection() {
         setTimeout(function() {
           game.knight.skills.movementSpeed -= 3;
         }, 5000)
-      }
+      },
+      "coinValue": 15
     },
     healphPotion: {
       "image48": "images/healphPotion48px.png",
@@ -276,7 +279,8 @@ function ItemCollection() {
         };
         //callback();
         game.knight.refreshBar(game.knight.knightHP, game.knight.defaultHP, game.knight.hpBar, 20, 50, "#e50707");
-      }
+      },
+      "coinValue": 10
     },
     attackPointPotion: {
       "image48": "images/attackpotion48px.png",
@@ -295,7 +299,8 @@ function ItemCollection() {
             game.knight.skills.attack = game.knight.skills.attack - 3;
           }, 5000)
         }
-      }
+      },
+      "coinValue": 10
     },
     manaPotion: {
       "image48": "images/manaPotion48px.png",
@@ -311,7 +316,8 @@ function ItemCollection() {
           game.knight.manaPoints += 3;
           game.knight.refreshBar(game.knight.manaPoints, game.knight.defaultMana, game.knight.manaBar, 70, 25, "#005aff");
         }
-      }
+      },
+      "coinValue": 10
     }
   }
 
@@ -333,7 +339,7 @@ function ItemCollection() {
     return me.items[itemName]["image100px300px"]
   };
 
-  this.getWeaponFrameImage = function(itemName){
+  this.getWeaponFrameImage = function(itemName) {
     return me.items[itemName]["frameImg"]
   }
 }

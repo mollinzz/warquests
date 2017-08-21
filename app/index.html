@@ -12,9 +12,10 @@
   <script type="text/javascript" src="js/abilityPanel.js"></script>
   <script type="text/javascript" src="js/equipmentPanel.js"></script>
   <script type="text/javascript" src="js/decor.js"></script>
-  <script type="text/javascript" src="js/game.js"></script>
   <script type="text/javascript" src="js/levelGenerator.js"></script>
   <script type="text/javascript" src="js/script.js"></script>
+  <script type="text/javascript" src="js/shop.js"></script>
+  <script type="text/javascript" src="js/game.js"></script>
 </head>
 
 <body onload="init()">
@@ -25,10 +26,6 @@
   function init() {
     game = new Game("demoCanvas");
     game.start();
-    if (!game.storage.getField("coins")) {
-      game.storage.setField("coins", 0);
-      alert(game.storage.getField("coins"));
-    };
     game.stage.on("stagemousedown", function(event) {
       //console.log(event);
       if (!event.relatedTarget) {

@@ -61,11 +61,13 @@ function Game(stageId) {
     me.equipmentPanel = new EquipmentPanel();
     me.levelGenerator = new LevelGenerate();
     me.market = new Market();
+    me.alert = new AlertMessage();
     // me.decor = new Decor();
     House(300, 100);
     House2(800, 100);
     Portal(300, 300);
-    House2(300, 500)
+    House2(300, 500);
+    me.spawner.createMonster(100, 100, "snake" )
     var factor;
     var factor2;
     setInterval(function() {

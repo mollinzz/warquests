@@ -122,7 +122,6 @@ function Knight() {
     var coordY = 0;
     var attackFrame = "attackRight";
     var walkFrame = "walkRight";
-
     if (me.container.x > monster.imgObj.x) {
       coordX = 127.5;
       attackFrame = "attackLeft";

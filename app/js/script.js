@@ -85,15 +85,61 @@ function MonsterSpawner() {
   }
 };
 
-function Bar(width, height, x, y, color, container) {
+function AlertMessage() {
   var me = this;
-  bar = new createjs.Shape();
-  bar.graphics.beginFill(color);
-  bar.graphics.drawRect(
-    width,
-    height,
-    x,
-    y
-  );
-  container.addChild(bar);
+  var container = new createjs.Container();
+  game.stage.addChild(container);
+  container.x = game.stage.canvas.width / 2 + 480;
+  container.y = 20;
+
+  this.alertCollection = {
+    bought: "You bought: "
+  };
+
+  var textContainer = [];
+
+  var posCollection = [{ "posY": 0 }, { "posY": 40 }, { "posY": 75 }];
+
+  var chatBitmap = new createjs.Bitmap("images/chat.png");
+  container.addChild(chatBitmap);
+
+  this.createAlert = function(mainText, additionalText) {
+    var slotIndex = 0;
+    if (additionalText) {
+      var textAlert = new createjs.Text(mainText + additionalText, "35px Arial", "white");
+    } else {
+      var textAlert = new createjs.Text(mainText, "35px Arial", "white");
+    };
+    console.log(container)
+    if (textContainer.length == 1) {
+      //alert(textContainer[0].y)
+      textContainer[0].y = posCollection[1].posY
+      // container.removeChild(textContainer[0]);
+      // textContainer.shift();
+    };
+
+    if (textContainer.length == 2) {
+      // alert(textContainer[1].y)
+      textContainer[0].y = posCollection[1].posY;
+      textContainer[1].y = posCollection[2].posY;
+      container.removeChild(textContainer[2]);
+      textContainer.shift();
+      // container.removeChild(textContainer[0]);
+    };
+
+    // if (textContainer.length == 2) {
+
+    //   //console.log(container)
+    // };
+
+    textAlert.y = posCollection[0].posY;
+    container.addChild(textAlert);
+
+    textContainer.unshift(textAlert);
+
+    setTimeout(function() {
+      container.removeChild(textAlert);
+      textContainer.shift();
+    }, 3500);
+  };
 };

@@ -92,6 +92,10 @@ function AlertMessage() {
   container.x = game.stage.canvas.width / 2 + 480;
   container.y = 20;
 
+  container.addEventListener("click", function(){
+   return false 
+  });
+  
   this.alertCollection = {
     bought: "You bought: "
   };
@@ -103,43 +107,10 @@ function AlertMessage() {
   var chatBitmap = new createjs.Bitmap("images/chat.png");
   container.addChild(chatBitmap);
 
-  this.createAlert = function(mainText, additionalText) {
-    var slotIndex = 0;
-    if (additionalText) {
-      var textAlert = new createjs.Text(mainText + additionalText, "35px Arial", "white");
-    } else {
-      var textAlert = new createjs.Text(mainText, "35px Arial", "white");
-    };
-    console.log(container)
-    if (textContainer.length == 1) {
-      //alert(textContainer[0].y)
-      textContainer[0].y = posCollection[1].posY
-      // container.removeChild(textContainer[0]);
-      // textContainer.shift();
-    };
+  var textAlert = new createjs.Text("", "35px Arial", "white");
+  container.addChild(textAlert);
 
-    if (textContainer.length == 2) {
-      // alert(textContainer[1].y)
-      textContainer[0].y = posCollection[1].posY;
-      textContainer[1].y = posCollection[2].posY;
-      container.removeChild(textContainer[2]);
-      textContainer.shift();
-      // container.removeChild(textContainer[0]);
-    };
-
-    // if (textContainer.length == 2) {
-
-    //   //console.log(container)
-    // };
-
-    textAlert.y = posCollection[0].posY;
-    container.addChild(textAlert);
-
-    textContainer.unshift(textAlert);
-
-    setTimeout(function() {
-      container.removeChild(textAlert);
-      textContainer.shift();
-    }, 3500);
+  this.createAlert = function(mainText) {
+    textAlert.text = mainText + "\n" + textAlert.text;
   };
 };

@@ -36,7 +36,7 @@ function Market() {
     game.storage.refresh("coins", game.storage.getField("coins"), -game.itemCollection.items[itemName].coinValue)
     game.storage.refresh(itemName, game.storage.getField(itemName), 1);
     game.inventory.refresh();
-    game.alert.createAlert(game.alert.alertCollection.bought, itemName)
+    game.alert.createAlert(game.alert.alertCollection.bought + itemName)
   };
 
   this.open = function(shopType) {

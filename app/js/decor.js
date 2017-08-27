@@ -30,7 +30,7 @@ function Decor(animations, usedAnimations, image, spriteWidth, spriteHeight, x, 
       return false;
     };
     usingFlag = 1;
-    decorObj.gotoAndPlay("used");
+
     useFunc();
     setTimeout(function() {
       usingFlag = 0;

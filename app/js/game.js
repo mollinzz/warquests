@@ -1,14 +1,40 @@
 /** Main game func */
 function Game(stageId) {
+  this.abilityFlag = 1;
+  this.showAbility = 1;
   // code here.
   var me = this;
+  this.home = function() {
+    var level = "home";
+    var settings = levelSettings[level];
+    if (settings.type == "home") {
+      this.showAbility = 0;
+    };
+    this.bg1 = new createjs.Shape();
+    this.bg1.graphics.beginFill("#51d977"); // first bg
+    this.bg1.graphics.drawRect(
+      0,
+      0,
+      me.stage.canvas.width,
+      me.stage.canvas.height
+    );
+
+    this.bg1.graphics.ef();
+    me.stage.addChild(this.bg1);
+    me.spawner.createMonster(100, 100, "snake");
+    House(300, 100);
+    House2(800, 100);
+    Portal(300, 300);
+    House2(300, 500);
+  };
+
   this.start = function() {
     this.storage = new Storage();
     this.stage = new createjs.Stage(stageId);
+
     this.spawner = new MonsterSpawner();
     this.itemCollection = new ItemCollection();
     me.stage.autoClear = false;
-    this.abilityFlag = 1;
     if (!game.storage.getField("levelPoints")) {
       game.storage.setField("levelPoints", 0);
     };
@@ -42,20 +68,10 @@ function Game(stageId) {
       gameArea.style.marginLeft = ((window.innerWidth - newWidth) / 2) + 'px';
     };
     me.resizeCanvas();
-    // canvas background  
-    this.bg1 = new createjs.Shape();
-    this.bg1.graphics.beginFill("#51d977"); // first bg
-    this.bg1.graphics.drawRect(
-      0,
-      0,
-      me.stage.canvas.width,
-      me.stage.canvas.height
-    );
-
-    this.bg1.graphics.ef();
-    me.stage.addChild(this.bg1);
+    // canvas background 
 
     me.inventory = new Inventory();
+    me.home();
     me.abilityPanel = new AbilityPanel();
     me.knight = new Knight();
     me.equipmentPanel = new EquipmentPanel();
@@ -63,11 +79,8 @@ function Game(stageId) {
     me.market = new Market();
     me.alert = new AlertMessage();
     // me.decor = new Decor();
-    House(300, 100);
-    House2(800, 100);
-    Portal(300, 300);
-    House2(300, 500);
-    me.spawner.createMonster(100, 100, "snake" )
+
+
     var factor;
     var factor2;
     setInterval(function() {
@@ -102,4 +115,5 @@ function Game(stageId) {
       me.stage.update();
     }
   };
+
 }

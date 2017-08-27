@@ -1,7 +1,10 @@
 function AbilityPanel() {
   var me = this;
   this.container = new createjs.Container();
-  //game.stage.addChild(container);
+  game.stage.addChild(this.container);
+  if (!game.showAbility) {
+    this.container.visible = false
+  };
   this.container.x = game.stage.canvas.width / 2 - 200;
   this.container.y = game.stage.canvas.height - 129;
 
@@ -13,8 +16,8 @@ function AbilityPanel() {
   this.slamSlot = new AbilityPanelSlot("slam", 3, this.container)
   this.healSlot = new AbilityPanelSlot("heal", 106, this.container)
 
-  this.container.addEventListener("click", function(){
-   return false 
+  this.container.addEventListener("click", function() {
+    return false
   });
 };
 

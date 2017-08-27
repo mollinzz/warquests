@@ -10,22 +10,26 @@ function Game(stageId) {
     if (settings.type == "home") {
       this.showAbility = 0;
     };
+
+    var bgColor = (settings.bgColor) ? settings.bgColor : "#51d977";
     this.bg1 = new createjs.Shape();
-    this.bg1.graphics.beginFill("#51d977"); // first bg
+    this.bg1.graphics.beginFill(bgColor); // first bg
     this.bg1.graphics.drawRect(
       0,
       0,
       me.stage.canvas.width,
       me.stage.canvas.height
     );
-
     this.bg1.graphics.ef();
     me.stage.addChild(this.bg1);
+
+    if (settings.decor) {
+      for (var i = 0; i < settings.decor.length; i++) {
+        var decorItem = settings.decor[i];
+        createFromSettings(decorItem['name'], decorItem['x'], decorItem['y'])
+      }
+    };
     me.spawner.createMonster(100, 100, "snake");
-    House(300, 100);
-    House2(800, 100);
-    Portal(300, 300);
-    House2(300, 500);
   };
 
   this.start = function() {

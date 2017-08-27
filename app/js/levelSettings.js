@@ -21,7 +21,8 @@ levelSettings.home = {
       x: 200,
       y: 400
     }
-  ]
+  ],
+  monters : [{}]
 };
 levelSettings.farm1 = {
   type: "farm",

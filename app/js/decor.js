@@ -38,6 +38,20 @@ function Decor(animations, usedAnimations, image, spriteWidth, spriteHeight, x, 
   })
 };
 
+function createFromSettings(decorName, x, y) {
+  switch (decorName) {
+    case "weaponShop":
+      House2(x, y)
+      break;
+    case "potionShop":
+      House(x, y)
+      break;
+    case "portal":
+      Portal(x, y)
+      break;
+  };
+};
+
 function House(x, y) {
   this.prototype = new Decor([0], [0], "images/house1x1.png", 200, 168, x, y, function() { game.market.open("potionShop") })
 };

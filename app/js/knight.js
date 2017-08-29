@@ -2,30 +2,33 @@
  * @constructor
  */
 function Knight() {
+  var me = this;
   var attackSpeed;
   var healAbilityFlag = 0;
   var slamAbilityFlag = 0;
-  this.knightHP = 15;
-  this.manaPoints = 10;
   this.actionsFlag = 0;
-  var me = this;
+  this.knightHP = 15;
   this.defaultHP = this.knightHP;
-  this.containerBar = new createjs.Container();
-  game.stage.addChild(this.containerBar)
-  var factorKnight;
-  var apple;
-  this.direction = 1; // right direction
-  this.dirSettings = [
-    { "walk": "walkLeft" },
-    { "walk": "walkRight" },
-  ];
+  this.manaPoints = 10;
+  this.defaultMana = this.manaPoints;
   this.skills = {
     shieldBlock: 1,
     movementSpeed: 0.3,
     extraAttack: 0,
     attack: 1,
   };
-  this.defaultMana = this.manaPoints;
+
+  this.containerBar = new createjs.Container();
+  game.stage.addChild(this.containerBar);
+  this.containerBar.addEventListener("click", function() {
+    return false
+  });
+
+  this.direction = 1; // right direction
+  this.dirSettings = [
+    { "walk": "walkLeft" },
+    { "walk": "walkRight" },
+  ];
 
   /** Sprites setting */
   var knightSprites = new createjs.SpriteSheet({

@@ -4,13 +4,13 @@ function Game(stageId) {
   this.showAbility = 1;
   // code here.
   var me = this;
+
   this.home = function() {
     var level = "home";
     var settings = levelSettings[level];
     if (settings.type == "home") {
       this.showAbility = 0;
     };
-
     var bgColor = (settings.bgColor) ? settings.bgColor : "#51d977";
     this.bg1 = new createjs.Shape();
     this.bg1.graphics.beginFill(bgColor); // first bg
@@ -27,18 +27,16 @@ function Game(stageId) {
       for (var i = 0; i < settings.decor.length; i++) {
         var decorItem = settings.decor[i];
         createFromSettings(decorItem['name'], decorItem['x'], decorItem['y'])
-      }
+      };
     };
-    me.spawner.createMonster(100, 100, "snake");
   };
 
   this.start = function() {
     this.storage = new Storage();
     this.stage = new createjs.Stage(stageId);
-
     this.spawner = new MonsterSpawner();
     this.itemCollection = new ItemCollection();
-    me.stage.autoClear = false;
+    // me.stage.autoClear = false;
     if (!game.storage.getField("levelPoints")) {
       game.storage.setField("levelPoints", 0);
     };
@@ -72,14 +70,14 @@ function Game(stageId) {
       gameArea.style.marginLeft = ((window.innerWidth - newWidth) / 2) + 'px';
     };
     me.resizeCanvas();
-    // canvas background 
-
+    // canvas background
+    me.levelGenerator = new LevelGenerate();
     me.inventory = new Inventory();
-    me.home();
     me.abilityPanel = new AbilityPanel();
+    me.home();
     me.knight = new Knight();
     me.equipmentPanel = new EquipmentPanel();
-    me.levelGenerator = new LevelGenerate();
+
     me.market = new Market();
     me.alert = new AlertMessage();
     // me.decor = new Decor();
@@ -119,5 +117,4 @@ function Game(stageId) {
       me.stage.update();
     }
   };
-
 }

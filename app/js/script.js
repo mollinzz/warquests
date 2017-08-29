@@ -55,8 +55,9 @@ function MonsterSpawner() {
   this.randomMachine = function(number, monsterName) {
     for (var i = 1; i <= number; i++) {
       me.createMonster(
-        Math.random() * game.stage.canvas.width,
-        Math.random() * game.stage.canvas.height,
+        Math.random()* (1800  - 100) +100,
+        // Math.random() * game.stage.canvas.width,
+        Math.random()*(900 - 100) + 100,
         monsterName
       );
     }

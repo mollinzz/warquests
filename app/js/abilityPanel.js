@@ -2,7 +2,7 @@ function AbilityPanel() {
   var me = this;
   this.container = new createjs.Container();
   game.stage.addChild(this.container);
-  if (!game.showAbility) {
+  while (!game.showAbility) {
     this.container.visible = false
   };
   this.container.x = game.stage.canvas.width / 2 - 200;

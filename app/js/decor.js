@@ -41,7 +41,7 @@
     })
   };
 
-  function createFromSettings(decorName, x, y) {
+  function createFromSettings(decorName, x, y, options) {
     switch (decorName) {
       case "weaponShop":
         House2(x, y)
@@ -50,7 +50,7 @@
         House(x, y)
         break;
       case "portal":
-        Portal(x, y)
+        Portal(x, y, options)
         break;
     };
   };
@@ -68,13 +68,13 @@
     //  console.log(this.prototype)
   };
 
-  function Portal(x, y) {
+  function Portal(x, y, options) {
     this.prototype = new Decor([16], [0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13, 14, 15, 16], "images/portal.png", 64, 64, x, y, function() {
       game.knight.walk(x, y, function() {
         game.knight.actionsFlag = 1;
         setTimeout(function() {
           game.levelGenerator.createInterface();
-          game.levelGenerator.createlevel("farm1");
+          game.levelGenerator.createlevel(options.target);
           game.knight.actionsFlag = 0;
         }, 1400)
       })

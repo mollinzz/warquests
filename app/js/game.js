@@ -5,31 +5,11 @@ function Game(stageId) {
   // code here.
   var me = this;
 
-  this.home = function() {
-    var level = "home";
-    var settings = levelSettings[level];
-    if (settings.type == "home") {
-      this.showAbility = 0;
-    };
-    var bgColor = (settings.bgColor) ? settings.bgColor : "#51d977";
-    this.bg1 = new createjs.Shape();
-    this.bg1.graphics.beginFill(bgColor); // first bg
-    this.bg1.graphics.drawRect(
-      0,
-      0,
-      me.stage.canvas.width,
-      me.stage.canvas.height
-    );
-    this.bg1.graphics.ef();
-    me.stage.addChild(this.bg1);
-
-    if (settings.decor) {
-      for (var i = 0; i < settings.decor.length; i++) {
-        var decorItem = settings.decor[i];
-        createFromSettings(decorItem['name'], decorItem['x'], decorItem['y'])
-      };
-    };
-  };
+  // this.home = function() {
+  //   var level = "home";
+  //   var settings = levelSettings[level];
+  //   me.stage.addChild(this.bg1);
+  // };
 
   this.start = function() {
     this.storage = new Storage();
@@ -74,10 +54,9 @@ function Game(stageId) {
     me.levelGenerator = new LevelGenerate();
     me.inventory = new Inventory();
     me.abilityPanel = new AbilityPanel();
-    me.home();
     me.knight = new Knight();
     me.equipmentPanel = new EquipmentPanel();
-
+    me.levelGenerator.createlevel('home');
     me.market = new Market();
     me.alert = new AlertMessage();
     // me.decor = new Decor();

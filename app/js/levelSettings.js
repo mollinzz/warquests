@@ -1,14 +1,21 @@
 var levelSettings = {};
 levelSettings.home = {
   type: "home",
-  //bgColor: default,
+  // bgColor: default,
   //bgImage: null,
   decor: [{
       name: "portal",
       x: 100,
       y: 100,
       options: {
-        target: "home"
+        target: "farm1"
+      }
+    }, {
+      name: "portal",
+      x: 100,
+      y: 200,
+      options: {
+        target: "farm2"
       }
     },
     {
@@ -38,7 +45,29 @@ levelSettings.farm1 = {
     }
   }],
   monsters: [{
-    name: "snake", 
-    value: 1000
+    name: "snake",
+    value: 10
   }]
-}
+};
+levelSettings.farm2 = {
+  type: "farm",
+  decor: [{
+    name: "portal",
+    x: 1,
+    y: 1,
+    options: {
+      target: "home"
+    }
+  }, {
+    name: "portal",
+    x: 100,
+    y: 100,
+    options: {
+      target: "farm1"
+    }
+  }],
+  monsters: [{
+    name: "harpy",
+    value: 10
+  }]
+};

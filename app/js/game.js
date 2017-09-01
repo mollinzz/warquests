@@ -1,10 +1,10 @@
 /** Main game func */
 function Game(stageId) {
+  this.currentLevel = "home";
   this.abilityFlag = 1;
-  this.showAbility = 1;
+  this.showAbility = 0;
   // code here.
   var me = this;
-
   // this.home = function() {
   //   var level = "home";
   //   var settings = levelSettings[level];
@@ -56,7 +56,7 @@ function Game(stageId) {
     me.abilityPanel = new AbilityPanel();
     me.knight = new Knight();
     me.equipmentPanel = new EquipmentPanel();
-    me.levelGenerator.createlevel('home');
+    me.levelGenerator.createLevelEnvironment('home');
     me.market = new Market();
     me.alert = new AlertMessage();
     // me.decor = new Decor();

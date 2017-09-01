@@ -55,15 +55,15 @@ function MonsterSpawner() {
   this.randomMachine = function(number, monsterName) {
     for (var i = 1; i <= number; i++) {
       me.createMonster(
-        Math.random()* (1800  - 100) +100,
+        Math.random() * (1800 - 100) + 100,
         // Math.random() * game.stage.canvas.width,
-        Math.random()*(900 - 100) + 100,
+        Math.random() * (900 - 100) + 100,
         monsterName
       );
-    }
+    };
   };
 
-  /** Spawning monsters 
+  /** Spawning monsters
    * @param {number} x - x pos
    * @param {number} y - y pos
    * @param {string} monsterName - name of monster to switch constructor
@@ -93,17 +93,23 @@ function AlertMessage() {
   container.x = game.stage.canvas.width / 2 + 480;
   container.y = 20;
 
-  container.addEventListener("click", function(){
-   return false 
+  container.addEventListener("click", function() {
+    return false
   });
-  
+
   this.alertCollection = {
     bought: "You bought: "
   };
 
   var textContainer = [];
 
-  var posCollection = [{ "posY": 0 }, { "posY": 40 }, { "posY": 75 }];
+  var posCollection = [{
+    "posY": 0
+  }, {
+    "posY": 40
+  }, {
+    "posY": 75
+  }];
 
   var chatBitmap = new createjs.Bitmap("images/chat.png");
   container.addChild(chatBitmap);

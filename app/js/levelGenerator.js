@@ -4,14 +4,18 @@ function LevelGenerate() {
     game.stage.removeAllChildren();
     game.stage.update();
     game.stage.addChild(game.abilityPanel.container);
-    game.abilityFlag = 0;
   };
 
-  this.createlevel = function(level) {
+  this.createLevelEnvironment = function(level) {
+    game.currentLevel = level ;
     settings = levelSettings[level];
     if (settings.type == "home") {
       game.showAbility = 0;
-    };
+      game.abilityFlag = 0;
+    } else {
+      game.showAbility = 1;
+      game.abilityFlag = 1;
+    }
     this.createInterface();
     var bgColor = (settings.bgColor) ? settings.bgColor : "#51d977";
     this.bg1 = new createjs.Shape();
@@ -40,13 +44,18 @@ function LevelGenerate() {
         }
       };
     };
+      this.createMonstersOnLevel(settings);
 
+  };
+
+  this.createMonstersOnLevel = function(levelSettings) {
     if (settings.monsters) {
-      for (var i = 0; i < settings.monsters.length; i++) {
-        var monsterItem = settings.monsters[i];
-        game.spawner.randomMachine(monsterItem['value'], monsterItem['name'])
+      for (i = 0; i < levelSettings.monsters.length; i++) {
+        var monsterItem = levelSettings.monsters[i];
+        this.numberOfMonsters = this.numberOfMonsters + monsterItem['value'];
+        this.defaultNumberOfMonsters = this.numberOfMonsters;
+        game.spawner.randomMachine(monsterItem['value'], monsterItem['name']);
       };
     };
   };
-
 };

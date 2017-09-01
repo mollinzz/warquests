@@ -12,7 +12,7 @@
 
      /** Sprites setting */
      var monsterSprites = new createjs.SpriteSheet({
-      "animations": {
+       "animations": {
          "stand": {
            "frames": standFrames,
            "speed": 0.1
@@ -34,7 +34,10 @@
 
      /** Moving monster to selected post */
      createjs.Tween.get(this.imgObj)
-       .to({ x: x, y: y });
+       .to({
+         x: x,
+         y: y
+       });
 
      /** Making variable to hp bar*/
      var hpText = new createjs.Text(nameOfMonster, "20px Arial", "black");
@@ -69,14 +72,17 @@
        game.knight.gotoAndFight(coinValue, me, monsterAttackPoint, spriteWidth, function() {
          //game.storage.setField("monsterHP", monsterHP)
          if (game.storage.getField("equipedWeapon")) {
-          me.monsterHP = me.monsterHP - game.knight.skills.extraAttack - game.knight.skills.attack  - game.itemCollection.items[game.storage.getField("equipedWeapon")].attack;
-        } else {
-          me.monsterHP = me.monsterHP - game.knight.skills.extraAttack - game.knight.skills.attack;
-        }
-         
+           me.monsterHP = me.monsterHP - game.knight.skills.extraAttack - game.knight.skills.attack - game.itemCollection.items[game.storage.getField("equipedWeapon")].attack;
+         } else {
+           me.monsterHP = me.monsterHP - game.knight.skills.extraAttack - game.knight.skills.attack;
+         }
+
          game.knight.skills.extraAttack = 0;
          hpReload();
          if (me.monsterHP <= 0) {
+           setTimeout(function() {
+             game.spawner.randomMachine(1, levelSettings[game.currentLevel].monsters[parseInt(Math.random() * levelSettings[game.currentLevel].monsters.length)].name)
+           }, 3000)
            game.stage.removeChild(me.imgObj);
            game.stage.removeChild(container)
            drop(coinValue);

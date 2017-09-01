@@ -28,11 +28,7 @@ levelSettings.home = {
       x: 200,
       y: 400
     }
-  ],
-  monsters: [{
-    name: "snake",
-    value: 10
-  }]
+  ]
 };
 levelSettings.farm1 = {
   type: "farm",

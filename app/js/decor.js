@@ -74,7 +74,7 @@
         game.knight.actionsFlag = 1;
         setTimeout(function() {
           game.levelGenerator.createInterface();
-          game.levelGenerator.createlevel(options.target);
+          game.levelGenerator.createLevelEnvironment(options.target);
           game.knight.actionsFlag = 0;
         }, 1400)
       })

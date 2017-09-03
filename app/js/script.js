@@ -93,6 +93,10 @@ function AlertMessage() {
   container.x = game.stage.canvas.width / 2 + 480;
   container.y = 20;
 
+  var maskShape = new createjs.Shape();
+  maskShape.graphics.drawRect(container.x, container.y, 500, 100);
+  container.mask = maskShape;
+
   container.addEventListener("click", function() {
     return false
   });

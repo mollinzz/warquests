@@ -36,9 +36,6 @@ function LevelGenerate() {
     if (settings.decor) {
       for (var i = 0; i < settings.decor.length; i++) {
         var decorItem = settings.decor[i];
-        if (decorItem.name == "man") {
-          alert(decorItem.name)
-        }
         if (decorItem['options']) {
           createFromSettings(decorItem['name'], decorItem['x'], decorItem['y'], decorItem['options'])
         } else {

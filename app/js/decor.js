@@ -27,7 +27,12 @@
         x: x,
         y: y
       });
-    decorObj.gotoAndPlay("default")
+    decorObj.gotoAndPlay("default");
+
+    me.playUsed = function(){
+      decorObj.gotoAndPlay("used");
+    }
+
     decorObj.addEventListener("click", function() {
       if (usingFlag == 1 || game.knight.actionsFlag == 1) {
         return false;
@@ -73,8 +78,10 @@
 
   function Portal(x, y, options) {
     this.prototype = new Decor([16], [0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13, 14, 15, 16], "images/portal.png", 64, 64, x, y, function() {
+      var me = this;
       game.knight.walk(x, y, function() {
         game.knight.actionsFlag = 1;
+        me.playUsed();
         setTimeout(function() {
           game.levelGenerator.createInterface();
           game.levelGenerator.createLevelEnvironment(options.target);

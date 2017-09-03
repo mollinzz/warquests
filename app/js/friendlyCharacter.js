@@ -56,12 +56,14 @@
         var currentQuest = quests[questSettings[characterName][0]];
         var i = 0;
         var interval = setInterval(function() {
-          me.say(currentQuest.info[i]);
-          i++;
+          debugger;
           if (i == currentQuest.info.length - 1) {
             clearInterval(interval);
             me.closeMessage();
+            return;
           }
+          me.say(currentQuest.info[i]);
+          i++;
         }, 2000);
 
       });

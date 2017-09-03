@@ -16,6 +16,7 @@
   <script type="text/javascript" src="js/script.js"></script>
   <script type="text/javascript" src="js/shop.js"></script>
   <script type="text/javascript" src="js/levelSettings.js"></script>
+  <script type="text/javascript" src="js/questTextSettings.js"></script>
   <script type="text/javascript" src="js/friendlyCharacter.js"></script>
   <script type="text/javascript" src="js/game.js"></script>
 </head>
@@ -23,51 +24,51 @@
 <body onload="init()">
   <canvas id="demoCanvas" width="2000" height="1000"></canvas>
   <script>
-  var game;
+    var game;
 
-  function init() {
-    game = new Game("demoCanvas");
-    game.start();
-    game.stage.on("stagemousedown", function(event) {
-      //console.log(event);
-      if (!event.relatedTarget) {
-        game.knight.walk(event.stageX - 42.5, event.stageY - 42.5);
-      };
-    });
-    document.onkeydown = function(ev) {
-      console.log(ev);
-      console.log(ev.code);
-      if (ev.code == 'KeyB') {
-        game.inventory.toggle();
-      };
-      if (ev.code == 'Enter') {
-        if (levels[game.storage.getField("level") + 1].XP <= game.storage.getField("levelPoints") & levels[game.storage.getField("level") + 1].coins <= game.storage.getField("coins")) {
-          alert()
-          game.storage.refresh("coins", game.storage.getField("coins"), -levels[game.storage.getField("level") + 1].coins)
-          game.storage.refresh("level", game.storage.getField("level"), 1);
-          game.equipmentPanel.refresh();
-          game.inventory.refresh();
+    function init() {
+      game = new Game("demoCanvas");
+      game.start();
+      game.stage.on("stagemousedown", function(event) {
+        //console.log(event);
+        if (!event.relatedTarget) {
+          game.knight.walk(event.stageX - 42.5, event.stageY - 42.5);
+        };
+      });
+      document.onkeydown = function(ev) {
+        console.log(ev);
+        console.log(ev.code);
+        if (ev.code == 'KeyB') {
+          game.inventory.toggle();
+        };
+        if (ev.code == 'Enter') {
+          if (levels[game.storage.getField("level") + 1].XP <= game.storage.getField("levelPoints") & levels[game.storage.getField("level") + 1].coins <= game.storage.getField("coins")) {
+            alert()
+            game.storage.refresh("coins", game.storage.getField("coins"), -levels[game.storage.getField("level") + 1].coins)
+            game.storage.refresh("level", game.storage.getField("level"), 1);
+            game.equipmentPanel.refresh();
+            game.inventory.refresh();
+          }
         }
-      }
-      if (ev.code == 'KeyC') {
-        game.equipmentPanel.toggle();
-      }
-      if (ev.code == 'KeyA' & !game.abilityFlag) {
-        game.knight.useAbility('slam');
+        if (ev.code == 'KeyC') {
+          game.equipmentPanel.toggle();
+        }
+        if (ev.code == 'KeyA' & !game.abilityFlag) {
+          game.knight.useAbility('slam');
+        };
+        if (ev.code == 'KeyS' & !game.abilityFlag) {
+          game.knight.useAbility('heal');
+        };
+        if (ev.code.substring(0, 5) == 'Digit') {
+          game.inventory.applySlot(parseInt(ev.code.substring(5)));
+        }
       };
-      if (ev.code == 'KeyS' & !game.abilityFlag) {
-        game.knight.useAbility('heal');
-      };
-      if (ev.code.substring(0, 5) == 'Digit') {
-        game.inventory.applySlot(parseInt(ev.code.substring(5)));
-      }
-    };
-    game.resizeCanvas();
-    window.addEventListener("resize", function() {
-      console.log('check');
       game.resizeCanvas();
-    });
-  }
+      window.addEventListener("resize", function() {
+        console.log('check');
+        game.resizeCanvas();
+      });
+    }
   </script>
 </body>
 

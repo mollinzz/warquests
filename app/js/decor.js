@@ -57,9 +57,9 @@
       case "portal":
         new Portal(x, y, options)
         break;
-        // case "man":
-        //   Man(x, y);
-        //   break;
+        case "man":
+          new Man(x, y);
+          break;
     };
   };
 

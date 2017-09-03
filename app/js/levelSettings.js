@@ -28,11 +28,6 @@ levelSettings.home = {
       x: 200,
       y: 400
     },
-    {
-      name: "man",
-      x: 200,
-      y: 400
-    }
   ]
 };
 levelSettings.farm1 = {

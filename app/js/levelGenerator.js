@@ -7,7 +7,7 @@ function LevelGenerate() {
   };
 
   this.createLevelEnvironment = function(level) {
-    game.currentLevel = level ;
+    game.currentLevel = level;
     settings = levelSettings[level];
     if (settings.type == "home") {
       game.showAbility = 0;
@@ -33,10 +33,12 @@ function LevelGenerate() {
     game.knight.weaponObj.y = 15;
     game.knight.weaponObj.x = 10;
     game.knight.container.addChild(game.knight.weaponObj);
-
     if (settings.decor) {
       for (var i = 0; i < settings.decor.length; i++) {
         var decorItem = settings.decor[i];
+        if (decorItem.name == "man") {
+          alert(decorItem.name)
+        }
         if (decorItem['options']) {
           createFromSettings(decorItem['name'], decorItem['x'], decorItem['y'], decorItem['options'])
         } else {
@@ -44,8 +46,7 @@ function LevelGenerate() {
         }
       };
     };
-      this.createMonstersOnLevel(settings);
-
+    this.createMonstersOnLevel(settings);
   };
 
   this.createMonstersOnLevel = function(levelSettings) {

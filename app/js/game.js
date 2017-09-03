@@ -50,7 +50,7 @@ function Game(stageId) {
       gameArea.style.marginLeft = ((window.innerWidth - newWidth) / 2) + 'px';
     };
     me.resizeCanvas();
-    // canvas background
+    // canvas   
     me.levelGenerator = new LevelGenerate();
     me.inventory = new Inventory();
     me.abilityPanel = new AbilityPanel();
@@ -59,8 +59,6 @@ function Game(stageId) {
     me.levelGenerator.createLevelEnvironment('home');
     me.market = new Market();
     me.alert = new AlertMessage();
-    // me.decor = new Decor();
-
 
     var factor;
     var factor2;

@@ -1,5 +1,8 @@
   function FriendlyCharacter(characterName, animations, image, spriteWidth, spriteHeight, x, y) {
     var me = this;
+    var currentQuest;
+    var actionFlag = 0;
+    var interval;
     var container = new createjs.Container();
     game.stage.addChild(container);
     var containerChat = new createjs.Container();
@@ -24,8 +27,8 @@
     this.personObj = new createjs.Sprite(personSprites);
     container.addChild(this.personObj);
     this.personObj.gotoAndPlay("default");
-    var textBackground = new createjs.Shape();
 
+    var textBackground = new createjs.Shape();
     textBackground.graphics.beginFill("white");
     textBackground.graphics.drawRect(spriteWidth - 125, spriteHeight * 2, 250, 300);
     containerChat.addChild(textBackground);
@@ -38,34 +41,91 @@
 
     var buttonNext = new createjs.Shape();
     buttonNext.graphics.beginFill("blue");
+    buttonNext.graphics.drawRect(spriteWidth - 125, spriteHeight * 2 + 250, 125, 50);
+    containerChat.addChild(buttonNext);
+
+    var buttonCancel = new createjs.Shape();
+    buttonCancel.graphics.beginFill("pink");
+    buttonCancel.graphics.drawRect(spriteWidth, spriteHeight * 2 + 250, 125, 50);
+    containerChat.addChild(buttonCancel);
+    buttonCancel.addEventListener("click", function() {
+      if (actionFlag) {
+        me.closeMessage();
+      }
+    });
 
     this.closeMessage = function() {
+      if (interval) {
+        clearInterval(interval);
+      };
+      actionFlag = 0;
       containerChat.visible = false;
       textMessage.text = "";
+      buttonNext.removeEventListener('click', listener)
     }
     this.closeMessage();
 
     this.say = function(text) {
-      debugger;
-      containerChat.visible = true;
       textMessage.text = text;
     };
 
+    var i = 0;
+    var listener = function() {
+      if (actionFlag) {
+        if (i == 2) {
+          game.quests.questArray.push(currentQuest.info);
+          game.storage.setField("quests", game.quests.questArray);
+          game.quests.questArray = game.storage.getField("quests");
+          me.closeMessage();
+        } else {
+          me.say(currentQuest.texts[i]);
+          i++;
+        };
+      };
+    };
     this.personObj.addEventListener("click", function() {
       game.knight.walk(x, y, function() {
-        var currentQuest = quests[questSettings[characterName][0]];
-        var i = 0;
-        var interval = setInterval(function() {
-          debugger;
-          if (i == currentQuest.info.length - 1) {
-            clearInterval(interval);
-            me.closeMessage();
-            return;
+        containerChat.visible = true;
+        buttonNext.visible = true;
+        buttonCancel.graphics.clear();
+        buttonCancel.graphics.beginFill("pink");
+        buttonCancel.graphics.drawRect(spriteWidth, spriteHeight * 2 + 250, 125, 50);
+        actionFlag = 1;
+        i = 0;
+        currentQuest = quests[questSettings[characterName][0]];
+        game.knight.imgObj.gotoAndStop();
+        game.quests.checkForComplete();
+        for (var i3 = 0; i3 < game.quests.questArray.length; i3++) {
+          if (quests[game.quests.questArray[i3].name].conditions(game.quests.questArray[i3].progress)) {
+            buttonNext.visible = false;
+            me.say(currentQuest.texts[3]);
+            buttonCancel.graphics.clear();
+            buttonCancel.graphics.beginFill("pink");
+            buttonCancel.graphics.drawRect(spriteWidth - 125, spriteHeight * 2 + 250, 250, 50);
+            i = 0;
+            quests[game.quests.questArray[i3].name].reward();
+            game.quests.questArray.splice([i3], 1);
+            game.storage.setField("quests", game.quests.questArray);
+            game.inventory.refresh();
+            return false;
+          };
+        };
+        for (var i2 = 0; i2 < game.quests.questArray.length; i2++) {
+          if (game.quests.questArray[i2]) {
+            if (game.quests.questArray[i2].name == quests[questSettings[characterName][0]].info.name) {
+              buttonNext.visible = false;
+              buttonCancel.graphics.clear();
+              buttonCancel.graphics.beginFill("pink");
+              buttonCancel.graphics.drawRect(spriteWidth - 125, spriteHeight * 2 + 250, 250, 50);
+              i = 0;
+              me.say(currentQuest.texts[2]);
+              return false;
+            };
           }
-          me.say(currentQuest.info[i]);
-          i++;
-        }, 2000);
-
+        };
+        me.say(currentQuest.texts[i]);
+        i++;
+        buttonNext.addEventListener("click", listener);
       });
     });
 

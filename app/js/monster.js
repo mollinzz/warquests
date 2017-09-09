@@ -1,7 +1,7 @@
    /** Monster function
     * @consructor
     */
-   function Monster(standFrames, image, spriteWidth, spriteHeight, x, y, monsterHP, widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue, textPosX, levelPointsValue) {
+   function Monster(standFrames, image, spriteWidth, spriteHeight, x, y, monsterHP, widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue, textPosX, levelPointsValue, monsterName) {
      /** Variables */
      var me = this;
      this.monsterHP = monsterHP;
@@ -82,12 +82,13 @@
          if (me.monsterHP <= 0) {
            setTimeout(function() {
              game.spawner.randomMachine(1, levelSettings[game.currentLevel].monsters[parseInt(Math.random() * levelSettings[game.currentLevel].monsters.length)].name)
-           }, 3000)
+           }, 3000);
            game.stage.removeChild(me.imgObj);
            game.stage.removeChild(container)
            drop(coinValue);
            game.storage.refresh("levelPoints", game.storage.getField("levelPoints"), levelPointsValue);
            game.equipmentPanel.refresh();
+           game.quests.addProgress(monsterName);
          };
        });
      };
@@ -136,7 +137,8 @@
        1,
        1,
        3,
-       1)
+       1,
+       "snake")
    };
 
    function Harpy(x, y) {
@@ -153,7 +155,8 @@
        2,
        2,
        25,
-       2)
+       2,
+       "harpy")
    };
 
    function Reaper(x, y) {
@@ -169,5 +172,6 @@
        10,
        10,
        35,
-       10)
+       10,
+       "harpy")
    };

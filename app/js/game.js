@@ -5,11 +5,6 @@ function Game(stageId) {
   this.showAbility = 0;
   // code here.
   var me = this;
-  // this.home = function() {
-  //   var level = "home";
-  //   var settings = levelSettings[level];
-  //   me.stage.addChild(this.bg1);
-  // };
 
   this.start = function() {
     this.storage = new Storage();
@@ -25,7 +20,6 @@ function Game(stageId) {
     };
     if (!game.storage.getField("coins")) {
       game.storage.setField("coins", 0);
-      alert(game.storage.getField("coins"));
     };
     me.resizeCanvas = function() {
       gameArea = me.stage.canvas;
@@ -59,7 +53,8 @@ function Game(stageId) {
     me.levelGenerator.createLevelEnvironment('home');
     me.market = new Market();
     me.alert = new AlertMessage();
-    Man(500,100);
+    me.quests = new Quests();
+    Man(100, 100);
 
     var factor;
     var factor2;

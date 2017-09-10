@@ -91,6 +91,8 @@ function Game(stageId) {
       var indexArray = [];
       var bound;
       var childIndex;
+      var emptyBoundsCount = 0;
+
       for (var i = 0; i < game.stage.children.length; i++) {
         bound = game.stage.children[i].getBounds();
         if (bound) {
@@ -98,13 +100,20 @@ function Game(stageId) {
         };
       };
       indexArray.sort(me.sortNumber);
-      console.log(indexArray);
+      // console.log(indexArray);
+
+      for (var i = 0; i < game.stage.children.length; i++) {
+        bound = game.stage.children[i].getBounds();
+        if (!bound) {
+          game.stage.setChildIndex(game.stage.children[i], emptyBoundsCount++);
+        };
+      };
 
       for (var i = 0; i < game.stage.children.length; i++) {
         bound = game.stage.children[i].getBounds();
         if (bound) {
           childIndex = indexArray.indexOf(Math.floor(game.stage.children[i].y + bound.height));
-          game.stage.setChildIndex(game.stage.children[i], childIndex + 10);
+          game.stage.setChildIndex(game.stage.children[i], childIndex + emptyBoundsCount);
         };
       };
     };

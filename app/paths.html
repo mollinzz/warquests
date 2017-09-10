@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
-  <link href="vendor/bootstrap/css/bootstrap.css">
-  <link href="css/paths.css">
+  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="css/paths.css">
 </head>
 
 <body>
@@ -14,9 +14,23 @@
       <div class="col-md-8">
         <canvas id="paths-canvas"></canvas>
       </div>
-      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <form action="">
+          x1: <input type="text" id="x1" value="10"><br>
+          y1: <input type="text" id="y1" value="10"><br>
+          x2: <input type="text" id="x2" value="100"><br>
+          y2: <input type="text" id="y2" value="100"><br>
+          <hr>
+          x3: <input type="text" id="x3" value="10"><br>
+          x4: <input type="text" id="x4" value="100"><br>
+          y3: <input type="text" id="y3" value="10"><br>
+          <a href="#" id='drawLine'>Нарисоватб</a>
+        </form>
+      </div>
     </div>
   </div>
+  <script src="vendor/jquery/jquery.js"></script>
+  <script src="js/paths.js"></script>
 </body>
 
 </html>

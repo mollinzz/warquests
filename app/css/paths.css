@@ -1,5 +1,5 @@
-#paths-canvas: {
+#paths-canvas {
   width: 100%;
   min-height: 400px;
-  border: 1px solid #333;
+  border: 10px solid #333;
 }

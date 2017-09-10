@@ -55,7 +55,7 @@ function Game(stageId) {
     me.alert = new AlertMessage();
     me.quests = new Quests();
     Man(100, 100);
-    Elder(200, 100);  
+    Elder(200, 100);
 
     var factor;
     var factor2;
@@ -83,12 +83,39 @@ function Game(stageId) {
       }
     }, 100)
 
+    me.sortNumber = function(a, b) {
+      return a - b;
+    };
+
+    me.updateIndex = function() {
+      var indexArray = [];
+      var bound;
+      var childIndex;
+      for (var i = 0; i < game.stage.children.length; i++) {
+        bound = game.stage.children[i].getBounds();
+        if (bound) {
+          indexArray.push(Math.floor(game.stage.children[i].y + bound.height));
+        };
+      };
+      indexArray.sort(me.sortNumber);
+      console.log(indexArray);
+
+      for (var i = 0; i < game.stage.children.length; i++) {
+        bound = game.stage.children[i].getBounds();
+        if (bound) {
+          childIndex = indexArray.indexOf(Math.floor(game.stage.children[i].y + bound.height));
+          game.stage.setChildIndex(game.stage.children[i], childIndex + 10);
+        };
+      };
+    };
+
     me.stage.update();
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", handleEvent);
 
     function handleEvent() {
       me.stage.update();
+      me.updateIndex();
     }
   };
 }

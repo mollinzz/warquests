@@ -97,9 +97,7 @@
         } else {
           currentQuest = quests[questSettings[characterName][game.storage.getField(characterName)]];
         };
-
         game.knight.imgObj.gotoAndStop();
-        game.quests.checkForComplete();
         for (var i3 = 0; i3 < game.quests.questArray.length; i3++) {
           if (quests[game.quests.questArray[i3].name].conditions(game.quests.questArray[i3].progress)) {
             buttonNext.visible = false;

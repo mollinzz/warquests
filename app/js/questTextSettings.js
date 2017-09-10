@@ -79,10 +79,7 @@ function Quests() {
   this.addProgress = function(monsterName) {
     for (var i = 0; i < this.questArray.length; i++) {
       this.questArray[i].progress[monsterName] = this.questArray[i].progress[monsterName] + 1;
-      console.log(this.questArray[i].progress[monsterName]);
       game.storage.setField("quests", this.questArray)
     };
   };
-
-  this.checkForComplete = function() {};
 };

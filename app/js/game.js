@@ -55,7 +55,7 @@ function Game(stageId) {
     me.alert = new AlertMessage();
     me.quests = new Quests();
     Man(100, 100);
-    Elder(200, 100);
+    Elder(200, 100);  
 
     var factor;
     var factor2;

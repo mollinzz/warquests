@@ -93,7 +93,6 @@
         actionFlag = 1;
         i = 0;
         if (!game.storage.getField(characterName)) {
-          alert(1)
           currentQuest = quests[questSettings[characterName][0]];
         } else {
           currentQuest = quests[questSettings[characterName][game.storage.getField(characterName)]];

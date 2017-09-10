@@ -92,7 +92,13 @@
         buttonCancel.graphics.drawRect(spriteWidth, spriteHeight * 2 + 250, 125, 50);
         actionFlag = 1;
         i = 0;
-        currentQuest = quests[questSettings[characterName][0]];
+        if (!game.storage.getField(characterName)) {
+          alert(1)
+          currentQuest = quests[questSettings[characterName][0]];
+        } else {
+          currentQuest = quests[questSettings[characterName][game.storage.getField(characterName)]];
+        };
+
         game.knight.imgObj.gotoAndStop();
         game.quests.checkForComplete();
         for (var i3 = 0; i3 < game.quests.questArray.length; i3++) {
@@ -106,13 +112,18 @@
             quests[game.quests.questArray[i3].name].reward();
             game.quests.questArray.splice([i3], 1);
             game.storage.setField("quests", game.quests.questArray);
+            if (!game.storage.getField(characterName)) {
+              game.storage.refresh(characterName, 0, 1);
+            } else {
+              game.storage.refresh(characterName, game.storage.getField(characterName), 1);
+            }
             game.inventory.refresh();
             return false;
           };
         };
         for (var i2 = 0; i2 < game.quests.questArray.length; i2++) {
           if (game.quests.questArray[i2]) {
-            if (game.quests.questArray[i2].name == quests[questSettings[characterName][0]].info.name) {
+            if (game.quests.questArray[i2].name == currentQuest.info.name) {
               buttonNext.visible = false;
               buttonCancel.graphics.clear();
               buttonCancel.graphics.beginFill("pink");
@@ -134,6 +145,14 @@
   function Man(x, y) {
     this.prototype = new FriendlyCharacter(
       "man", [6, 7, 8, 7], "images/man.png", 47, 63, x, y
+    );
+    this.prototype.personObj.scaleX = 2;
+    this.prototype.personObj.scaleY = 2;
+  };
+
+  function Elder(x, y) {
+    this.prototype = new FriendlyCharacter(
+      "elder", [6, 7, 8, 7], "images/man.png", 47, 63, x, y
     );
     this.prototype.personObj.scaleX = 2;
     this.prototype.personObj.scaleY = 2;

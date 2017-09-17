@@ -71,6 +71,65 @@ function Knight() {
   this.imgObj.gotoAndStop("walkRight");
   this.container.addChild(this.imgObj);
 
+  this.checkPath = function(x1, y1, x2, y2) {
+    var bound, currentChild, pointX;
+    for (var i = 0; i < game.stage.children.length; i++) {
+      currentChild = game.stage.children[i];
+      bound = currentChild.getBounds();
+      if (bound) {
+        currentChild.x;
+        currentChild.y;
+        pointX = me.getPoint(x1, y1, x2, y2, parseInt(currentChild.x), parseInt(currentChild.y),  parseInt(currentChild.x + bound.width))
+        if (pointX) {
+          if (!(parseInt(x1) == parseInt(pointX) && parseInt(y1) == parseInt(currentChild.y))) {
+            return {
+              x: pointX,
+              y: parseInt(currentChild.y)
+            };
+          }
+          console.log('point: ' + pointX);
+        }
+      };
+    };
+    return false;
+  }
+
+  this.calculateKoeffs = function(x1, y1, x2, y2) {
+    var k = null;
+    var b = null;
+
+    k = (y2 - y1) / (x2 - x1);
+    b = y1 - k * x1;
+    var returnObj = {
+      k: k,
+      b: b
+    };
+    return returnObj;
+  };
+
+  this.getPoint = function(x1, y1, x2, y2, x3, y3, x4) {
+      var minX = Math.min(x1,x2);
+      var maxX = Math.max(x1,x2);
+      var minY = Math.min(y1,y2);
+      var maxY = Math.max(y1,y2);
+      if (x1 == x3 && y1 == y3) {
+        return false;
+      }
+      if ((x4 < minX) || (x3 > maxX) || (y3 > maxY) || (y3 < minY)) {
+        return false;
+      }
+
+      var koeffs = me.calculateKoeffs(x1, y1, x2, y2);
+      var x5 = (y3 - koeffs.b) / koeffs.k;
+      if (x5 < x3) {
+          return false;
+      }
+      if (x5 > x4) {
+          return false;
+      }
+      return x5;
+  }
+
   /** Knight walking
    * @param {number} x - x position of walking point.
    * @param {number} y - y position of walking point.
@@ -82,6 +141,12 @@ function Knight() {
       return false
     };
     me.actionsFlag++;
+    var point = me.checkPath(parseInt(me.container.x), parseInt(me.container.y), parseInt(x), parseInt(y));
+    if (point) {
+      x = point.x;
+      y = point.y;
+    }
+
     me.direction = (x > me.container.x) + 0;
     me.weaponObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
     me.imgObj.gotoAndPlay(me.dirSettings[me.direction]["walk"]);

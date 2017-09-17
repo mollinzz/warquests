@@ -122,6 +122,7 @@ function Inventory() {
       switch (itemName) {
         case "coin":
           game.storage.refresh("coins", game.storage.getField("coins"), coinValue);
+          createjs.Sound.play('lootCoin');
           break;
         case "basicSword":
         case "speedPotion":
@@ -130,6 +131,7 @@ function Inventory() {
         case "attackPointPotion":
         case "manaPotion":
           game.storage.refresh(itemName, game.storage.getField(itemName), 1);
+          createjs.Sound.play('lootItem');
           break;
       };
       me.refresh();

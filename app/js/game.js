@@ -46,7 +46,9 @@ function Game(stageId) {
     me.resizeCanvas();
     me.loadSounds = function() {
       createjs.Sound.registerSound("sounds/hit.wav", 'hit');
-    }
+      createjs.Sound.registerSound("sounds/lootCoin.wav", 'lootCoin');
+      createjs.Sound.registerSound("sounds/lootItem.wav", 'lootItem');
+    };
     me.loadSounds();
     // canvas
     me.levelGenerator = new LevelGenerate();

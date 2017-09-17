@@ -40,14 +40,14 @@ $("#drawLine").click(
     console.log(x2);
     console.log(y1);
     console.log(y2);
-    clear()
+    clear();
     drawLine(x1, y1, x2, y2);
     drawLine(x3, y3, x4, y3);
     var koeffs = calculateKoeffs(x1, y1, x2, y2);
     if (x5 >= x3 && x5 <= 4) {
-      alert()
+      alert();
     }
-    var x5 = (y3 - koeffs.b) / koeffs.k
-    console.log(x5)
+    var x5 = (y3 - koeffs.b) / koeffs.k;
+    console.log(x5);
   }
 );

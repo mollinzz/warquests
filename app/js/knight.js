@@ -145,6 +145,7 @@ function Knight() {
       //starting animation
       me.imgObj.gotoAndPlay(attackFrame);
       me.weaponObj.gotoAndPlay(attackFrame);
+      createjs.Sound.play('hit');
       //callback
       setTimeout(function() {
         callback();

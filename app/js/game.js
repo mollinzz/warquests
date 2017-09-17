@@ -44,6 +44,10 @@ function Game(stageId) {
       gameArea.style.marginLeft = ((window.innerWidth - newWidth) / 2) + 'px';
     };
     me.resizeCanvas();
+    me.loadSounds = function() {
+      createjs.Sound.registerSound("sounds/hit.wav", 'hit');
+    }
+    me.loadSounds();
     // canvas
     me.levelGenerator = new LevelGenerate();
     me.inventory = new Inventory();
@@ -55,7 +59,7 @@ function Game(stageId) {
     me.alert = new AlertMessage();
     me.quests = new Quests();
     Man(100, 100);
-    Elder(200, 100);
+    Elder(200, 101);
 
     var factor;
     var factor2;

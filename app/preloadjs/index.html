@@ -1,0 +1,28 @@
+<html>
+
+<head>
+  <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+  <script>
+  var queue = new createjs.LoadQueue();
+  queue.installPlugin(createjs.Sound);
+  queue.on("complete", handleComplete, this);
+  queue.loadManifest([
+    { id: "myImage", src: "images/pic.png" }
+  ]);
+  queue.loadManifest([
+    { id: "myImage1", src: "images/pic1.png" }
+  ]);
+
+  function handleComplete() {
+    //createjs.Sound.play("sound");
+    var image = queue.getResult("myImage");
+    document.body.appendChild(image);
+    document.body.appendChild(queue.getResult("myImage1"));
+  }
+  </script>
+</head>
+
+<body>
+</body>
+
+</html>

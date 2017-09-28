@@ -3,26 +3,42 @@
 <head>
   <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
   <script>
-  var queue = new createjs.LoadQueue();
-  queue.installPlugin(createjs.Sound);
-  queue.on("complete", handleComplete, this);
-  queue.loadManifest([
-    { id: "myImage", src: "images/pic.png" }
-  ]);
-  queue.loadManifest([
-    { id: "myImage1", src: "images/pic1.png" }
-  ]);
+  function init() {
+    var stage = new createjs.Stage("demoCanvas");
+    var preloader = new createjs.Shape();
+    preloader.graphics.beginFill("red");
+    preloader.graphics.drawRect(0, 0, 0, 100);
+    stage.addChild(preloader);
+    stage.update()
 
-  function handleComplete() {
-    //createjs.Sound.play("sound");
-    var image = queue.getResult("myImage");
-    document.body.appendChild(image);
-    document.body.appendChild(queue.getResult("myImage1"));
-  }
+    var queue = new createjs.LoadQueue();
+    var countLoadedFiles = 0;
+    var filesCollection = [
+      { id: "myPic", src: "images/pic.png" },
+      { id: "myPic2", src: "images/pic1.png" },
+      { id: "myPic3", src: "images/pic2.png" },
+      { id: "myPic4", src: "images/pic3.png" },
+      { id: "myPic5", src: "images/pic4.png" }
+    ];
+    queue.installPlugin(createjs.Sound);
+    queue.on("fileload", handleLoad, this);
+    queue.loadManifest(filesCollection);
+
+    function handleLoad() {
+      countLoadedFiles++;
+      var percents = Math.floor((countLoadedFiles / filesCollection.length) * 300) / 100;
+      preloader.graphics.clear();
+      preloader.graphics.beginFill("red");
+      preloader.graphics.drawRect(0, 0, percents * 300, 100);
+      stage.update();
+      console.log(percents)
+    };
+  };
   </script>
 </head>
 
-<body>
+<body onload="init()">
+  <canvas id="demoCanvas" width="500" height="300"></canvas>
 </body>
 
 </html>

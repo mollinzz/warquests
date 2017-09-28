@@ -70,14 +70,14 @@
        //     game.storage.remove("monsterHP")
        // }, 20000);
 
-       game.knight.gotoAndFight(coinValue, me, monsterAttackPoint, spriteWidth, function() {         alert()
-                createjs.Tween.removeTweens(game.knight.container)
+       game.knight.gotoAndFight(coinValue, me, monsterAttackPoint, spriteWidth, function() {
          //game.storage.setField("monsterHP", monsterHP)
          if (game.storage.getField("equipedWeapon")) {
            me.monsterHP = me.monsterHP - game.knight.skills.extraAttack - game.knight.skills.attack - game.itemCollection.items[game.storage.getField("equipedWeapon")].attack;
          } else {
            me.monsterHP = me.monsterHP - game.knight.skills.extraAttack - game.knight.skills.attack;
          }
+
          game.knight.skills.extraAttack = 0;
          hpReload();
          if (me.monsterHP <= 0) {

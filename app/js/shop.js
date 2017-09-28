@@ -9,7 +9,9 @@ function Market() {
   mainBlock = new createjs.Shape();
   mainBlock.graphics.beginFill('yellow');
   mainBlock.graphics.drawRect(0, 0, 1200, 800);
-
+  mainBlock.addEventListener("click", function(){
+    return false;
+  })
 
   exitButton = new createjs.Shape();
   exitButton.graphics.beginFill('black');

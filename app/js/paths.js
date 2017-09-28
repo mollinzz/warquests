@@ -23,7 +23,6 @@ function calculateKoeffs(x1, y1, x2, y2) {
 };
 
 function getPoint(x1, y1, x2, y2, x3, y3, x4) {
-<<<<<<< Updated upstream
     var koeffs = calculateKoeffs(x1, y1, x2, y2);
     if (x5 >= x3 && x5 <= 4) {
       alert();
@@ -38,21 +37,6 @@ function getPoint(x1, y1, x2, y2, x3, y3, x4) {
     return x5;
 }
 
-=======
-  var koeffs = calculateKoeffs(x1, y1, x2, y2);
-  if (x5 >= x3 && x5 <= 4) {
-    alert();
-  }
-  var x5 = (y3 - koeffs.b) / koeffs.k;
-  if (x5 <= x3) {
-    return false
-  }
-  if (x5 >= x4) {
-    return false
-  }
-  return x5;
-};
->>>>>>> Stashed changes
 
 function clear() {
   ctx.clearRect(0, 0, c.width, c.height)
@@ -78,4 +62,3 @@ $("#drawLine").click(
     getPoint(x1, y1, x2, y2, x3, y3, x4);
   }
 );
-

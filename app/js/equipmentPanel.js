@@ -69,6 +69,15 @@ function EquipmentPanel() {
   var levelText = new createjs.Text("Level: " + game.storage.getField("level"), "20px Arial", "black");
   levelText.x = 260;
   levelText.y = 145;
+  var dragger = new createjs.Shape();
+  dragger.graphics.beginFill('gray');
+  dragger.graphics.drawRect(0, 0, 400, 20);
+  dragger.on("pressmove", function(event) {
+    // currentTarget will be the container that the event listener was added to:
+    me.mainContainer.x = event.stageX - 200;
+    me.mainContainer.y = event.stageY;
+    // make sure to redraw the stage to show the change:
+  });
 
   this.mainContainer.addChild(mainBlock);
   this.mainContainer.addChild(bitmapWeaponSlot);
@@ -81,6 +90,7 @@ function EquipmentPanel() {
   this.mainContainer.addChild(textSpeed);
   this.mainContainer.addChild(levelPointsText);
   this.mainContainer.addChild(levelText);
+    this.mainContainer.addChild(dragger);
 
   this.mainContainer.addEventListener("click", function() {
     return false

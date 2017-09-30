@@ -156,7 +156,7 @@
        .to({
          x: x,
          y: y
-       }, parseInt((Math.abs(x - me.container.x) + Math.abs(y - me.container.y)) / me.skills.movementSpeed), createjs.Ease.getPowInOut(1.5))
+       }, parseInt((Math.abs(x - me.container.x) + Math.abs(y - me.container.y)) / me.skills.movementSpeed), createjs.Ease.getPowInOut(1))
        .call(function() {
          if (walkCallback) {
            walkCallback();

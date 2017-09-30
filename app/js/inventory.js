@@ -29,27 +29,40 @@ function Inventory() {
 
   var text = new createjs.Text("X " + game.storage.getField("coins"), "32px Arial", "black");
   text.x = 58;
+  text.y = 20;
 
   var inventoryBlockFraction = new Image();
   inventoryBlockFraction.src = "images/network.png";
   var bitmap = new createjs.Bitmap(inventoryBlockFraction);
-  bitmap.y = 40;
+  bitmap.y = 60;
 
   var coinImageInv = new Image();
   coinImageInv.src = "images/coin.png";
   var bitmap2 = new createjs.Bitmap(coinImageInv);
+  bitmap2.y = 20;
 
   var inventoryBlock = new createjs.Shape();
   inventoryBlock.graphics.beginFill('yellow');
   inventoryBlock.graphics.drawRect(0, 0, 360, 400);
 
+  var dragger = new createjs.Shape();
+  dragger.graphics.beginFill('gray');
+  dragger.graphics.drawRect(0, 0, 360, 20);
+  dragger.on("pressmove", function(event) {
+    // currentTarget will be the container that the event listener was added to:
+    me.container.x = event.stageX - 180;
+    me.container.y = event.stageY;
+    // make sure to redraw the stage to show the change:
+  });
+
   this.container.x = 20;
-  this.container.y = game.stage.canvas.height - 440;
+  this.container.y = game.stage.canvas.height - 460;
 
   //this.container.addChild(inventoryBlock);
   this.container.addChild(bitmap);
   this.container.addChild(text);
   this.container.addChild(bitmap2);
+  this.container.addChild(dragger);
 
   /** Spawn item into stage */
   this.spawnItems = function(itemName, x, y, coinValue) {

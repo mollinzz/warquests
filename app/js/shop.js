@@ -1,6 +1,6 @@
 function Market() {
   var me = this;
-  var openFlag = 0;
+  this.openFlag = 0;
   var currentType = null;
   this.container = new createjs.Container();
   this.container.x = game.stage.canvas.width / 2 - 600;
@@ -9,7 +9,7 @@ function Market() {
   mainBlock = new createjs.Shape();
   mainBlock.graphics.beginFill('yellow');
   mainBlock.graphics.drawRect(0, 0, 1200, 800);
-  mainBlock.addEventListener("click", function(){
+  mainBlock.addEventListener("click", function() {
     return false;
   })
 
@@ -42,35 +42,49 @@ function Market() {
   };
 
   this.open = function(shopType) {
-    if (openFlag) {
+    if (me.openFlag = 0) {
       return false;
     };
+    if (!game.stage.container) { game.stage.addChild(game.inventory.container) };
+    game.inventory.container.x = 600;
+    game.inventory.container.y = 400;
     currentType = shopType;
-    openFlag = 1;
+    me.openFlag = 1;
     game.knight.actionsFlag++;
-    game.stage.addChild(this.container);
+    game.stage.addChild(me.container);
     switch (shopType) {
       case "potionShop":
-        this.container.addChild(potionShop);
+        me.container.addChild(potionShop);
         break;
       case "weaponShop":
-        this.container.addChild(weaponShop);
+        me.container.addChild(weaponShop);
         break;
     }
+  };
+
+  this.sell = function(item) {
+    game.storage.refresh("coins", game.storage.getField("coins"), game.itemCollection.items[item].coinValue);
+    game.storage.refresh(item, game.storage.getField(item), -1);
+    game.inventory.refresh();
   };
 
   this.close = function() {
     switch (currentType) {
       case "weaponShop":
-        this.container.removeChild(weaponShop);
+        me.container.removeChild(weaponShop);
         break;
       case "potionShop":
-        this.container.removeChild(potionShop);
-    }
+        me.container.removeChild(potionShop);
+    };
     currentType = null;
-    openFlag = 0;
+    me.openFlag = 0;
     game.knight.actionsFlag--;
-    game.stage.removeChild(this.container);
+    game.stage.removeChild(me.container);
+    game.inventory.container.x = game.inventory.containerPosX;
+    game.inventory.container.y = game.inventory.containerPosY;
+    if (!game.inventory.flagOpen) {
+      game.inventory.close();
+    }
   };
 };
 

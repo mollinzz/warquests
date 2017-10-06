@@ -139,7 +139,7 @@
        game.stage.removeChild(game.marker.bitmap);
      }
      me.checkPath(parseInt(me.container.x), parseInt(me.container.y), parseInt(x), parseInt(y))
-    //  me.actionsFlag++;
+     //  me.actionsFlag++;
      me.direction = (x > me.container.x) + 0;
      me.weaponObj.gotoAndStop(me.dirSettings[me.direction]["walk"]);
      me.imgObj.gotoAndPlay(me.dirSettings[me.direction]["walk"]);
@@ -166,7 +166,7 @@
            me.weaponObj.x = 10;
          };
          game.stage.removeChild(game.marker.bitmap);
-        //  me.actionsFlag--;
+         //  me.actionsFlag--;
        });
    };
 
@@ -285,6 +285,32 @@
        me.refreshBar(count1, count2, bar, y, height, color);
      };
    };
+
+   var factor;
+   var factor2;
+   setInterval(function() {
+     factor = Math.random() * 3000;
+     setTimeout(function() {
+       me.regen(me.knightHP, me.defaultHP, me.hpBar, 20, 50, "#e50707");
+     }, factor);
+   }, 5000);
+
+   setInterval(function() {
+     factor2 = Math.random() * 5000;
+     setTimeout(function() {
+       // alert(me.knight.regen)
+       me.regen(me.manaPoints, me.defaultMana, me.manaBar, 70, 25, "#005aff");
+     }, factor2);
+   }, 6000);
+
+   setInterval(function() {
+     if (me.knightHP <= 0) {
+       me.die();
+       setTimeout(function() {
+         location.reload();
+       }, 1000)
+     }
+   }, 100)
 
    this.refreshBar = function(count1, count2, bar, y, height, color) {
      if (count1 <= 0) {

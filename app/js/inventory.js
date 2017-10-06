@@ -1,8 +1,10 @@
 /** Game inventory */
 function Inventory() {
   this.container = new createjs.Container();
-  var me = this,
-    flagOpen = 0;
+  this.containerPosX = 20;
+  this.containerPosY = game.stage.canvas.height - 460;
+  var me = this;
+  this.flagOpen = 0;
   this.slots = [
     { "posX": 10, "posY": 60 },
     { "posX": 130, "posY": 60 },
@@ -49,14 +51,19 @@ function Inventory() {
   dragger.graphics.beginFill('gray');
   dragger.graphics.drawRect(0, 0, 360, 20);
   dragger.on("pressmove", function(event) {
-    // currentTarget will be the container that the event listener was added to:
-    me.container.x = event.stageX - 180;
-    me.container.y = event.stageY;
-    // make sure to redraw the stage to show the change:
+    if (!game.market.openFlag) {
+      // currentTarget will be the container that the event listener was added to:
+      me.container.x = event.stageX - 180;
+      me.container.y = event.stageY;
+      me.containerPosX = event.stageX - 180;
+      me.containerPosY = event.stageY;
+      // make sure to redraw the stage to show the change:
+    }
+
   });
 
-  this.container.x = 20;
-  this.container.y = game.stage.canvas.height - 460;
+  this.container.x = this.containerPosX;
+  this.container.y = this.containerPosY;
 
   //this.container.addChild(inventoryBlock);
   this.container.addChild(bitmap);
@@ -190,6 +197,11 @@ function Inventory() {
       if (currentItem) {
         slotIndex++;
         if (slotIndex == number) {
+          //alert(game.itemCollection.items[me.itemArray[i]].coinValue)
+          if (!game.market.openFlag) {
+            game.market.sell(me.itemArray[i]);
+            return false;
+          };
           if (game.itemCollection.items[me.itemArray[i]]["disableApply"]) {
             if (me.itemArray[i] == game.storage.getField("equipedWeapon")) {
               return false;
@@ -212,19 +224,22 @@ function Inventory() {
 
   /** OpenInv */
   this.open = function() {
-    flagOpen = 1;
+    me.flagOpen = 1;
     game.stage.addChild(me.container)
   };
 
   /** Close Inv */
   this.close = function() {
-    flagOpen = 0;
+    me.flagOpen = 0;
     game.stage.removeChild(me.container);
   };
 
   /** Toggle function (on key down B) */
   this.toggle = function() {
-    if (!flagOpen) {
+    if (game.market.openFlag) {
+      return false;
+    }
+    if (!me.flagOpen) {
       me.open();
     } else {
       me.close();

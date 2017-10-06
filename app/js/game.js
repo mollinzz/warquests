@@ -63,32 +63,6 @@ function Game(stageId) {
     Man(100, 100);
     Elder(200, 101);
 
-    var factor;
-    var factor2;
-    setInterval(function() {
-      factor = Math.random() * 3000;
-      setTimeout(function() {
-        me.knight.regen(me.knight.knightHP, me.knight.defaultHP, me.knight.hpBar, 20, 50, "#e50707");
-      }, factor);
-    }, 5000);
-
-    setInterval(function() {
-      factor2 = Math.random() * 5000;
-      setTimeout(function() {
-        // alert(me.knight.regen)
-        me.knight.regen(me.knight.manaPoints, me.knight.defaultMana, me.knight.manaBar, 70, 25, "#005aff");
-      }, factor2);
-    }, 6000);
-
-    setInterval(function() {
-      if (me.knight.knightHP <= 0) {
-        me.knight.die();
-        setTimeout(function() {
-          location.reload();
-        }, 1000)
-      }
-    }, 100)
-
     me.sortNumber = function(a, b) {
       return a - b;
     };

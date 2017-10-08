@@ -25,8 +25,7 @@ function EquipmentPanel() {
   bitmapWeaponSlot.y = 20;
 
   bitmapWeaponSlot.addEventListener("click", function() {
-    alert();
-    me.unequipItem(game.storage.getField("equipedItem"), "weapon")
+    me.unequipItem(game.storage.getField("equipedWeapon"), "weapon")
   })
 
   helmetSlot = new Image();
@@ -137,9 +136,10 @@ function EquipmentPanel() {
         // if (game.storage.getField(itemName) == 0) {
         //   game.storage.refresh(game.storage.getField("equipedWeapon"), 0, 1)
         // } else {
-          game.storage.refresh(game.storage.getField(itemName), game.storage.getField(itemName), 1);
+          debugger;
+          game.storage.refresh(itemName, game.storage.getField(itemName), 1);
        // };
-        //game.storage.setField("equipedWeapon", null);
+        game.storage.setField("equipedWeapon", null);
         game.inventory.refresh();
         weaponSlot.src = "images/graySword.png";
         game.knight.container.removeChild(game.knight.weaponObj);

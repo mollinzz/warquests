@@ -1,6 +1,13 @@
 /** Game inventory */
 function Inventory() {
   this.container = new createjs.Container();
+  this.container.addEventListener("click", function(event) {
+    me.slots.findIndex(function(element, index, array) {
+      if (event.target.x == element.posX && event.target.y == element.posY) {
+        me.applySlot(index + 1)
+      }
+    });
+  })
   this.containerPosX = 20;
   this.containerPosY = game.stage.canvas.height - 460;
   var me = this;

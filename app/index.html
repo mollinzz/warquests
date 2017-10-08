@@ -29,12 +29,80 @@
   function init() {
     game = new Game("demoCanvas");
     game.start();
+
+    var queue = new createjs.LoadQueue();
+    var countLoadedFiles = 0;
+    var filesCollection = [
+      { id: "myPic", src: "images/attackpotion48px.png" },
+      { id: "myPic2", src: "images/attackpotion100px.png" },
+      { id: "myPic3", src: "images/axe_sprite.png" },
+      { id: "myPic4", src: "images/axe48px.png" },
+      { id: "myPic5", src: "images/axe100px.png" },
+      { id: "myPic4", src: "images/axe100px300px.png" },
+      { id: "myPic4", src: "images/buybutton.png" },
+      { id: "myPic4", src: "images/chat.png" },
+      { id: "myPic4", src: "images/coin.png" },
+      { id: "myPic4", src: "images/grayArmor.png" },
+      { id: "myPic4", src: "images/grayHelmet.png" },
+      { id: "myPic4", src: "images/grayShoes.png" },
+      { id: "myPic4", src: "images/graySword.png" },
+      { id: "myPic4", src: "images/harpy.png" },
+      { id: "myPic4", src: "images/heal.png" },
+      { id: "myPic4", src: "images/healphPotion48px.png" },
+      { id: "myPic4", src: "images/healphPotion100px.png" },
+      { id: "myPic4", src: "images/house1x1.png" },
+      { id: "myPic4", src: "images/house2x1.png" },
+      { id: "myPic4", src: "images/king_cobra3.png" },
+      { id: "myPic4", src: "images/man.png" },
+      { id: "myPic4", src: "images/manaPotion48px.png" },
+      { id: "myPic4", src: "images/manaPotion100px.png" },
+      { id: "myPic4", src: "images/marker2.png" },
+      { id: "myPic4", src: "images/network.png" },
+      { id: "myPic4", src: "images/portal.png" },
+      { id: "myPic4", src: "images/reaper.png" },
+      { id: "myPic4", src: "images/slam.png" },
+      { id: "myPic4", src: "images/speedPotion48px.png" },
+      { id: "myPic4", src: "images/speedPotion100px.png" },
+      { id: "myPic4", src: "images/sword_sprite.png" },
+      { id: "myPic4", src: "images/sword48px.png" },
+      { id: "myPic4", src: "images/sword100px.png" },
+      { id: "myPic4", src: "images/man.png" },
+    ];
+    queue.installPlugin(createjs.Sound);
+    queue.on("fileload", handleLoad, this);
+    queue.on("complete", game.handleComplete, this);
+    queue.loadManifest(filesCollection);
+
+    var preloader = new createjs.Shape();
+    preloader.graphics.beginFill("red");
+    preloader.graphics.drawRect(0, 0, 0, 100);
+    game.stage.addChild(preloader);
+
+    var preloaderText = new createjs.Text("Please stand by", "30px Arial", "red");
+    game.stage.addChild(preloaderText);
+
+    function handleComplete(){
+       game.stage.removeChild(preloader);
+       game.stage.removeChild(preloaderText);
+    };
+
+    function handleLoad() {
+      countLoadedFiles++;
+      var percents = Math.floor((countLoadedFiles / filesCollection.length) * 300) / 100;
+      preloader.graphics.clear();
+      preloader.graphics.beginFill("black");
+      preloader.graphics.drawRect(0, 0, percents * 300, 100);
+      game.stage.update();
+      console.log(preloader);
+    };
+
     game.stage.on("stagemousedown", function(event) {
       //console.log(event);
       if (!event.relatedTarget) {
         game.knight.walk(event.stageX - 42.5, event.stageY - 42.5);
       };
     });
+
     document.onkeydown = function(ev) {
       console.log(ev);
       console.log(ev.code);
@@ -62,11 +130,11 @@
         game.inventory.applySlot(parseInt(ev.code.substring(5)));
       }
     };
-    game.resizeCanvas();
-    window.addEventListener("resize", function() {
-      console.log('check');
-      game.resizeCanvas();
-    });
+    //game.resizeCanvas();
+    // window.addEventListener("resize", function() {
+    //   console.log('check');
+    //   game.resizeCanvas();
+    // });
   }
   </script>
 </body>

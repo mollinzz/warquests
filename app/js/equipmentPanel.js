@@ -4,10 +4,11 @@ function EquipmentPanel() {
   // if (!game.storage.getField('equipedArmor') || !game.storage.getField('equipedSword')) {
   //   game.storage.setField('equipedArmor', "basicArmor");
   //   game.storage.setField('equipedWeapon', "electroforez");
-  // }
+  // 
   this.mainContainer = new createjs.Container();
   this.mainContainer.x = game.stage.canvas.width - 440;
   this.mainContainer.y = game.stage.canvas.height - 380;
+  this.mainContainer.frontFlag = true;
 
   mainBlock = new createjs.Shape();
   mainBlock.graphics.beginFill("gray");
@@ -136,9 +137,9 @@ function EquipmentPanel() {
         // if (game.storage.getField(itemName) == 0) {
         //   game.storage.refresh(game.storage.getField("equipedWeapon"), 0, 1)
         // } else {
-          debugger;
-          game.storage.refresh(itemName, game.storage.getField(itemName), 1);
-       // };
+        debugger;
+        game.storage.refresh(itemName, game.storage.getField(itemName), 1);
+        // };
         game.storage.setField("equipedWeapon", null);
         game.inventory.refresh();
         weaponSlot.src = "images/graySword.png";

@@ -70,18 +70,25 @@ function Game(stageId) {
 
       me.updateIndex = function() {
         var indexArray = [];
+        var frontIndexArray = [];
         var bound;
         var childIndex;
         var emptyBoundsCount = 0;
+        var indexCount = 0;
 
         for (var i = 0; i < game.stage.children.length; i++) {
           bound = game.stage.children[i].getBounds();
           if (bound) {
-            indexArray.push(Math.floor(game.stage.children[i].y + bound.height));
+            if (game.stage.children[i].frontFlag) {
+              frontIndexArray.push(Math.floor(game.stage.children[i].y + bound.height))
+            } else {
+              indexArray.push(Math.floor(game.stage.children[i].y + bound.height));
+            };
+
           };
         };
+
         indexArray.sort(me.sortNumber);
-        // console.log(indexArray);
 
         for (var i = 0; i < game.stage.children.length; i++) {
           bound = game.stage.children[i].getBounds();
@@ -92,11 +99,21 @@ function Game(stageId) {
 
         for (var i = 0; i < game.stage.children.length; i++) {
           bound = game.stage.children[i].getBounds();
-          if (bound) {
+          if (bound && !game.stage.children[i].frontFlag) {
             childIndex = indexArray.indexOf(Math.floor(game.stage.children[i].y + bound.height));
             game.stage.setChildIndex(game.stage.children[i], childIndex + emptyBoundsCount);
+            // indexCount = childIndex + emptyBoundsCount;
           };
         };
+        //indexCount++;
+        for (var i = 0; i < game.stage.children.length; i++) {
+          bound = game.stage.children[i].getBounds();
+          if (bound && game.stage.children[i].frontFlag) {
+            childIndex = indexArray.indexOf(Math.floor(game.stage.children[i].y + bound.height));
+            game.stage.setChildIndex(game.stage.children[i], childIndex + 1000);
+          };
+        };
+
       };
 
       me.stage.update();

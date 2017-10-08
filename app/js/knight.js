@@ -133,7 +133,6 @@
      //  if (me.actionsFlag && !forceFlag) {
      //    return false
      //  };
-     debugger;
      createjs.Tween.removeTweens(me.container)
      if (game.marker) {
        game.stage.removeChild(game.marker.bitmap);

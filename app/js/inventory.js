@@ -1,5 +1,6 @@
 /** Game inventory */
 function Inventory() {
+  var me = this;
   this.container = new createjs.Container();
   this.container.addEventListener("click", function(event) {
     me.slots.findIndex(function(element, index, array) {
@@ -7,10 +8,12 @@ function Inventory() {
         me.applySlot(index + 1)
       }
     });
-  })
+  });
+
+  this.container.frontFlag = true;
+
   this.containerPosX = 20;
   this.containerPosY = game.stage.canvas.height - 460;
-  var me = this;
   this.flagOpen = 0;
   this.slots = [
     { "posX": 10, "posY": 60 },

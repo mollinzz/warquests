@@ -5,6 +5,7 @@ function Market() {
   this.container = new createjs.Container();
   this.container.x = game.stage.canvas.width / 2 - 600;
   this.container.y = game.stage.canvas.height / 2 - 400;
+  this.container.frontFlag = true;
 
   mainBlock = new createjs.Shape();
   mainBlock.graphics.beginFill('yellow');

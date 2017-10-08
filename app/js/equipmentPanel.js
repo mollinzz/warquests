@@ -19,9 +19,15 @@ function EquipmentPanel() {
   } else {
     weaponSlot.src = game.itemCollection.getBigestImage(game.storage.getField("equipedWeapon"));
   }
+
   var bitmapWeaponSlot = new createjs.Bitmap(weaponSlot);
   bitmapWeaponSlot.x = 20;
   bitmapWeaponSlot.y = 20;
+
+  bitmapWeaponSlot.addEventListener("click", function() {
+    alert();
+    me.unequipItem(game.storage.getField("equipedItem"), "weapon")
+  })
 
   helmetSlot = new Image();
   helmetSlot.src = "images/grayHelmet.png";
@@ -90,13 +96,16 @@ function EquipmentPanel() {
   this.mainContainer.addChild(textSpeed);
   this.mainContainer.addChild(levelPointsText);
   this.mainContainer.addChild(levelText);
-    this.mainContainer.addChild(dragger);
+  this.mainContainer.addChild(dragger);
 
   this.mainContainer.addEventListener("click", function() {
     return false
   });
 
   this.equipItem = function(itemName, type) {
+    if (game.market.openFlag) {
+      return false;
+    };
     switch (type) {
       case "weapon":
         game.inventory.refresh();
@@ -113,6 +122,29 @@ function EquipmentPanel() {
         game.knight.weaponObj.y = 15;
         game.knight.weaponObj.x = 10;
         game.knight.container.addChild(game.knight.weaponObj);
+        me.refresh();
+        break;
+    };
+  };
+
+  this.unequipItem = function(itemName, type) {
+    // if (game.market.openFlag) {
+    //   return false;
+    // };
+    switch (type) {
+      case "weapon":
+        game.inventory.refresh();
+        // if (game.storage.getField(itemName) == 0) {
+        //   game.storage.refresh(game.storage.getField("equipedWeapon"), 0, 1)
+        // } else {
+          game.storage.refresh(game.storage.getField(itemName), game.storage.getField(itemName), 1);
+       // };
+        //game.storage.setField("equipedWeapon", null);
+        game.inventory.refresh();
+        weaponSlot.src = "images/graySword.png";
+        game.knight.container.removeChild(game.knight.weaponObj);
+        // game.knight.weaponObj = me.getWeaponObj(itemName);
+        // game.knight.container.addChild(game.knight.weaponObj);
         me.refresh();
         break;
     };
@@ -155,6 +187,7 @@ function EquipmentPanel() {
   game.knight.weaponObj.y = 15;
   game.knight.weaponObj.x = 10;
   game.knight.container.addChild(game.knight.weaponObj);
+
   this.refresh = function() {
     attack = game.knight.skills.attack;
     if (game.storage.getField("equipedWeapon")) {

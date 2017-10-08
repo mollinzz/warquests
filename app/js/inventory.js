@@ -198,7 +198,7 @@ function Inventory() {
         slotIndex++;
         if (slotIndex == number) {
           //alert(game.itemCollection.items[me.itemArray[i]].coinValue)
-          if (!game.market.openFlag) {
+          if (game.market.openFlag) {
             game.market.sell(me.itemArray[i]);
             return false;
           };

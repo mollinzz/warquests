@@ -53,7 +53,29 @@
      this.container.addChild(monsterhpbar);
      this.container.addChild(hpText);
      game.stage.addChild(this.container);
-     
+
+     this.startMove = function() {
+       setTimeout(function() {
+         createjs.Tween.get(me.container, { loop: true })
+           .to({
+             x: me.container.x + Math.floor(Math.random() * 300),
+             y: me.container.y
+           }, Math.floor(Math.random() * 1500) + 500)
+           .to({
+             x: me.container.x + Math.floor(Math.random() * 300),
+             y: me.container.y + Math.floor(Math.random() * 300)
+           }, Math.floor(Math.random() * 1500) + 500)
+           .to({
+             x: me.container.x,
+             y: me.container.y + Math.floor(Math.random() * 300)
+           }, Math.floor(Math.random() * 1500) + 500)
+           .to({
+             x: me.container.x,
+             y: me.container.y
+           }, Math.floor(Math.random() * 1500) + 500);
+       }, Math.floor(Math.random() * 3000));
+     };
+     this.startMove();
      /** Refreshing healph bar */
      function hpReload() {
        game.stage.removeChild(this.container);
@@ -74,6 +96,12 @@
        //     game.storage.remove("monsterHP")
        // }, 20000);
 
+       createjs.Tween.get(me.container, {override : true})
+         .to({
+           x: me.container.x,
+           y: me.container.y
+         }, 10);
+
        game.knight.gotoAndFight(coinValue, me, monsterAttackPoint, spriteWidth, function() {
          //game.storage.setField("monsterHP", monsterHP)
          if (game.storage.getField("equipedWeapon")) {
@@ -88,8 +116,7 @@
            setTimeout(function() {
              game.spawner.randomMachine(1, levelSettings[game.currentLevel].monsters[parseInt(Math.random() * levelSettings[game.currentLevel].monsters.length)].name)
            }, 3000);
-           game.stage.removeChild(me.imgObj);
-           game.stage.removeChild(container)
+           game.stage.removeChild(me.container)
            drop(coinValue);
            game.storage.refresh("levelPoints", game.storage.getField("levelPoints"), levelPointsValue);
            game.equipmentPanel.refresh();

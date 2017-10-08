@@ -47,6 +47,8 @@ function Market() {
       return false;
     };
     if (!game.stage.container) { game.stage.addChild(game.inventory.container) };
+    game.stage.removeChild(game.inventory.container);
+    me.container.addChild(game.inventory.container);
     game.inventory.container.x = 600;
     game.inventory.container.y = 400;
     currentType = shopType;
@@ -77,6 +79,8 @@ function Market() {
       case "potionShop":
         me.container.removeChild(potionShop);
     };
+    me.container.removeChild(game.inventory.container);
+    game.stage.addChild(game.inventory.container);
     currentType = null;
     me.openFlag = 0;
     game.knight.actionsFlag--;

@@ -185,20 +185,20 @@
      var coordY = 0;
      var attackFrame = "attackRight";
      var walkFrame = "walkRight";
-     if (me.container.x > monster.imgObj.x) {
+     if (me.container.x > monster.container.x) {
        coordX = 127.5;
        attackFrame = "attackLeft";
        walkFrame = "walkLeft";
      };
-     if (monster.imgObj.x - 70 < me.container.x & me.container.x < monster.imgObj.x + monsterWidth - 10) {
+     if (monster.container.x - 70 < me.container.x & me.container.x < monster.container.x + monsterWidth - 10) {
        coordX = 0;
-       if (monster.imgObj.y + 20 < me.container.y) {
+       if (monster.container.y + 20 < me.container.y) {
          coordY = 127.5;
        } else {
          coordY = -127.5;
        }
      };
-     me.walk(monster.imgObj.x + coordX, monster.imgObj.y + coordY, function() {
+     me.walk(monster.container.x + coordX, monster.container.y + coordY, function() {
        if (me.actionsFlag) {
          console.log("string")
          return false;

@@ -10,6 +10,10 @@
      var monsterAttack = monsterAttackPoint;
      var coinValue = coinValue;
 
+     this.container = new createjs.Container();
+     this.container.x = x;
+     this.container.y = y - 75;
+
      /** Sprites setting */
      var monsterSprites = new createjs.SpriteSheet({
        "animations": {
@@ -29,11 +33,11 @@
 
      /** Adding snake */
      this.imgObj = new createjs.Sprite(monsterSprites);
-     game.stage.addChild(this.imgObj);
+     this.container.addChild(this.imgObj);
      this.imgObj.gotoAndPlay("stand");
 
      /** Moving monster to selected post */
-     createjs.Tween.get(this.imgObj)
+     createjs.Tween.get(this.container)
        .to({
          x: x,
          y: y
@@ -41,24 +45,24 @@
 
      /** Making variable to hp bar*/
      var hpText = new createjs.Text(nameOfMonster, "20px Arial", "black");
-
      var monsterhpbar = new createjs.Shape();
-     var container = new createjs.Container();
-     container.x = x;
-     container.y = y - 75;
-     hpText.x = hpText.x + textPosX;
-     container.addChild(monsterhpbar);
-     container.addChild(hpText);
 
+     hpText.x = hpText.x + textPosX;
+     hpText.y = -heightBar;
+
+     this.container.addChild(monsterhpbar);
+     this.container.addChild(hpText);
+     game.stage.addChild(this.container);
+     
      /** Refreshing healph bar */
      function hpReload() {
-       game.stage.removeChild(container);
+       game.stage.removeChild(this.container);
        factor = parseInt(me.monsterHP / defaultHP * 100) / 100;
        //console.log(factor);
        monsterhpbar.graphics.clear();
        monsterhpbar.graphics.beginFill('#cc0000');
-       monsterhpbar.graphics.drawRect(0, 0, factor * widthBar, heightBar);
-       game.stage.addChild(container);
+       monsterhpbar.graphics.drawRect(0, -heightBar - 10, factor * widthBar, heightBar);
+       game.stage.addChild(this.container);
      };
 
      /** Adding listener */

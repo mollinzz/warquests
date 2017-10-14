@@ -93,7 +93,6 @@
       preloader.graphics.beginFill("black");
       preloader.graphics.drawRect(0, 0, percents * 300, 100);
       game.stage.update();
-      console.log(preloader);
     };
 
     game.stage.on("stagemousedown", function(event) {
@@ -104,8 +103,6 @@
     });
 
     document.onkeydown = function(ev) {
-      console.log(ev);
-      console.log(ev.code);
       if (ev.code == 'KeyB') {
         game.inventory.toggle();
       };

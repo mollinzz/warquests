@@ -7,6 +7,7 @@ function LevelGenerate() {
   };
 
   this.createLevelEnvironment = function(level) {
+    game.monsterColl = [];
     game.currentLevel = level;
     settings = levelSettings[level];
     if (settings.type == "home") {

@@ -1,8 +1,9 @@
 /** Main game func */
 function Game(stageId) {
+  this.monsterColl = [];
   this.currentLevel = "home";
   this.abilityFlag = 1;
-  this.showAbility = 0;
+  this.showAbility = 1;
   // code here.
   var me = this;
 
@@ -63,7 +64,7 @@ function Game(stageId) {
       me.quests = new Quests();
       Man(100, 100);
       Elder(200, 101);
-      Reaper(0, 500)
+      //Reaper(0, 500);
 
       me.sortNumber = function(a, b) {
         return a - b;
@@ -117,6 +118,14 @@ function Game(stageId) {
 
       };
 
+      me.checkMonsterDistances = function() {
+        for (var i = 0; i < me.monsterColl.length; i++) {
+          if (me.monsterColl[i]) {
+            me.monsterColl[i].checkDistance(me.knight.container.x, me.knight.container.y);
+          }
+        }
+      };
+
       me.stage.update();
       createjs.Ticker.setFPS(60);
       createjs.Ticker.addEventListener("tick", handleEvent);
@@ -124,6 +133,7 @@ function Game(stageId) {
       function handleEvent() {
         me.stage.update();
         me.updateIndex();
+        me.checkMonsterDistances();
       }
     };
   }

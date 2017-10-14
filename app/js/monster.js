@@ -1,19 +1,19 @@
    /** Monster function
     * @consructor
     */
-   function Monster(standFrames, image, spriteWidth, spriteHeight, x, y, monsterHP, widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue, textPosX, levelPointsValue, monsterName, moveKoeff = 1) {
+   function Monster(standFrames, image, spriteWidth, spriteHeight, x, y, monsterHP, widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue, textPosX, levelPointsValue, monsterName, moveKoeff = 1, distance = 300) {
      /** Variables */
+     this.id = game.monsterColl.length;
+     this.status = "walk";
+     game.monsterColl.push(this);
+     var damageDist = 150;
+     //  console.log(game.monsterColl)
      var me = this;
      this.monsterHP = monsterHP;
      var defaultHP = this.monsterHP;
      var targetHP = monsterHP;
      var monsterAttack = monsterAttackPoint;
      var coinValue = coinValue;
-
-     //  var moveKoeff = 1;
-     //  if (monsterName == "harpy") {
-     //
-     //  }
 
      this.container = new createjs.Container();
      this.container.x = x;
@@ -58,6 +58,32 @@
      this.container.addChild(monsterhpbar);
      this.container.addChild(hpText);
      game.stage.addChild(this.container);
+
+     this.checkDistance = function(knightX, knightY) {
+       var deltaX = me.container.x - knightX;
+       var deltaY = me.container.y - knightY;
+       if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(distance, 2)) {
+         if (Math.pow(deltaX, 2) + Math.pow(deltaY, 2) < Math.pow(damageDist, 2)) {
+           if (me.status != "fight") {
+             // TODO: knight defense
+             game.knight.minusHPKnight(monsterAttackPoint);
+             me.status = "fight";
+             setTimeout(function() {
+               me.status = "waitForFight";
+             }, 2000);
+           }
+         } else {
+           // following
+           me.status = "following";
+           createjs.Tween.get(me.container, {override: true})
+           .to({x: knightX, y: knightY}, 2000)
+         }
+       } else if (me.status != "walk") {
+         me.status = "walk";
+         me.startMove();
+       }
+     };
+
 
      this.startMove = function() {
        var distance = Math.floor(300 * moveKoeff);
@@ -126,7 +152,8 @@
            setTimeout(function() {
              game.spawner.randomMachine(1, levelSettings[game.currentLevel].monsters[parseInt(Math.random() * levelSettings[game.currentLevel].monsters.length)].name)
            }, 3000);
-           game.stage.removeChild(me.container)
+           game.stage.removeChild(me.container);
+           game.monsterColl[me.id] = null;
            drop(coinValue);
            game.storage.refresh("levelPoints", game.storage.getField("levelPoints"), levelPointsValue);
            game.equipmentPanel.refresh();
@@ -200,7 +227,8 @@
        25,
        2,
        "harpy",
-       1.5)
+       1.5,
+     )
    };
 
    function Reaper(x, y) {

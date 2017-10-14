@@ -213,7 +213,7 @@
          callback();
          me.imgObj.gotoAndStop(walkFrame);
          me.weaponObj.gotoAndStop(walkFrame);
-         me.minusHPKnight(monsterAttack);
+        //  me.minusHPKnight(monsterAttack);
          me.actionsFlag--;
        }, attackSpeed)
      }, true);

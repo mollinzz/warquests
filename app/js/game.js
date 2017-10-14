@@ -63,6 +63,7 @@ function Game(stageId) {
       me.quests = new Quests();
       Man(100, 100);
       Elder(200, 101);
+      Reaper(0, 500)
 
       me.sortNumber = function(a, b) {
         return a - b;

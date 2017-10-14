@@ -1,7 +1,7 @@
    /** Monster function
     * @consructor
     */
-   function Monster(standFrames, image, spriteWidth, spriteHeight, x, y, monsterHP, widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue, textPosX, levelPointsValue, monsterName) {
+   function Monster(standFrames, image, spriteWidth, spriteHeight, x, y, monsterHP, widthBar, heightBar, nameOfMonster, monsterAttackPoint, coinValue, textPosX, levelPointsValue, monsterName, moveKoeff = 1) {
      /** Variables */
      var me = this;
      this.monsterHP = monsterHP;
@@ -9,6 +9,11 @@
      var targetHP = monsterHP;
      var monsterAttack = monsterAttackPoint;
      var coinValue = coinValue;
+
+     //  var moveKoeff = 1;
+     //  if (monsterName == "harpy") {
+     //
+     //  }
 
      this.container = new createjs.Container();
      this.container.x = x;
@@ -55,24 +60,27 @@
      game.stage.addChild(this.container);
 
      this.startMove = function() {
+       var distance = Math.floor(300 * moveKoeff);
+       var halfDistance = Math.floor(150 * moveKoeff);
        setTimeout(function() {
-         createjs.Tween.get(me.container, { loop: true })
+         createjs.Tween.get(me.container, {})
            .to({
-             x: me.container.x + Math.floor(Math.random() * 300),
+             x: me.container.x + Math.floor(Math.random() * distance) - halfDistance,
              y: me.container.y
-           }, Math.floor(Math.random() * 1500) + 500)
+           }, Math.floor(Math.random() * 2000) + 1000)
            .to({
-             x: me.container.x + Math.floor(Math.random() * 300),
-             y: me.container.y + Math.floor(Math.random() * 300)
-           }, Math.floor(Math.random() * 1500) + 500)
+             x: me.container.x + Math.floor(Math.random() * distance) - halfDistance,
+             y: me.container.y + Math.floor(Math.random() * distance) - halfDistance
+           }, Math.floor(Math.random() * 2000) + 1000)
            .to({
              x: me.container.x,
-             y: me.container.y + Math.floor(Math.random() * 300)
-           }, Math.floor(Math.random() * 1500) + 500)
+             y: me.container.y + Math.floor(Math.random() * distance) - halfDistance
+           }, Math.floor(Math.random() * 2000) + 1000)
            .to({
-             x: me.container.x,
-             y: me.container.y
-           }, Math.floor(Math.random() * 1500) + 500);
+             x: me.container.x + Math.floor(Math.random() * 200) - 100,
+             y: me.container.y + Math.floor(Math.random() * 200) - 100
+           }, Math.floor(Math.random() * 2000) + 1000)
+           .call(me.startMove)
        }, Math.floor(Math.random() * 3000));
      };
      this.startMove();
@@ -96,7 +104,9 @@
        //     game.storage.remove("monsterHP")
        // }, 20000);
 
-       createjs.Tween.get(me.container, {override : true})
+       createjs.Tween.get(me.container, {
+           override: true
+         })
          .to({
            x: me.container.x,
            y: me.container.y
@@ -170,7 +180,8 @@
        1,
        3,
        1,
-       "snake")
+       "snake",
+       1)
    };
 
    function Harpy(x, y) {
@@ -188,7 +199,8 @@
        2,
        25,
        2,
-       "harpy")
+       "harpy",
+       1.5)
    };
 
    function Reaper(x, y) {
@@ -205,5 +217,6 @@
        10,
        35,
        10,
-       "harpy")
+       "harpy",
+       0.5)
    };
